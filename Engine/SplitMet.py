@@ -12,6 +12,7 @@ import numpy as np
 import numpy.linalg as LA
 import mpmath as mp
 import sys
+import time
 
 class Split:
     '''
@@ -67,8 +68,13 @@ class Split:
             for j in range(self.n):
                 A_tilde[i][j]=self.A[i][j]
         for key in self.Er:
+            a=float(self.Er[key][0]*self.A[key[0]][key[1]])
+            b=float(self.Er[key][1]*self.A[key[0]][key[1]])
+            #print(a,b)
+            #print(mp.mpi(float(a),float(b)))
             #A_tilde[key[0]][key[1]]=mp.mpi(float(self.Er[key][0]*self.A[key[0]][key[1]]),float(self.Er[key][1]*self.A[key[0]][key[1]]))
-            A_tilde[key[0]][key[1]]=mp.mpi(self.Er[key][0]*self.A[key[0]][key[1]],self.Er[key][1]*self.A[key[0]][key[1]])
+            #A_tilde[key[0]][key[1]]=mp.mpi(self.Er[key][0]*self.A[key[0]][key[1]],self.Er[key][1]*self.A[key[0]][key[1]])
+            A_tilde[key[0]][key[1]]=mp.mpi(min(a,b),max(a,b))
 
         #print(A_tilde)
         return A_tilde
@@ -106,6 +112,7 @@ class Split:
         Implements the main algorithm of splitting the effect of the constant and
         the uncertain part
         '''
+        start_time=time.time()
         ORS=self.Theta
         U=self.computeU(ORS)
         t=1
@@ -117,8 +124,10 @@ class Split:
             ORS=np.matmul(self.Ac,ORS)+U
             U=self.computeU(ORS)
             t=t+1
+        time_taken=time.time()-start_time
         print()
         print("\n-------------Reachable Set of the Perturbed System using Splitting Method-------------")
+        print("Time Taken: ",time_taken)
         print(ORS)
         print("---------------------------------------------------------------")
 

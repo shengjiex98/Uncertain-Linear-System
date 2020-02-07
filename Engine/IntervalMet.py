@@ -12,6 +12,7 @@ import numpy as np
 import numpy.linalg as LA
 import mpmath as mp
 import sys
+import time
 
 class Interval:
     '''
@@ -46,7 +47,10 @@ class Interval:
             for j in range(self.n):
                 A_tilde[i][j]=self.A[i][j]
         for key in self.Er:
-            A_tilde[key[0]][key[1]]=mp.mpi(self.Er[key][0]*self.A[key[0]][key[1]],self.Er[key][1]*self.A[key[0]][key[1]])
+            a=float(self.Er[key][0]*self.A[key[0]][key[1]])
+            b=float(self.Er[key][1]*self.A[key[0]][key[1]])
+            A_tilde[key[0]][key[1]]=mp.mpi(min(a,b),max(a,b))
+            #A_tilde[key[0]][key[1]]=mp.mpi(self.Er[key][0]*self.A[key[0]][key[1]],self.Er[key][1]*self.A[key[0]][key[1]])
 
         #print(A_tilde)
         return A_tilde
@@ -63,10 +67,13 @@ class Interval:
         '''
         Computes the reachable set without perturbation
         '''
+        start_time=time.time()
         At=LA.matrix_power(self.A,self.T)
         rs=np.matmul(At,self.Theta)
+        time_taken=time.time()-start_time
         print()
         print("\n-------------Reachable Set of the Un-perturbed System-------------")
+        print("Time Taken: ",time_taken)
         print(rs)
         print("---------------------------------------------------------------")
 
@@ -82,10 +89,13 @@ class Interval:
         '''
         Computes the reachable set of the perturbed system
         '''
+        start_time=time.time()
         At=LA.matrix_power(self.A_tilde,self.T)
         rs=np.matmul(At,self.Theta)
+        time_taken=time.time()-start_time
         print()
         print("\n-------------Reachable Set of the Perturbed System using Interval Arithmetic-------------")
+        print("Time Taken: ",time_taken)
         print(rs)
         print("---------------------------------------------------------------")
 
