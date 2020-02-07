@@ -25,7 +25,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Stable System 1 <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -43,7 +43,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Stable System 2 <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -55,13 +55,13 @@ class Driver:
         B=Benchmarks.StableSystem3.B
         mode='.'
         E={
-        (0,1): [-0.1,0.1]
+        (0,1): [0.9,1.1]
         }
         IS=np.array([
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Stable System 3 <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -81,7 +81,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Stable System 4 <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -114,7 +114,7 @@ class Driver:
         (3,7): [0.9,1,1],
         (4,6): [0.9,1,1]
         }
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Flight Envelope <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -144,7 +144,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Co Op Vehicles I <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -174,7 +174,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Co Op Vehicles II <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -196,7 +196,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> PKPD 2 <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -215,7 +215,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> DC Conv <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -239,7 +239,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> SpaceCraft Rndzvs <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -268,7 +268,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Holes CXc <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -292,7 +292,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Motor Transmission 1 <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
@@ -314,7 +314,7 @@ class Driver:
         [1],
         [1]
         ])
-        T=20
+        T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Motor Transmission 2 <<<<<<<<<<<<<\n")
         rs=ReachSet(A,B,mode,E,IS,T,mList)
