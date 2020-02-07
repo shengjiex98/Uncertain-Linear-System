@@ -3,7 +3,7 @@ Author: Bineet Ghosh, under supervision of Dr. Sridhar Duggirala
 Email: ghosh.bineet22@gmail.com
 
 - Given a Linear System with uncertainties, compute the reachable set of the
-uncertain system.
+uncertain system using the Splitting Method.
 
 Documentation: Not yet available. (TODO)
 '''
@@ -66,7 +66,7 @@ class Split:
         for key in self.Er:
             A_tilde[key[0]][key[1]]=mp.mpi(self.Er[key][0]*self.A[key[0]][key[1]],self.Er[key][1]*self.A[key[0]][key[1]])
 
-        #print(A_tilde)
+        print(A_tilde)
         return A_tilde
 
 
@@ -114,7 +114,7 @@ class Split:
             U=self.computeU(ORS)
             t=t+1
         print()
-        print("\n-------------Reachable Set of the Perturbed System-------------")
+        print("\n-------------Reachable Set of the Perturbed System using Splitting Method-------------")
         print(ORS)
         print("---------------------------------------------------------------")
 
