@@ -45,9 +45,12 @@ class Split:
         Ac=np.zeros((self.n,self.n))
         for i in range(self.n):
             for j in range(self.n):
-                if (isinstance(self.A_tilde[i][j],int)) or (isinstance(self.A_tilde[i][j],float)):
+                if (isinstance(self.A_tilde[i][j],int)) or (isinstance(self.A_tilde[i][j],float)) or (isinstance(self.A_tilde[i][j],np.float128)):
                     Ac[i][j]=self.A_tilde[i][j]
                 else:
+                    '''print(mp.nstr(self.A_tilde[i][j]))
+                    print(mp.nstr(self.A_tilde[i][j]).split(',')[0][1:])
+                    print(mp.nstr(self.A_tilde[i][j]).split(',')[1][:-1])'''
                     a=float(mp.nstr(self.A_tilde[i][j]).split(',')[0][1:])
                     b=float(mp.nstr(self.A_tilde[i][j]).split(',')[1][:-1])
                     c=(a+b)/2
@@ -64,9 +67,10 @@ class Split:
             for j in range(self.n):
                 A_tilde[i][j]=self.A[i][j]
         for key in self.Er:
+            #A_tilde[key[0]][key[1]]=mp.mpi(float(self.Er[key][0]*self.A[key[0]][key[1]]),float(self.Er[key][1]*self.A[key[0]][key[1]]))
             A_tilde[key[0]][key[1]]=mp.mpi(self.Er[key][0]*self.A[key[0]][key[1]],self.Er[key][1]*self.A[key[0]][key[1]])
 
-        print(A_tilde)
+        #print(A_tilde)
         return A_tilde
 
 
@@ -118,18 +122,35 @@ class Split:
         print(ORS)
         print("---------------------------------------------------------------")
 
-if True:
-    A=np.array([
+if False:
+    A2=np.array([
     [1,1,-2],
     [2,0.2,0],
     [0,0.1,0.1]
     ])
+    A=np.array([
+    [2,1,-2,1],
+    [2,1.2,0,0],
+    [0,0.1,1.1,1],
+    [0,0,0,1]
+    ])
     E={
+    (0,1):[0.9,1.5],
+    (1,0):[0.8,1.2],
+    (2,3):[0.9,1.1]
+    }
+    E2={
     (0,1):[0.9,1.5],
     (1,0):[0.8,1.2],
     }
     T=2000
+    IS2=np.array([
+    [1],
+    [1],
+    [1]
+    ])
     IS=np.array([
+    [1],
     [1],
     [1],
     [1]

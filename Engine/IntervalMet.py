@@ -48,7 +48,7 @@ class Interval:
         for key in self.Er:
             A_tilde[key[0]][key[1]]=mp.mpi(self.Er[key][0]*self.A[key[0]][key[1]],self.Er[key][1]*self.A[key[0]][key[1]])
 
-        print(A_tilde)
+        #print(A_tilde)
         return A_tilde
 
     def getReachableSetPertFree(self):
@@ -66,7 +66,7 @@ class Interval:
         At=LA.matrix_power(self.A,self.T)
         rs=np.matmul(At,self.Theta)
         print()
-        print("\n-------------Reachable Set of the Unerturbed System-------------")
+        print("\n-------------Reachable Set of the Un-perturbed System-------------")
         print(rs)
         print("---------------------------------------------------------------")
 
@@ -91,7 +91,7 @@ class Interval:
 
 
 
-if True:
+if False:
     A=np.array([
     [1,1,-2],
     [2,0.2,0],
