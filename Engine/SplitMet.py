@@ -84,9 +84,11 @@ class Split:
         '''
         Computes the effect of uncertainty on the reachable set
         '''
-        A_tildeX=np.matmul(self.A_tilde,rs)
-        AcX=np.matmul(self.Ac,rs)
-        U=A_tildeX-AcX
+        #A_tildeX=np.matmul(self.A_tilde,rs)
+        #AcX=np.matmul(self.Ac,rs)
+        #U=A_tildeX-AcX
+        diff=self.A_tilde-self.Ac
+        U=np.matmul(diff,rs)
         return U
 
     def getReachableSet(self):
