@@ -258,40 +258,51 @@ class Split:
         '''
         start_time=time.time()
         ORS=self.Theta
-        ORSI=self.Theta
         U=self.computeU(ORS)
-        UI=self.computeU_Interval(ORS)
         t=1
         print("-----------------")
         while (t<=self.T):
             sys.stdout.write('\r')
-            sys.stdout.write("Splitting Algorithm Progress: "+str((t*100)/self.T)+"%")
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
             sys.stdout.flush()
             #print()
             ORS=np.matmul(self.Ac,ORS)+U
             U=self.computeU(ORS)
-            ORSI=np.matmul(self.Ac,ORSI)+UI
-            UI=self.computeU(ORSI)
-            '''print(U)
-            print("-")
-            print(self.computeU_Interval(ORS))
-            exit(0)'''
             t=t+1
         time_taken=time.time()-start_time
         print()
+
+        start_time2=time.time()
+        ORSI=self.Theta
+        UI=self.computeU_Interval(ORS)
+        t=1
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Interval): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+            #print()
+            ORSI=np.matmul(self.Ac,ORSI)+UI
+            UI=self.computeU_Interval(ORSI)
+            t=t+1
+        time_taken2=time.time()-start_time2
+        print()
+        print()
         print("\n-------------Reachable Set of the Perturbed System using Splitting Method-------------\n")
-        print("Time Taken: ",time_taken)
         print()
         print("----Optimization----")
+        print("Time Taken: ",time_taken)
         print(ORS)
         print("--------")
         print()
         print("----Interval----")
+        print("Time Taken: ",time_taken2)
         print(ORSI)
-        print("--------\n")
+        print("--------")
+        print()
+        print("Step: ",self.T)
         print("---------------------------------------------------------------")
 
-if True:
+if False:
     A2=np.array([
     [1,1,-2],
     [2,0.2,0],

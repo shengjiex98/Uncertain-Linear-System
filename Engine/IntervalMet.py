@@ -74,7 +74,10 @@ class Interval:
         print()
         print("\n-------------Reachable Set of the Un-perturbed System-------------")
         print("Time Taken: ",time_taken)
+        print()
         print(rs)
+        print()
+        print("Step: ",self.T)
         print("---------------------------------------------------------------")
 
     def getReachableSet(self):
@@ -97,6 +100,8 @@ class Interval:
         print("\n-------------Reachable Set of the Perturbed System using Interval Arithmetic-------------")
         print("Time Taken: ",time_taken)
         print(rs)
+        print()
+        print("Step: ",self.T)
         print("---------------------------------------------------------------")
 
 

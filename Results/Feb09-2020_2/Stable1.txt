@@ -1,0 +1,52 @@
+>>>>>>>>>>> Stable System 1 <<<<<<<<<<<<<
+
+Using license file /home/bineet/gurobi.lic
+Academic license - for non-commercial use only
+-----------------
+Splitting Algorithm Progress (Optimization): 100.0%
+Splitting Algorithm Progress (Interval): 100.0%
+
+
+-------------Reachable Set of the Perturbed System using Splitting Method-------------
+
+
+----Optimization----
+Time Taken:  2.091600179672241
+[[mpi('1.0', '1.0')]
+ [mpi('1.0', '1.0')]
+ [mpi('1.8637566029919304e-9', '1.8637566029925268e-9')]]
+--------
+
+----Interval----
+Time Taken:  0.6155061721801758
+[[mpi('1.0', '1.0')]
+ [mpi('1.0', '1.0')]
+ [mpi('1.8637566029919304e-9', '1.8637566029925268e-9')]]
+--------
+
+Step:  2000
+---------------------------------------------------------------
+
+
+-------------Reachable Set of the Perturbed System using Interval Arithmetic-------------
+Time Taken:  0.00171661376953125
+[[mpi('1.0', '1.0')]
+ [mpi('1.0', '1.0')]
+ [mpi('1.8637566029920371e-9', '1.8637566029922931e-9')]]
+
+Step:  2000
+---------------------------------------------------------------
+
+
+-------------Reachable Set of the Un-perturbed System-------------
+Time Taken:  0.019886016845703125
+
+[[1.0000000e+00]
+ [1.0000000e+00]
+ [1.8637566e-09]]
+
+Step:  2000
+---------------------------------------------------------------
+
+==========================================
+
