@@ -228,7 +228,9 @@ class Split:
                     a=np.float(mp.nstr(UInterval[i][0]).split(',')[0][1:])
                     if lb<a:
                         print("Really?! Min Error!!")
-                        print("i: ",i)
+                        print("Value: ",obj.getValue())
+                        print("Interval: ",a)
+                        '''print("i: ",i)
                         for j in range(self.n):
                             if (i,j) in self.Er:
                                 pertV=model.getVarByName("Pert"+str((i,j)))
@@ -259,7 +261,7 @@ class Split:
                         UW=np.matmul(diff,rs)
                         print(UW[i])
 
-                        model.write('dump.lp')
+                        model.write('dump.lp')'''
                         #exit(0)
                 if ub!=9890:
                     b=np.float(mp.nstr(UInterval[i][0]).split(',')[1][:-1])
@@ -268,7 +270,6 @@ class Split:
                         model.write("anamoly.lp")
                         print("Interval: ",b)
                         print("Optimization: ",ub)
-                        exit(0)
                 U[i][0]=mp.mpi(lb,ub)
         else:
             for i in range(self.n):
