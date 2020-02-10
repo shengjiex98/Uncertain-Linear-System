@@ -11,8 +11,12 @@ Documentation: Not yet available. (TODO)
 import numpy as np
 import numpy.linalg as LA
 import mpmath as mp
+from gurobipy import *
 import sys
 import time
+
+BIGM=0.001
+EPSILON=1e-3
 
 class Split:
     '''
@@ -35,7 +39,6 @@ class Split:
         self.Theta=theta # The initial set
         self.T=T #Max number of steps
         self.n=A.shape[0]
-        self.A_tilde=self.computeUncertainMat()
         self.Ac=self.computeCenter()
         self.methodName="Split"
 
@@ -46,18 +49,24 @@ class Split:
         Ac=np.zeros((self.n,self.n))
         for i in range(self.n):
             for j in range(self.n):
-                if (isinstance(self.A_tilde[i][j],int)) or (isinstance(self.A_tilde[i][j],float)) or (isinstance(self.A_tilde[i][j],np.float128)):
-                    Ac[i][j]=self.A_tilde[i][j]
-                else:
-                    '''print(mp.nstr(self.A_tilde[i][j]))
-                    print(mp.nstr(self.A_tilde[i][j]).split(',')[0][1:])
-                    print(mp.nstr(self.A_tilde[i][j]).split(',')[1][:-1])'''
-                    a=float(mp.nstr(self.A_tilde[i][j]).split(',')[0][1:])
-                    b=float(mp.nstr(self.A_tilde[i][j]).split(',')[1][:-1])
+                if (i,j) in self.Er:
+                    a=float(self.A[i][j]*self.Er[(i,j)][0])
+                    b=float(self.A[i][j]*self.Er[(i,j)][1])
                     c=(a+b)/2
                     Ac[i][j]=c
-        #print(Ac)
+                else:
+                    Ac[i][j]=self.A[i][j]
         return Ac
+
+    def computeU_Interval(self,rs):
+        '''
+        Computes the effect of uncertainty on the reachable set
+        using Interval arithmetic
+        '''
+        A_tilde=self.computeUncertainMat()
+        diff=A_tilde-self.Ac
+        U=np.matmul(diff,rs)
+        return U
 
     def computeUncertainMat(self):
         '''
@@ -79,16 +88,149 @@ class Split:
         #print(A_tilde)
         return A_tilde
 
-
     def computeU(self,rs):
         '''
         Computes the effect of uncertainty on the reachable set
+        using optimization.
         '''
-        #A_tildeX=np.matmul(self.A_tilde,rs)
-        #AcX=np.matmul(self.Ac,rs)
-        #U=A_tildeX-AcX
-        diff=self.A_tilde-self.Ac
-        U=np.matmul(diff,rs)
+
+        semiDefFlag=False
+
+        model = Model("qp")
+        model.setParam( 'OutputFlag', False )
+        #model.params.Presolve=0
+
+        # Create Perturbation Variables
+        faultVars=[]
+        for key in self.Er:
+            name="Pert"+str(key)
+            faultVars.append(model.addVar(-GRB.INFINITY,GRB.INFINITY,name=name,vtype='C'))
+        #-----------------------
+
+        # Create Reachable Set Variables
+        reachVars=[]
+        for i in range(self.n):
+            name="IS"+str(i)
+            reachVars.append(model.addVar(-GRB.INFINITY,GRB.INFINITY,name=name,vtype='C'))
+        #-----------------------
+
+        # Add the Perturbation Constraints
+
+
+        model.optimize() # Updating the model, to use some of the functions
+
+        for var in faultVars:
+            kN=var.varName
+            i=int(kN.split(',')[0][5:])
+            j=int(kN.split(',')[1][:-1])
+            k=(i,j)
+            name="Pert-C"+str(k)
+            model.addConstr(var>=self.Er[k][0],name+".1")
+            model.addConstr(var<=self.Er[k][1],name+".2")
+        #---------------------------------
+
+        # Add Initial Set Constraints
+        for i in range(self.n):
+            name="ReachSet-C-"+str(i)
+            if (isinstance(rs[i][0],int)) or (isinstance(rs[i][0],np.int64)) or (isinstance(rs[i][0],float)) or (isinstance(rs[i][0],np.float128)):
+                model.addConstr(reachVars[i]==rs[i][0],name)
+            else:
+                a=float(mp.nstr(rs[i][0]).split(',')[0][1:])
+                b=float(mp.nstr(rs[i][0]).split(',')[1][:-1])
+                if a==b:
+                    model.addConstr(reachVars[i]==a,name)
+                else:
+                    model.addConstr(reachVars[i]>=min(a,b),name+".1")
+                    model.addConstr(reachVars[i]<=max(a,b),name+".2")
+        #---------------------------------
+
+        # Prepare the objective functions and get min max
+
+        U=np.zeros((self.n,1),dtype=object)
+
+        for i in range(self.n):
+            obj=0
+            for j in range(self.n):
+                if (i,j) in self.Er:
+                    pertV=model.getVarByName("Pert"+str((i,j)))
+                    obj=obj+((self.A[i][j]*pertV)-self.Ac[i][j])
+                else:
+                    obj=obj+(self.A[i][j]-self.Ac[i][j])
+            obj=obj*reachVars[i]
+
+            # Obtain Minimum
+            mn=-9890
+            #print(obj," (Min)\n")
+            model.setObjective(obj,GRB.MINIMIZE)
+            #model.params.Presolve=0
+            #model.write("logMin.lp")
+            try:
+                model.optimize()
+                status = model.Status
+                if status==GRB.Status.UNBOUNDED:
+                    print("UNBOUNDED ")
+                else:
+                    if status == GRB.Status.INF_OR_UNBD or \
+                       status == GRB.Status.INFEASIBLE  or \
+                       status == GRB.Status.UNBOUNDED:
+                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                    else:
+                        mn=obj.getValue()
+            except:
+                semiDefFlag=True
+
+
+            #print("Min: ",mn)
+            #-------------------------------
+
+            # Obtain Maximum
+            #print(obj," (Max)\n")
+            mx=9890
+            model.setObjective(obj,GRB.MAXIMIZE)
+            #model.params.Presolve=0
+            #model.write("logMax.lp")
+            try:
+                model.optimize()
+                status = model.Status
+                if status==GRB.Status.UNBOUNDED:
+                    print("UNBOUNDED ")
+                else:
+                    if status == GRB.Status.INF_OR_UNBD or \
+                       status == GRB.Status.INFEASIBLE  or \
+                       status == GRB.Status.UNBOUNDED:
+                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                    else:
+                        mx=obj.getValue()
+            except:
+                #print("Caught it!!")
+                semiDefFlag=True
+
+
+            #print("Max: ",mx)
+            #----------------------------------
+
+            #U[i][0]=mp.mpi(mn,mx)
+            U[i][0]=(mn,mx)
+            #print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ",i)
+
+        if semiDefFlag==True:
+            UInterval=self.computeU_Interval(rs)
+            for i in range(self.n):
+                lb=U[i][0][0]
+                ub=U[i][0][1]
+                if lb==-9890:
+                    lb=np.float(mp.nstr(UInterval[i][0]).split(',')[0][1:])
+                if ub==9890:
+                    ub=np.float(mp.nstr(UInterval[i][0]).split(',')[1][:-1])
+                #print(lb,ub)
+                U[i][0]=mp.mpi(lb,ub)
+        else:
+            for i in range(self.n):
+                lb=U[i][0][0]
+                ub=U[i][0][1]
+                #print(lb,ub)
+                U[i][0]=mp.mpi(lb,ub)
+        #print("Ret>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         return U
 
     def getReachableSet(self):
@@ -116,24 +258,40 @@ class Split:
         '''
         start_time=time.time()
         ORS=self.Theta
+        ORSI=self.Theta
         U=self.computeU(ORS)
+        UI=self.computeU_Interval(ORS)
         t=1
-        print()
+        print("-----------------")
         while (t<=self.T):
             sys.stdout.write('\r')
             sys.stdout.write("Splitting Algorithm Progress: "+str((t*100)/self.T)+"%")
             sys.stdout.flush()
+            #print()
             ORS=np.matmul(self.Ac,ORS)+U
             U=self.computeU(ORS)
+            ORSI=np.matmul(self.Ac,ORSI)+UI
+            UI=self.computeU(ORSI)
+            '''print(U)
+            print("-")
+            print(self.computeU_Interval(ORS))
+            exit(0)'''
             t=t+1
         time_taken=time.time()-start_time
         print()
-        print("\n-------------Reachable Set of the Perturbed System using Splitting Method-------------")
+        print("\n-------------Reachable Set of the Perturbed System using Splitting Method-------------\n")
         print("Time Taken: ",time_taken)
+        print()
+        print("----Optimization----")
         print(ORS)
+        print("--------")
+        print()
+        print("----Interval----")
+        print(ORSI)
+        print("--------\n")
         print("---------------------------------------------------------------")
 
-if False:
+if True:
     A2=np.array([
     [1,1,-2],
     [2,0.2,0],
@@ -146,7 +304,7 @@ if False:
     [0,0,0,1]
     ])
     E={
-    (0,1):[0.9,1.5],
+    (0,1):[0.9,1.1],
     (1,0):[0.8,1.2],
     (2,3):[0.9,1.1]
     }
@@ -154,7 +312,7 @@ if False:
     (0,1):[0.9,1.5],
     (1,0):[0.8,1.2],
     }
-    T=2000
+    T=200
     IS2=np.array([
     [1],
     [1],
