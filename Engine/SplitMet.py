@@ -18,6 +18,7 @@ import time
 BIGM=0.001
 EPSILON=1e-3
 
+
 class Split:
     '''
     Computes the reachable set of a given linear discrete dynamical system A
@@ -153,10 +154,9 @@ class Split:
             for j in range(self.n):
                 if (i,j) in self.Er:
                     pertV=model.getVarByName("Pert"+str((i,j)))
-                    obj=obj+((self.A[i][j]*pertV)-self.Ac[i][j])
+                    obj=obj+(((self.A[i][j]*pertV)-self.Ac[i][j])*reachVars[j])
                 else:
-                    obj=obj+(self.A[i][j]-self.Ac[i][j])
-            obj=obj*reachVars[i]
+                    obj=obj+((self.A[i][j]-self.Ac[i][j]))*reachVars[j]
 
             # Obtain Minimum
             mn=-9890
@@ -166,6 +166,7 @@ class Split:
             #model.write("logMin.lp")
             try:
                 model.optimize()
+                #model.write("dump.bas")
                 status = model.Status
                 if status==GRB.Status.UNBOUNDED:
                     print("UNBOUNDED ")
@@ -223,6 +224,51 @@ class Split:
                 if ub==9890:
                     ub=np.float(mp.nstr(UInterval[i][0]).split(',')[1][:-1])
                 #print(lb,ub)
+                if lb!=-9890:
+                    a=np.float(mp.nstr(UInterval[i][0]).split(',')[0][1:])
+                    if lb<a:
+                        print("Really?! Min Error!!")
+                        print("i: ",i)
+                        for j in range(self.n):
+                            if (i,j) in self.Er:
+                                pertV=model.getVarByName("Pert"+str((i,j)))
+                                obj=obj+((self.A[i][j]*pertV)-self.Ac[i][j])
+                            else:
+                                obj=obj+(self.A[i][j]-self.Ac[i][j])
+                        obj=obj*reachVars[i]
+                        print(obj)
+                        model.setObjective(obj,GRB.MINIMIZE)
+                        model.optimize()
+                        print("Value: ",obj.getValue())
+                        print("Interval: ",a,UInterval[i][0])
+                        print(rs)
+                        print("-")
+                        print(self.A[i])
+                        print("-")
+                        print(self.Ac[i])
+                        print("-")
+                        print(self.Er)
+                        print("-")
+                        A_tilde=self.computeUncertainMat()
+                        print(A_tilde[i])
+                        print("-")
+                        print(self.Ac[i])
+                        diff=A_tilde-self.Ac
+                        print("-")
+                        print(diff[i])
+                        UW=np.matmul(diff,rs)
+                        print(UW[i])
+
+                        model.write('dump.lp')
+                        #exit(0)
+                if ub!=9890:
+                    b=np.float(mp.nstr(UInterval[i][0]).split(',')[1][:-1])
+                    if b<ub:
+                        print("Really?! Max Error!!")
+                        model.write("anamoly.lp")
+                        print("Interval: ",b)
+                        print("Optimization: ",ub)
+                        exit(0)
                 U[i][0]=mp.mpi(lb,ub)
         else:
             for i in range(self.n):
@@ -271,7 +317,6 @@ class Split:
             t=t+1
         time_taken=time.time()-start_time
         print()
-
         start_time2=time.time()
         ORSI=self.Theta
         UI=self.computeU_Interval(ORS)
