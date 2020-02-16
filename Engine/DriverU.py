@@ -7,6 +7,7 @@ Email: ghosh.bineet22@gmail.com
 Documentation: Not yet available. (TODO)
 '''
 
+from Visualization import *
 from ComputeU import *
 from Benchmarks import *
 
@@ -345,7 +346,9 @@ class DriverCompU:
         P=[(1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,1,rs,rs2)
+        v.displayPlot()
 
 
 
