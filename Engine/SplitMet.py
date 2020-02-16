@@ -201,7 +201,9 @@ class Split:
                        status == GRB.Status.UNBOUNDED:
                         print('**The model cannot be solved because it is infeasible or unbounded**')
                     else:
-                        mx=obj.getValue()
+                        for v in model.getVars():
+                            print('%s %g' % (v.varName, v.x))
+                        print('Obj: %g' % obj.getValue())
             except:
                 #print("Caught it!!")
                 semiDefFlag=True
