@@ -79,6 +79,9 @@ class DriverCompU:
         rs=(C,V,P)
         u=CompU(A,E)
         u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,2,rs,rs2)
+        v.displayPlot()
 
     def stableSystem2():
         dynA=Benchmarks.StableSystem2.A
@@ -96,7 +99,9 @@ class DriverCompU:
         P=[(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,1,rs,rs2)
+        v.displayPlot()
 
     def stableSystem3():
         dynA=Benchmarks.StableSystem3.A
@@ -114,7 +119,9 @@ class DriverCompU:
         P=[(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,1,rs,rs2)
+        v.displayPlot()
 
     def stableSystem4():
         dynA=Benchmarks.StableSystem4.A
@@ -134,7 +141,9 @@ class DriverCompU:
         P=[(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,2,rs,rs2)
+        v.displayPlot()
 
     def flightEnvelope():
         dynA=Benchmarks.FlightEnvelope.A
@@ -173,7 +182,9 @@ class DriverCompU:
         P=[(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,1,rs,rs2)
+        v.displayPlot()
 
     def coOPVehiclesI():
         dynA=Benchmarks.CoOPVehiclesI.A
@@ -204,7 +215,9 @@ class DriverCompU:
         P=[(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,1,rs,rs2)
+        v.displayPlot()
 
     def pkpd2():
         dynA=Benchmarks.PKPD2.A
@@ -226,13 +239,15 @@ class DriverCompU:
         P=[(1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,1,rs,rs2)
+        v.displayPlot()
 
     def dcConv():
         dynA=Benchmarks.DCConv.A
         dynB=Benchmarks.DCConv.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=10
+        P=0
         E={
         (0,2): [1-(P/100),1+(P/100)],
         (1,1): [1-(P/100),1+(P/100)]
@@ -246,7 +261,9 @@ class DriverCompU:
         P=[(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,1,rs,rs2)
+        v.displayPlot()
 
     def spaceCraftRndzvs():
         dynA=Benchmarks.SpaceCraftRndzvs.A
@@ -271,7 +288,9 @@ class DriverCompU:
         P=[(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,1,rs,rs2)
+        v.displayPlot()
 
     def holesCXc():
         dynA=Benchmarks.HolesCXc.A
@@ -300,7 +319,9 @@ class DriverCompU:
         P=[(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,1,rs,rs2)
+        v.displayPlot()
 
     def motorTransmission1():
         dynA=Benchmarks.MotorTransmission1.A
@@ -324,7 +345,9 @@ class DriverCompU:
         P=[(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
-        u.computeU(rs)
+        rs2=u.computeU(rs)
+        v=Visualization(0,1,rs,rs2)
+        v.displayPlot()
 
     def motorTransmission2():
         dynA=Benchmarks.MotorTransmission2.A
@@ -352,4 +375,4 @@ class DriverCompU:
 
 
 
-DriverCompU.motorTransmission2()
+DriverCompU.dcConv()
