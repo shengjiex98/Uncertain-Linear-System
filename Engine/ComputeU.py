@@ -581,8 +581,8 @@ class CompU:
 
             U[i][0]=(mn,mx)
         #----------------------------------
-        print(U)
-        exit(0)
+        #print(U)
+        #exit(0)
 
         # Find a new Star set that overapproximates rs
         semiDefFlag=False
