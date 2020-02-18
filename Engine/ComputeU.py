@@ -476,6 +476,10 @@ class CompU:
         V=rs[1]
         P=rs[2]
 
+        '''print(self.A)
+        print(self.Ac)
+        print(V)'''
+
         semiDefFlag=False
 
         model = Model("qp")
@@ -530,7 +534,7 @@ class CompU:
                         obj2=obj2+(((self.A[i][k]*pertV)-self.Ac[i][k])*V[k][j])
                     else:
                         obj2=obj2+((self.A[i][k]-self.Ac[i][k])*V[k][j])
-                obj=obj2*reachVars[j]
+                obj=obj+(obj2*reachVars[j])
             objC=0
             for j in range(self.n):
                 if (i,j) in self.Er:
@@ -539,6 +543,7 @@ class CompU:
                 else:
                     objC=objC+((self.A[i][j]-self.Ac[i][j])*C[j])
             obj=objC+obj
+            #print(obj)
 
             # Obtain Minimum
             mn=-9890
@@ -558,6 +563,8 @@ class CompU:
                         mn=obj.getValue()
             except:
                 semiDefFlag=True
+                model.write("dumpN.lp")
+                print("i: ",i)
 
 
 

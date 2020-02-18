@@ -431,8 +431,7 @@ class Visualization:
         return (X_list,Y_list,X_list2,Y_list2)
 
     def getPlots(self):
-        print("Under Construction!!")
-
+        
         C=self.star1[0]
         V=self.star1[1]
         P=self.star1[2]

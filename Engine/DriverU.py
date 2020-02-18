@@ -150,7 +150,7 @@ class DriverCompU:
         dynA=Benchmarks.FlightEnvelope.A
         dynB=Benchmarks.FlightEnvelope.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=10000
+        P=1000000
         E_weird={
         (3,7): [1-(P/100),1+(P/100)],
         (4,6): [1-(P/100),1+(P/100)]
@@ -180,10 +180,12 @@ class DriverCompU:
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
         ])
-        P=[(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
+        P=[(-10,10),(-10,10),(-10,10),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
-        u=CompU(A,E)
+        u=CompU(A,E_weird)
         rs2=u.computeU(rs)
+        print(rs2)
+        #exit(0)
         v=Visualization(0,1,rs,rs2)
         v.displayPlot()
 
@@ -191,7 +193,7 @@ class DriverCompU:
         dynA=Benchmarks.CoOPVehiclesI.A
         dynB=Benchmarks.CoOPVehiclesI.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=10000
+        P=100
         E={
         (0,0): [1-(P/100),1+(P/100)],
         (2,0): [1-(P/100),1+(P/100)],
@@ -199,6 +201,10 @@ class DriverCompU:
         (2,8): [1-(P/100),1+(P/100)],
         (5,0): [1-(P/100),1+(P/100)],
         (5,8): [1-(P/100),1+(P/100)]
+        }
+        E2={
+        (2,0): [1-(P/100),1+(P/100)],
+        (5,0): [1-(P/100),1+(P/100)]
         }
         C=[0,0,0,0,0,0,0,0,0,0]
         V=np.array([
@@ -248,7 +254,7 @@ class DriverCompU:
         dynA=Benchmarks.DCConv.A
         dynB=Benchmarks.DCConv.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=10000
+        P=10000000
         E={
         (0,2): [1-(P/100),1+(P/100)],
         (1,1): [1-(P/100),1+(P/100)]
@@ -270,7 +276,7 @@ class DriverCompU:
         dynA=Benchmarks.SpaceCraftRndzvs.A
         dynB=Benchmarks.SpaceCraftRndzvs.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=200000000000000000000
+        P=20
         E={
         (2,1): [1-(P/100),1+(P/100)],
         (2,0): [1-(P/100),1+(P/100)],
@@ -286,7 +292,7 @@ class DriverCompU:
         [0,0,0,0,1,0],
         [0,0,0,0,0,1],
         ])
-        P=[(-1,1),(-1,1),(1,1),(1,1),(1,1),(1,1)]
+        P=[(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
         rs2=u.computeU(rs)
@@ -297,12 +303,12 @@ class DriverCompU:
         dynA=Benchmarks.HolesCXc.A
         dynB=Benchmarks.HolesCXc.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=20000
+        P=2000
         E={
-        (0,3): [0.9,1.1],
-        (1,2): [0.9,1.1],
-        (3,2): [0.9,1.1],
-        (4,3): [0.9,1.1]
+        (0,3): [1-(P/100),1+(P/100)],
+        (1,2): [1-(P/100),1+(P/100)],
+        (3,2): [1-(P/100),1+(P/100)],
+        (4,3): [1-(P/100),1+(P/100)]
         }
         C=[0,0,0,0,0,0,0,0,0,0]
         V=np.array([
@@ -317,7 +323,7 @@ class DriverCompU:
         [0,0,0,0,0,0,0,0,1,0],
         [0,0,0,0,0,0,0,0,0,1],
         ])
-        P=[(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
+        P=[(-1,1),(-1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
         u=CompU(A,E)
         rs2=u.computeU(rs)
@@ -328,7 +334,7 @@ class DriverCompU:
         dynA=Benchmarks.MotorTransmission1.A
         dynB=Benchmarks.MotorTransmission1.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=500
+        P=50000
         E={
         (0,6): [1-(P/100),1+(P/100)],
         (1,6): [1-(P/100),1+(P/100)]
@@ -354,10 +360,10 @@ class DriverCompU:
         dynA=Benchmarks.MotorTransmission2.A
         dynB=Benchmarks.MotorTransmission2.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=1
+        P=1000
         E={
-        (4,0): [0.9,1.1],
-        (4,1): [0.9,1.1]
+        (4,0): [1-(P/100),1+(P/100)],
+        (4,1): [1-(P/100),1+(P/100)]
         }
         C=[0,0,0,0,0]
         V=np.array([
@@ -371,9 +377,9 @@ class DriverCompU:
         rs=(C,V,P)
         u=CompU(A,E)
         rs2=u.computeU(rs)
-        v=Visualization(0,1,rs,rs2)
+        v=Visualization(0,4,rs,rs2)
         v.displayPlot()
 
 
 
-DriverCompU.spaceCraftRndzvs()
+DriverCompU.motorTransmission1()
