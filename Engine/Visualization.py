@@ -431,7 +431,7 @@ class Visualization:
         return (X_list,Y_list,X_list2,Y_list2)
 
     def getPlots(self):
-        
+
         C=self.star1[0]
         V=self.star1[1]
         P=self.star1[2]
@@ -961,17 +961,17 @@ class Visualization:
 if False:
     C=[0,0]
     V=np.array([
-    [0,-1],
-    [-1,0]
+    [1,-1],
+    [0,-1]
     ])
     P=[(-1,1), (-2,2)]
     rs=(C,V,P)
     C2=[0,0]
     V2=np.array([
-    [0,1],
-    [1,-1]
+    [-2,1],
+    [1,0]
     ])
-    P2=[(-4,4), (-7,7)]
+    P2=[(-0.2,0.2), (-0.7,0.7)]
     rs2=(C2,V2,P2)
     v=Visualization(0,1,rs,rs2)
     v.displayPlot()
