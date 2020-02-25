@@ -28,7 +28,7 @@ class Driver:
         T=2000
         mList=['Split','Interval']
         print("\n>>>>>>>>>>> Stable System 1 <<<<<<<<<<<<<\n")
-        rs=ReachSet(A,B,mode,E,IS,T,mList)
+        rs=Split
         rs.compareReachSets()
         print("\n==========================================\n")
 

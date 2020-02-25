@@ -15,9 +15,6 @@ from gurobipy import *
 import sys
 import time
 
-from VisualizationReachSet import *
-from ComputeU import *
-
 BIGM=0.001
 EPSILON=1e-3
 
@@ -285,7 +282,7 @@ class Split:
         #print("Ret>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         return U
 
-    def getReachableSetOld(self):
+    def getReachableSet(self):
         '''
         Implements the main algorithm of splitting the effect of the constant and
         the uncertain part
@@ -303,7 +300,7 @@ class Split:
         print()
         return ORS
 
-    def printReachableSetOld(self):
+    def printReachableSet(self):
         '''
         Implements the main algorithm of splitting the effect of the constant and
         the uncertain part
@@ -353,130 +350,6 @@ class Split:
         print("Step: ",self.T)
         print("---------------------------------------------------------------")
 
-    def printReachableSet(self,s1,s2):
-        '''
-        Implements the main algorithm of splitting the effect of the constant and
-        the uncertain part
-        '''
-        intervalPlot=self.T/5
-        lPlots=[]
-        start_time=time.time()
-        cu=CompU(self.A,self.Er)
-        ORS=self.Theta
-        ORS_old=self.Theta
-        RS=self.Theta
-        U=cu.computeUI_Interval(ORS)
-        t=1
-        print("-----------------\n\n")
-
-        (X1,Y1)=Visualization(s1,s2,RS).getPlots()
-        (X2,Y2)=Visualization(s1,s2,ORS_old).getPlots()
-        (X3,Y3)=Visualization(s1,s2,ORS).getPlots()
-        #lPlots.append((X1,Y1,X2,Y2,X3,Y3))
-        lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
-        Visualization.displayPlot(s1,s2,lPlots)
-
-        while (t<=self.T):
-            sys.stdout.write('\r')
-            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
-            sys.stdout.flush()
-            RS=CompU.prodMatStars(self.A,RS)
-
-            ORS_old=ORS
-
-            ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
-
-
-            if t%intervalPlot==0:
-                (X1,Y1)=Visualization(s1,s2,RS).getPlots()
-                (X2,Y2)=Visualization(s1,s2,ORS_old).getPlots()
-                (X3,Y3)=Visualization(s1,s2,ORS).getPlots()
-                lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
-                Visualization.displayPlot(s1,s2,lPlots)
-
-
-            '''print("Center of ORS: ",ORS[0])
-            print("Vector of ORS: ")
-            print(ORS[1])
-            print("Predicate of ORS: ",ORS[2])
-            print("\n\n")'''
-
-
-            U=cu.computeUI_Interval(ORS)
-            t=t+1
-        time_taken=time.time()-start_time
-
-    def printReachableSetExpand(self,s1,s2):
-        '''
-        Implements the main algorithm of splitting the effect of the constant and
-        the uncertain part
-        '''
-        intervalPlot=self.T/5
-        lPlots=[]
-        U_list=[]
-        start_time=time.time()
-        cu=CompU(self.A,self.Er)
-        ORS=self.Theta
-        ORS_old=self.Theta
-        RS=self.Theta
-        U=cu.computeUI_Interval(ORS)
-        U_list.append(U)
-        t=1
-        print("-----------------\n\n")
-
-        (X1,Y1)=Visualization(s1,s2,RS).getPlots()
-        (X2,Y2)=Visualization(s1,s2,ORS_old).getPlots()
-        (X3,Y3)=Visualization(s1,s2,ORS).getPlots()
-        #lPlots.append((X1,Y1,X2,Y2,X3,Y3))
-        lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
-        Visualization.displayPlot(s1,s2,lPlots)
-
-        while (t<=self.T):
-            sys.stdout.write('\r')
-            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
-            sys.stdout.flush()
-            RS=CompU.prodMatStars(self.A,RS)
-
-            ORS_old=ORS
-
-            ORS=U_list[t-1]
-            for i in range(1,t+1):
-                if (i!=t):
-                    mat=LA.matrix_power(self.Ac,i)
-                    ORS=CompU.addStars(CompU.prodMatStars(mat,U_list[t-(i+1)]),ORS)
-                else:
-                    mat=LA.matrix_power(self.Ac,i)
-                    ORS=CompU.addStars(CompU.prodMatStars(mat,self.Theta),ORS)
-
-            #lPlots.append((X1,Y1,X2,Y2,X3,Y3))
-
-            if t%intervalPlot==0:
-                (X1,Y1)=Visualization(s1,s2,RS).getPlots()
-                (X2,Y2)=Visualization(s1,s2,ORS_old).getPlots()
-                (X3,Y3)=Visualization(s1,s2,ORS).getPlots()
-                lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
-                Visualization.displayPlot(s1,s2,lPlots)
-
-
-
-            '''print("Center of ORS: ",ORS[0])
-            print("Vector of ORS: ")
-            print(ORS[1])
-            print("Predicate of ORS: ",ORS[2])
-            print("\n\n")
-            print("Center of U: ",U_list[t-1][0])
-            print("Vector of U: ")
-            print(U_list[t-1][1])
-            print("Predicate of U: ",U_list[t-1][2])
-            print("\n\n")'''
-            #input("Continue?")
-
-
-            U=U_list.append(cu.computeUI_Interval(ORS))
-            t=t+1
-        time_taken=time.time()-start_time
-
-
 if False:
     A2=np.array([
     [1,1,-2],
@@ -511,29 +384,3 @@ if False:
     [1]
     ])
     Split(A,E,IS,T).printReachableSet()
-
-if False:
-    A2=np.array([
-    [2,1],
-    [-2,1.2]
-    ])
-    A=np.array([
-    [2,1],
-    [2,1.2]
-    ])
-    E={
-    (0,1): [0.98,1.02]
-    }
-
-    C=[0,0]
-    V=np.array([
-    [1,0],
-    [0,1]
-    ])
-    P=[(-1,1),(-1,1)]
-    rs=(C,V,P)
-
-    T=10
-
-    sp=Split(A,E,rs,T)
-    sp.printReachableSet(0,1)
