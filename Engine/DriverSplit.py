@@ -66,7 +66,7 @@ class DriverCompU:
         dynA=Benchmarks.StableSystem1.A
         dynB=Benchmarks.StableSystem1.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=1
+        P=2
         E={
         (2,2): [1-(P/100),1+(P/100)]
         }
@@ -76,17 +76,17 @@ class DriverCompU:
         [0,1,0],
         [0,0,1],
         ])
-        P=[(-1,1),(-1,1),(1,1)]
+        P=[(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(1,2,"Stable1")
 
     def stableSystem2():
         dynA=Benchmarks.StableSystem2.A
         dynB=Benchmarks.StableSystem2.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=10
+        P=2
         E={
         (0,1): [1-(P/100),1+(P/100)]
         }
@@ -97,15 +97,15 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(0,1,"Stable2")
 
     def stableSystem3():
         dynA=Benchmarks.StableSystem3.A
         dynB=Benchmarks.StableSystem3.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=10
+        P=2
         E={
         (0,1): [1-(P/100),1+(P/100)]
         }
@@ -116,15 +116,15 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(0,1,"Stable3")
 
     def stableSystem4():
         dynA=Benchmarks.StableSystem4.A
         dynB=Benchmarks.StableSystem4.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=10
+        P=2
         E={
         (0,0): [1-(P/100),1+(P/100)],
         (2,2): [1-(P/100),1+(P/100)]
@@ -137,20 +137,20 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1),(1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(0,1,"Stable4")
 
     def flightEnvelope():
         dynA=Benchmarks.FlightEnvelope.A
         dynB=Benchmarks.FlightEnvelope.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=100000
-        E_weird={
+        P=20
+        E={
         (3,7): [1-(P/100),1+(P/100)],
         (4,6): [1-(P/100),1+(P/100)]
         }
-        E={
+        E2={
         (0,1): [1-(P/100),1+(P/100)],
         (0,3): [1-(P/100),1+(P/100)],
         (1,4): [1-(P/100),1+(P/100)],
@@ -175,17 +175,17 @@ class DriverCompU:
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
         ])
-        P=[(-10,10),(-10,10),(-10,10),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
+        P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(0,1,"FlightEnvelope20p")
 
     def coOPVehiclesI():
         dynA=Benchmarks.CoOPVehiclesI.A
         dynB=Benchmarks.CoOPVehiclesI.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=1000
+        P=2
         E={
         (0,0): [1-(P/100),1+(P/100)],
         (2,0): [1-(P/100),1+(P/100)],
@@ -211,17 +211,17 @@ class DriverCompU:
         [0,0,0,0,0,0,0,0,1,0],
         [0,0,0,0,0,0,0,0,0,1]
         ])
-        P=[(-1,1),(-1,1),(-1,1),(-1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
+        P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
-        T=10
-        sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        T=2000
+        sp=Split(A,E2,rs,T)
+        sp.printReachableSet(0,1,"CoOpIv2")
 
     def pkpd2():
         dynA=Benchmarks.PKPD2.A
         dynB=Benchmarks.PKPD2.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=10000000
+        P=20
         E={
         (0,4): [1-(P/100),1+(P/100)],
         (3,3): [1-(P/100),1+(P/100)]
@@ -234,11 +234,11 @@ class DriverCompU:
         [0,0,0,1,0],
         [0,0,0,0,1],
         ])
-        P=[(-1,1),(-1,1),(1,1),(1,1),(1,1)]
+        P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(0,3,"PKPD2_20p")
 
     def dcConv():
         dynA=Benchmarks.DCConv.A
@@ -255,17 +255,17 @@ class DriverCompU:
         [0,1,0],
         [0,0,1]
         ])
-        P=[(-1,1),(-1,1),(1,1)]
+        P=[(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(0,2,"DC")
 
     def spaceCraftRndzvs():
         dynA=Benchmarks.SpaceCraftRndzvs.A
         dynB=Benchmarks.SpaceCraftRndzvs.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=10000
+        P=2
         E={
         (2,1): [1-(P/100),1+(P/100)],
         (2,0): [1-(P/100),1+(P/100)],
@@ -283,15 +283,15 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(0,1,"Space")
 
     def holesCXc():
         dynA=Benchmarks.HolesCXc.A
         dynB=Benchmarks.HolesCXc.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=1000
+        P=20
         E={
         (0,3): [1-(P/100),1+(P/100)],
         (1,2): [1-(P/100),1+(P/100)],
@@ -311,17 +311,17 @@ class DriverCompU:
         [0,0,0,0,0,0,0,0,1,0],
         [0,0,0,0,0,0,0,0,0,1],
         ])
-        P=[(-1,1),(-1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
+        P=[(-1,1),(-1,1),(1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(0,1,"Holes20p")
 
     def motorTransmission1():
         dynA=Benchmarks.MotorTransmission1.A
         dynB=Benchmarks.MotorTransmission1.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=20000
+        P=20
         E={
         (0,6): [1-(P/100),1+(P/100)],
         (1,6): [1-(P/100),1+(P/100)]
@@ -336,17 +336,17 @@ class DriverCompU:
         [0,0,0,0,0,1,0],
         [0,0,0,0,0,0,1]
         ])
-        P=[(-1,1),(-1,1),(-1,-1),(1,1),(1,1),(1,1),(1,1)]
+        P=[(-1,1),(-1,1),(-1,-1),(-1,1),(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(0,1,"Motor120p")
 
     def motorTransmission2():
         dynA=Benchmarks.MotorTransmission2.A
         dynB=Benchmarks.MotorTransmission2.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=10000
+        P=2
         E={
         (4,0): [1-(P/100),1+(P/100)],
         (4,1): [1-(P/100),1+(P/100)]
@@ -361,10 +361,10 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1),(1,1),(1,1),(-1,1)]
         rs=(C,V,P)
-        T=10
+        T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1)
+        sp.printReachableSet(0,4,"Motor2")
 
 
 
-DriverCompU.motorTransmission1()
+DriverCompU.coOPVehiclesI()

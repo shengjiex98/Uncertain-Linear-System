@@ -14,6 +14,7 @@ import mpmath as mp
 from gurobipy import *
 import sys
 import time
+import math
 
 from VisualizationReachSet import *
 from ComputeU import *
@@ -353,12 +354,14 @@ class Split:
         print("Step: ",self.T)
         print("---------------------------------------------------------------")
 
-    def printReachableSet(self,s1,s2):
+    def printReachableSet(self,s1,s2,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
         the uncertain part
         '''
-        intervalPlot=self.T/5
+        name=n
+        #intervalPlot=math.ceil(self.T/7)
+        intervalPlot=10
         lPlots=[]
         start_time=time.time()
         cu=CompU(self.A,self.Er)
@@ -367,6 +370,8 @@ class Split:
         RS=self.Theta
         U=cu.computeUI_Interval(ORS)
         t=1
+        print()
+        print(n)
         print("-----------------\n\n")
 
         (X1,Y1)=Visualization(s1,s2,RS).getPlots()
@@ -374,7 +379,7 @@ class Split:
         (X3,Y3)=Visualization(s1,s2,ORS).getPlots()
         #lPlots.append((X1,Y1,X2,Y2,X3,Y3))
         lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
-        Visualization.displayPlot(s1,s2,lPlots)
+        Visualization.displayPlot(s1,s2,lPlots,name+"_0")
 
         while (t<=self.T):
             sys.stdout.write('\r')
@@ -392,7 +397,9 @@ class Split:
                 (X2,Y2)=Visualization(s1,s2,ORS_old).getPlots()
                 (X3,Y3)=Visualization(s1,s2,ORS).getPlots()
                 lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
-                Visualization.displayPlot(s1,s2,lPlots)
+                name=name+"_"+str(t)
+                Visualization.displayPlot(s1,s2,lPlots,name)
+                name=n
 
 
             '''print("Center of ORS: ",ORS[0])
@@ -404,7 +411,9 @@ class Split:
 
             U=cu.computeUI_Interval(ORS)
             t=t+1
+        print("\n")
         time_taken=time.time()-start_time
+        print("Time Taken: ",time_taken)
 
     def printReachableSetExpand(self,s1,s2):
         '''

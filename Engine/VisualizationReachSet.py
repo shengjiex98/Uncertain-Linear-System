@@ -468,8 +468,8 @@ class Visualization:
         return (X_list,Y_list)
 
     @staticmethod
-    def displayPlot(th1,th2,lPlots):
-        plt.axes()
+    def displayPlot(th1,th2,lPlots,name):
+        #plt.axes()
         plt.autoscale(enable=True, axis='both', tight=False)
         plt.xlabel("State "+str(th1))
         plt.ylabel("State "+str(th2))
@@ -486,9 +486,12 @@ class Visualization:
             plt.plot(X1,Y1,'bo')
             plt.plot(X2,Y2,'r+')
             plt.plot(X3,Y3,'kx')
+
         #plt.axis('scaled')
-        plt.legend()
-        plt.show()
+        #plt.legend()
+        plt.savefig("Plots/"+name)
+        #plt.show()
+        plt.close()
 
     def displayPlotTmp(th1,th2,lPlots):
         plt.axes()
