@@ -360,6 +360,7 @@ class Split:
         the uncertain part
         '''
         name=n
+        nameU=n
         #intervalPlot=math.ceil(self.T/7)
         intervalPlot=10
         lPlots=[]
@@ -374,12 +375,14 @@ class Split:
         print(n)
         print("-----------------\n\n")
 
-        (X1,Y1)=Visualization(s1,s2,RS).getPlots()
-        (X2,Y2)=Visualization(s1,s2,ORS_old).getPlots()
-        (X3,Y3)=Visualization(s1,s2,ORS).getPlots()
+        (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,ORS_old).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
         #lPlots.append((X1,Y1,X2,Y2,X3,Y3))
         lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
+        lPlots3=(X2,Y2,X3,Y3)
         Visualization.displayPlot(s1,s2,lPlots,name+"_0")
+        Visualization.displayPlotSingle(s1,s2,lPlots3,nameU+"U_0")
 
         while (t<=self.T):
             sys.stdout.write('\r')
@@ -388,18 +391,27 @@ class Split:
             RS=CompU.prodMatStars(self.A,RS)
 
             ORS_old=ORS
+            U_old=U
 
             ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
 
 
             if t%intervalPlot==0:
-                (X1,Y1)=Visualization(s1,s2,RS).getPlots()
-                (X2,Y2)=Visualization(s1,s2,ORS_old).getPlots()
-                (X3,Y3)=Visualization(s1,s2,ORS).getPlots()
+                (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                (X2,Y2)=Visualization(s1,s2,ORS_old).getPlotsLineFine()
+                (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+                #(UX1,UY1)=Visualization(s1,s2,U_old).getPlotsLineFine()
+                #(UX2,UY2)=Visualization(s1,s2,U).getPlotsLineFine()
                 lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
+                #lPlots2=(UX1,UY1,UX2,UY2)
+                lPlots3=(X2,Y2,X3,Y3)
                 name=name+"_"+str(t)
+                nameU=name+"U_"+str(t)
+                #print(U)
                 Visualization.displayPlot(s1,s2,lPlots,name)
+                Visualization.displayPlotSingle(s1,s2,lPlots3,nameU)
                 name=n
+                nameU=n
 
 
             '''print("Center of ORS: ",ORS[0])
@@ -414,6 +426,7 @@ class Split:
         print("\n")
         time_taken=time.time()-start_time
         print("Time Taken: ",time_taken)
+        print("")
 
     def printReachableSetExpand(self,s1,s2):
         '''

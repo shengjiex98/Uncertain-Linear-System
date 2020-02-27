@@ -237,7 +237,7 @@ class Visualization:
         #exit(0)
         return (X_list,Y_list)
 
-    def getPlots(self):
+    def getPlotsLine(self):
 
         C=self.star1[0]
         V=self.star1[1]
@@ -271,7 +271,7 @@ class Visualization:
 
         # Create Predicate Variables
         predVars=[]
-        for i in range(sv):
+        for i in range(aS):
             name="Pred"+str(i)
             predVars.append(model.addVar(-GRB.INFINITY,GRB.INFINITY,name=name,vtype='C'))
         #-----------------------
@@ -297,6 +297,7 @@ class Visualization:
         #-----------------------------------
 
         # Predicate Constraints
+
         for i in range(sv):
             a=P[i][0]
             b=P[i][1]
@@ -316,7 +317,7 @@ class Visualization:
         model.setObjective(obj,GRB.MAXIMIZE)
 
         for an in range(90):
-            if an==0:
+            if an==90:
                 model.addConstr(X==0,"Angle")
             else:
                 m=math.tan(math.radians(an))
@@ -467,6 +468,341 @@ class Visualization:
 
         return (X_list,Y_list)
 
+    def getPlotsLineFine(self):
+
+        C=self.star1[0]
+        V=self.star1[1]
+        P=self.star1[2]
+        X_list=[]
+        Y_list=[]
+
+        sv=V.shape[0]
+        aS=V.shape[1]
+
+        semiDefFlag=False
+        model = Model("qp")
+        model.setParam( 'OutputFlag', False )
+
+        # Create Predicate Variables
+        predVars=[]
+        for i in range(aS):
+            name="Pred"+str(i)
+            predVars.append(model.addVar(-GRB.INFINITY,GRB.INFINITY,name=name,vtype='C'))
+        #-----------------------
+
+        # Axes Variables
+        X=model.addVar(-GRB.INFINITY,GRB.INFINITY,name="X",vtype='C')
+        Y=model.addVar(-GRB.INFINITY,GRB.INFINITY,name="Y",vtype='C')
+        #-------------------------
+
+        # Create the Star Constraints
+        objX=0
+        for i in range(aS):
+            objX=objX+(predVars[i]*V[self.theta1][i])
+        objX=C[self.theta1]+objX
+
+        objY=0
+        for i in range(aS):
+            objY=objY+(predVars[i]*V[self.theta2][i])
+        objY=C[self.theta2]+objY
+
+        model.addConstr(X==objX,"X Axis")
+        model.addConstr(Y==objY,"Y Axis")
+        #-----------------------------------
+
+        # Predicate Constraints
+        for i in range(aS):
+            a=P[i][0]
+            b=P[i][1]
+            if a==b:
+                model.addConstr(predVars[i]==a,name)
+            else:
+                model.addConstr(predVars[i]>=min(a,b),name+".1")
+                model.addConstr(predVars[i]<=max(a,b),name+".2")
+        #-----------------------------------
+
+
+        # Quadrant Specific Constraints
+
+        # 1st Quadrant
+
+        obj=X+Y
+        model.setObjective(obj,GRB.MAXIMIZE)
+
+        for a in range(900):
+            an=a/10
+            if an==90:
+                model.addConstr(X==0,"Angle")
+            else:
+                m=math.tan(math.radians(an))
+                model.addConstr(Y==m*X,"Angle")
+            try:
+                model.optimize()
+                #model.write("dump.bas")
+                status = model.Status
+                if status==GRB.Status.UNBOUNDED:
+                    print("UNBOUNDED ")
+                else:
+                    if status == GRB.Status.INF_OR_UNBD or \
+                       status == GRB.Status.INFEASIBLE  or \
+                       status == GRB.Status.UNBOUNDED:
+                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                    else:
+                        xVal=model.getVarByName("X").x
+                        yVal=model.getVarByName("Y").x
+                        X_list.append(xVal)
+                        Y_list.append(yVal)
+            except:
+                semiDefFlag=True
+
+            if semiDefFlag==True:
+                print("Shoot!!")
+
+            semiDefFlag=False
+            model.remove(model.getConstrByName("Angle"))
+        #-----------------------------
+
+        # 2nd Quadrant
+
+        obj=X-Y
+        model.setObjective(obj,GRB.MAXIMIZE)
+
+        for a in range(0,-900,-1):
+            an=a/10
+            if an==-90:
+                model.addConstr(X==0,"Angle")
+            else:
+                m=math.tan(math.radians(an))
+                model.addConstr(Y==m*X,"Angle")
+            try:
+                model.optimize()
+                #model.write("dump.bas")
+                status = model.Status
+                if status==GRB.Status.UNBOUNDED:
+                    print("UNBOUNDED ")
+                else:
+                    if status == GRB.Status.INF_OR_UNBD or \
+                       status == GRB.Status.INFEASIBLE  or \
+                       status == GRB.Status.UNBOUNDED:
+                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                    else:
+                        xVal=model.getVarByName("X").x
+                        yVal=model.getVarByName("Y").x
+                        X_list.append(xVal)
+                        Y_list.append(yVal)
+            except:
+                semiDefFlag=True
+
+            if semiDefFlag==True:
+                print("Shoot!!")
+
+            semiDefFlag=False
+            model.remove(model.getConstrByName("Angle"))
+        #-----------------------------
+
+        # 3rd Quadrant
+
+        obj=-X-Y
+        model.setObjective(obj,GRB.MAXIMIZE)
+
+        for a in range(-900,-1800,-1):
+            an=a/10
+            if an==-90:
+                model.addConstr(X==0,"Angle")
+            else:
+                m=math.tan(math.radians(an))
+                model.addConstr(Y==m*X,"Angle")
+            try:
+                model.optimize()
+                #model.write("dump.bas")
+                status = model.Status
+                if status==GRB.Status.UNBOUNDED:
+                    print("UNBOUNDED ")
+                else:
+                    if status == GRB.Status.INF_OR_UNBD or \
+                       status == GRB.Status.INFEASIBLE  or \
+                       status == GRB.Status.UNBOUNDED:
+                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                    else:
+                        xVal=model.getVarByName("X").x
+                        yVal=model.getVarByName("Y").x
+                        X_list.append(xVal)
+                        Y_list.append(yVal)
+            except:
+                semiDefFlag=True
+
+            if semiDefFlag==True:
+                print("Shoot!!")
+
+            semiDefFlag=False
+            model.remove(model.getConstrByName("Angle"))
+        #-----------------------------
+
+        # 4th Quadrant
+
+        obj=-X+Y
+        model.setObjective(obj,GRB.MAXIMIZE)
+
+        for a in range(900,1800):
+            an=a/10
+            if an==90:
+                model.addConstr(X==0,"Angle")
+            else:
+                m=math.tan(math.radians(an))
+                model.addConstr(Y==m*X,"Angle")
+            try:
+                model.optimize()
+                #model.write("dump.bas")
+                status = model.Status
+                if status==GRB.Status.UNBOUNDED:
+                    print("UNBOUNDED ")
+                else:
+                    if status == GRB.Status.INF_OR_UNBD or \
+                       status == GRB.Status.INFEASIBLE  or \
+                       status == GRB.Status.UNBOUNDED:
+                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                    else:
+                        xVal=model.getVarByName("X").x
+                        yVal=model.getVarByName("Y").x
+                        X_list.append(xVal)
+                        Y_list.append(yVal)
+            except:
+                semiDefFlag=True
+
+            if semiDefFlag==True:
+                print("Shoot!!")
+
+            semiDefFlag=False
+            model.remove(model.getConstrByName("Angle"))
+        #-----------------------------
+
+
+
+        #------------------------------
+
+        #print(X_list,Y_list)
+        #exit(0)
+
+        return (X_list,Y_list)
+
+    def getPlots(self):
+
+        C=self.star1[0]
+        V=self.star1[1]
+        P=self.star1[2]
+        X_list=[]
+        Y_list=[]
+
+        sv=V.shape[0]
+        aS=V.shape[1]
+
+        semiDefFlag=False
+        model = Model("qp")
+        model.setParam( 'OutputFlag', False )
+
+        # Create Predicate Variables
+        predVars=[]
+        for i in range(sv):
+            name="Pred"+str(i)
+            predVars.append(model.addVar(-GRB.INFINITY,GRB.INFINITY,name=name,vtype='C'))
+        #-----------------------
+
+        # Axes Variables
+        X=model.addVar(-GRB.INFINITY,GRB.INFINITY,name="X",vtype='C')
+        Y=model.addVar(-GRB.INFINITY,GRB.INFINITY,name="Y",vtype='C')
+        #-------------------------
+
+        # Create the Star Constraints
+        objX=0
+        for i in range(sv):
+            objX=objX+(predVars[i]*V[self.theta1][i])
+        objX=C[self.theta1]+objX
+
+        objY=0
+        for i in range(sv):
+            objY=objY+(predVars[i]*V[self.theta2][i])
+        objY=C[self.theta2]+objY
+
+        model.addConstr(X==objX,"X Axis")
+        model.addConstr(Y==objY,"Y Axis")
+        #-----------------------------------
+
+        # Predicate Constraints
+        for i in range(sv):
+            a=P[i][0]
+            b=P[i][1]
+            if a==b:
+                model.addConstr(predVars[i]==a,name)
+            else:
+                model.addConstr(predVars[i]>=min(a,b),name+".1")
+                model.addConstr(predVars[i]<=max(a,b),name+".2")
+        #-----------------------------------
+
+        # Rotating Half space
+        '''obj=X+Y
+        model.setObjective(obj,GRB.MAXIMIZE)
+        try:
+            model.optimize()
+            #model.write("dump.bas")
+            status = model.Status
+            if status==GRB.Status.UNBOUNDED:
+                print("UNBOUNDED ")
+            else:
+                if status == GRB.Status.INF_OR_UNBD or \
+                   status == GRB.Status.INFEASIBLE  or \
+                   status == GRB.Status.UNBOUNDED:
+                    print('**The model cannot be solved because it is infeasible or unbounded**')
+                else:
+                    xVal=model.getVarByName("X").x
+                    yVal=model.getVarByName("Y").x
+                    print(xVal,yVal)
+                    X_list.append(xVal)
+                    Y_list.append(yVal)
+        except:
+            semiDefFlag=True
+        exit(0)'''
+
+        model.update()
+        for an in range(360):
+            #an=a/100
+            obj=0
+            if an==90 or an==270:
+                obj=X
+            else:
+                m=math.tan(math.radians(an))
+                obj=Y-(m*X)
+
+            print(obj)
+            model.setObjective(obj,GRB.MINIMIZE)
+            try:
+                model.optimize()
+                #model.write("dump.bas")
+                status = model.Status
+                if status==GRB.Status.UNBOUNDED:
+                    print("UNBOUNDED ")
+                else:
+                    if status == GRB.Status.INF_OR_UNBD or \
+                       status == GRB.Status.INFEASIBLE  or \
+                       status == GRB.Status.UNBOUNDED:
+                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                    else:
+                        xVal=model.getVarByName("X").x
+                        yVal=model.getVarByName("Y").x
+                        X_list.append(xVal)
+                        Y_list.append(yVal)
+            except:
+                semiDefFlag=True
+
+            if semiDefFlag==True:
+                print("Shoot!!")
+
+            semiDefFlag=False
+        #------------------------------------
+
+
+        print(X_list,Y_list)
+        return (X_list,Y_list)
+
     @staticmethod
     def displayPlot(th1,th2,lPlots,name):
         #plt.axes()
@@ -493,6 +829,28 @@ class Visualization:
         #plt.show()
         plt.close()
 
+    @staticmethod
+    def displayPlotSingle(th1,th2,lPlots,name):
+        #plt.axes()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+
+        X1=lPlots[0]
+        Y1=lPlots[1]
+        X2=lPlots[2]
+        Y2=lPlots[3]
+
+
+        plt.plot(X1,Y1,'r.')
+        plt.plot(X2,Y2,'b.')
+
+        #plt.axis('scaled')
+        #plt.legend()
+        plt.savefig("PlotsU/"+name)
+        #plt.show()
+        plt.close()
+
     def displayPlotTmp(th1,th2,lPlots):
         plt.axes()
         plt.autoscale(enable=True, axis='both', tight=False)
@@ -507,20 +865,13 @@ class Visualization:
 if False:
     C=[0,0]
     V=np.array([
-    [1,-1],
-    [0,-1]
+    [0,-1],
+    [1,0]
     ])
     P=[(-1,1), (-2,2)]
     rs=(C,V,P)
-    C2=[0,0]
-    V2=np.array([
-    [-2,1],
-    [1,0]
-    ])
-    P2=[(-0.2,0.2), (-0.7,0.7)]
-    rs2=(C2,V2,P2)
-    v=Visualization(0,1,rs,rs2)
-    v.displayPlot()
+    v=Visualization(0,1,rs)
+    Visualization.displayPlotTmp(0,1,v.getPlots())
 
 if False:
     C=[0, 0, 0]
