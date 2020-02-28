@@ -3,12 +3,12 @@
 Maximize
   IS0 + IS1 + IS2 + IS3 + IS4 + IS5 + IS6 + IS7 + IS8 + IS9
 Subject To
- Predicate-C-0.1: IS0 <= -61231.09088788433
+ Predicate-C-0.1: IS0 <= 0
  Predicate-C-1.1: IS1 <= 0
- Predicate-C-2.1: IS2 <= -996.5868801308592
+ Predicate-C-2.1: IS2 <= -0.0111786178912564
  Predicate-C-3.1: IS3 <= 0
  Predicate-C-4.1: IS4 <= 0
- Predicate-C-5.1: IS5 <= -535.2874888247684
+ Predicate-C-5.1: IS5 <= -0.00607197450317578
  Predicate-C-6.1: IS6 <= 0
  Predicate-C-7.1: IS7 <= 0
  Predicate-C-8.1: IS8 <= 0

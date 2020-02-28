@@ -232,14 +232,14 @@ class DriverCompU:
         P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
         T=2000
-        sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1,"CoOpI")
+        sp=Split(A,E2,rs,T)
+        sp.printReachableSet(0,1,"CoOpIv2")
 
     def pkpd2():
         dynA=Benchmarks.PKPD2.A
         dynB=Benchmarks.PKPD2.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=2
+        P=20
         E={
         (0,4): [1-(P/100),1+(P/100)],
         (3,3): [1-(P/100),1+(P/100)]
@@ -377,7 +377,7 @@ class DriverCompU:
         V=np.array([
         [1,0,0,1,0,0,-1],
         [0,1,0,-1,0,-1,0],
-        [1,0,1,2,1,-1,0],
+        [1,0,1,1,1,-1,0],
         [0,-1,0,1,0,0,-1],
         [-1,0,0,0,1,0,1],
         [0,0,-1,0,0,1,0],
@@ -387,7 +387,7 @@ class DriverCompU:
         rs=(C,V,P)
         T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1,"Motor120p")
+        sp.printReachableSet(0,1,"Motor1_20p")
 
     def motorTransmission2():
         dynA=Benchmarks.MotorTransmission2.A
@@ -414,4 +414,4 @@ class DriverCompU:
 
 
 
-DriverCompU.coOPVehiclesI()
+DriverCompU.spaceCraftRndzvs()
