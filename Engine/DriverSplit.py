@@ -197,7 +197,7 @@ class DriverCompU:
         rs=(C,V,P)
         T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1,"FlightEnvelope20p")
+        sp.printReachableSetUnderConst(0,1,"FlightEnvelope20p")
 
     def coOPVehiclesI():
         dynA=Benchmarks.CoOPVehiclesI.A
@@ -263,7 +263,7 @@ class DriverCompU:
         rs=(C,V,P)
         T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(1,3,"PKPD2_20p")
+        sp.printReachableSetUnderConst(1,3,"PKPD2_20p")
 
     def dcConv():
         dynA=Benchmarks.DCConv.A
@@ -289,7 +289,7 @@ class DriverCompU:
         rs=(C,V,P)
         T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,2,"DC")
+        sp.printReachableSetUnderConst(0,2,"DC")
 
     def spaceCraftRndzvs():
         dynA=Benchmarks.SpaceCraftRndzvs.A
@@ -414,4 +414,4 @@ class DriverCompU:
 
 
 
-DriverCompU.spaceCraftRndzvs()
+DriverCompU.stableSystem1()

@@ -685,7 +685,7 @@ class Visualization:
 
         return (X_list,Y_list)
 
-    def getPlots(self):
+    def getPlotsHalfSpace(self):
 
         C=self.star1[0]
         V=self.star1[1]
@@ -804,7 +804,7 @@ class Visualization:
         return (X_list,Y_list)
 
     @staticmethod
-    def displayPlot(th1,th2,lPlots,name):
+    def displayPlotOld(th1,th2,lPlots,name):
         #plt.axes()
         plt.autoscale(enable=True, axis='both', tight=False)
         plt.xlabel("State "+str(th1))
@@ -822,6 +822,35 @@ class Visualization:
             plt.plot(X1,Y1,'bo')
             plt.plot(X2,Y2,'r+')
             plt.plot(X3,Y3,'kx')
+
+        #plt.axis('scaled')
+        #plt.legend()
+        #plt.savefig("Plots/"+name)
+        plt.show()
+        #plt.close()
+
+    @staticmethod
+    def displayPlot(th1,th2,lPlots,name):
+        #plt.axes()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+        #plt.plot(X2,Y2,'r+',label="Perturbed")
+
+        for l in lPlots:
+            XY=l[0]
+            X1=l[1]
+            Y1=l[2]
+            X2=l[3]
+            Y2=l[4]
+            X3=l[5]
+            Y3=l[6]
+            #print(X2,Y2)
+            for (X,Y) in XY:
+                plt.plot(X,Y,'mo')
+            plt.plot(X1,Y1,'bo')
+            plt.plot(X2,Y2,'ro')
+            plt.plot(X3,Y3,'ko')
 
         #plt.axis('scaled')
         #plt.legend()
