@@ -20,7 +20,7 @@ from SamplingMet import *
 
 BIGM=0.001
 EPSILON=1e-3
-INTERVAL=50
+INTERVAL=5
 
 
 class Split:

@@ -197,13 +197,13 @@ class DriverCompU:
         rs=(C,V,P)
         T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSetUnderConst(0,1,"FlightEnvelope20p")
+        sp.printReachableSet(0,1,"FlightEnvelope20p")
 
     def coOPVehiclesI():
         dynA=Benchmarks.CoOPVehiclesI.A
         dynB=Benchmarks.CoOPVehiclesI.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=20
+        P=2
         E={
         (0,0): [1-(P/100),1+(P/100)],
         (2,0): [1-(P/100),1+(P/100)],
@@ -233,7 +233,7 @@ class DriverCompU:
         rs=(C,V,P)
         T=2000
         sp=Split(A,E2,rs,T)
-        sp.printReachableSet(0,1,"CoOpIv2")
+        sp.printReachableSet(0,1,"CoOpI")
 
     def pkpd2():
         dynA=Benchmarks.PKPD2.A
@@ -263,7 +263,7 @@ class DriverCompU:
         rs=(C,V,P)
         T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSetUnderConst(1,3,"PKPD2_20p")
+        sp.printReachableSet(1,3,"PKPD2_20p")
 
     def dcConv():
         dynA=Benchmarks.DCConv.A
@@ -289,7 +289,7 @@ class DriverCompU:
         rs=(C,V,P)
         T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSetUnderConst(0,2,"DC")
+        sp.printReachableSet(0,2,"DC_10p")
 
     def spaceCraftRndzvs():
         dynA=Benchmarks.SpaceCraftRndzvs.A
@@ -320,10 +320,10 @@ class DriverCompU:
         [1,-1,0,-1,0,1],
         ])
         P=[(-1,1),(-1,1),(1,1),(1,1),(1,1),(1,1)]
-        rs=(C,V,P)
+        rs=(C,V2,P)
         T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSet(0,1,"Space")
+        sp.printReachableSet(0,1,"Spacev2")
 
     def holesCXc():
         dynA=Benchmarks.HolesCXc.A
@@ -414,4 +414,4 @@ class DriverCompU:
 
 
 
-DriverCompU.stableSystem1()
+DriverCompU.spaceCraftRndzvs()

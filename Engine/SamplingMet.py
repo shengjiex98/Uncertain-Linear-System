@@ -24,7 +24,7 @@ class Sampling:
     and compute its reachable set
     '''
 
-    def __init__(self,A,er,i=20):
+    def __init__(self,A,er,i=100):
         self.A=A
         self.Er=er
         self.n=self.A.shape[0]
