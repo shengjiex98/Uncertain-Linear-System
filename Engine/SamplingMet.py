@@ -114,6 +114,20 @@ class Sampling:
 
         return plots
 
+    @staticmethod
+    def getPlotsLineFinePred(th1,th2,RS_list):
+        '''
+        Returns the plots for the given RS_list
+        '''
+
+        plots=[]
+
+        for star in RS_list:
+            (X,Y)=Visualization(th1,th2,star).getPlotsLineFinePred()
+            plots.append((X,Y))
+
+        return plots
+
 
 
 if False:
