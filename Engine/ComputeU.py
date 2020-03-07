@@ -16,6 +16,8 @@ import sys
 import time
 from operator import add
 
+from PredicateGen import *
+
 BIGM=1e500
 EPSILON=1e-3
 
@@ -337,6 +339,209 @@ class CompU:
         return starNew
         #-------------------------------------
 
+    def computeUI_IntervalRand(self,rs_list):
+        '''
+        This method aprroximates a reachable set with uncertainties represented
+        as a star to another bloated star
+        '''
+
+        V_randList=PredGen(self.A,self.n,len(rs_list)).getRandPred()
+
+        '''print(V_randList)
+        exit(0)'''
+        star_list=[]
+
+        for e in range(len(rs_list)):
+
+            rs=rs_list[e]
+
+            C=rs[0] # The center is always assumed to be 0 as of now
+            V=rs[1]
+            P=rs[2]
+
+            sv=V.shape[0]
+            aS=V.shape[1]
+
+            Vp=np.matmul(self.computeUncertainMat()-self.Ac,V)
+
+            U=np.zeros((self.n,1),dtype=object)
+
+            for i in range(sv):
+                s=0
+                for j in range(aS):
+                    #print(P[j][0],P[j][1])
+                    s=s+(mp.mpi(P[j][0],P[j][1])*Vp[i][j])
+                s=s+C[i]
+                s_min=float(mp.nstr(s).split(',')[0][1:])
+                s_max=float(mp.nstr(s).split(',')[1][:-1])
+                U[i][0]=(s_min,s_max)
+
+            #print(U)
+
+            # Find a new Star set that overapproximates rs
+
+            #print("Construction of the new overapproximated star is under construction!")
+
+
+
+            semiDefFlag=False
+            modelNewMax = Model("qp")
+            modelNewMax.setParam('OutputFlag', False )
+
+            C_new=np.zeros(self.n)
+            V_new=V_randList[e]
+            P_new=[]
+
+
+            # Create Reachable Set Variables
+            reachVars=[]
+            for i in range(self.n):
+                name="IS"+str(i)
+                reachVars.append(modelNewMax.addVar(-GRB.INFINITY,GRB.INFINITY,name=name,vtype='C'))
+            #-----------------------
+
+            # Create the star set Constraints functions for Maximum Bound
+            for i in range(self.n):
+                con=0
+                for j in range(self.n):
+                    con=con+(V_new[i][j]*reachVars[j])
+                con=C_new[i]+con
+                name="Predicate-C-"+str(i)
+                #modelNew.addConstr(con<=U[i][0][0],name+".1")
+                modelNewMax.addConstr(con>=U[i][0][1],name+".2")
+            #-------------------------------
+
+            # Create the Objective Function
+            obj=0
+            for i in range(self.n):
+                obj=obj+(reachVars[i])
+            modelNewMax.setObjective(obj,GRB.MINIMIZE)
+            #----------------------------------------
+
+            # Solve the Optimization Problem
+            UMax=np.zeros((self.n,1))
+            try:
+                modelNewMax.optimize()
+                status = modelNewMax.Status
+                if status==GRB.Status.UNBOUNDED:
+                    0;
+                    #print("UNBOUNDED")
+                else:
+                    if status == GRB.Status.INF_OR_UNBD or \
+                       status == GRB.Status.INFEASIBLE  or \
+                       status == GRB.Status.UNBOUNDED:
+                        0;
+                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                    else:
+                        k=0
+                        for v in modelNewMax.getVars():
+                            #print('%s %g' % (v.varName, v.x))
+                            UMax[k][0]=v.x
+                            k=k+1
+
+            except:
+                print("Err")
+                semiDefFlag=True
+
+
+            semiDefFlag=False
+            modelNewMin = Model("qp")
+            modelNewMin.setParam('OutputFlag', False )
+
+            #print("Construction of the new overapproximated star is under construction!")
+
+
+            # Create Reachable Set Variables
+            reachVars=[]
+            for i in range(self.n):
+                name="IS"+str(i)
+                reachVars.append(modelNewMin.addVar(-GRB.INFINITY,GRB.INFINITY,name=name,vtype='C'))
+            #-----------------------
+
+            # Create the star set Constraints functions for Maximum Bound
+            for i in range(self.n):
+                con=0
+                for j in range(self.n):
+                    con=con+(V_new[i][j]*reachVars[j])
+                con=C_new[i]+con
+                name="Predicate-C-"+str(i)
+                modelNewMin.addConstr(con<=U[i][0][0],name+".1")
+                #modelNewMin.addConstr(con>=U[i][0][1],name+".2")
+            #-------------------------------
+
+            # Create the Objective Function
+            obj=0
+            for i in range(self.n):
+                obj=obj+(reachVars[i])
+            modelNewMin.setObjective(obj,GRB.MAXIMIZE)
+            #----------------------------------------
+
+            # Solve the Optimization Problem
+            UMin=np.zeros((self.n,1))
+            try:
+                modelNewMin.optimize()
+                status = modelNewMin.Status
+                if status==GRB.Status.UNBOUNDED:
+                    0;
+                    #print("UNBOUNDED")
+                else:
+                    if status == GRB.Status.INF_OR_UNBD or \
+                       status == GRB.Status.INFEASIBLE  or \
+                       status == GRB.Status.UNBOUNDED:
+                        0;
+                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                    else:
+                        k=0
+                        for v in modelNewMin.getVars():
+                            #print('%s %g' % (v.varName, v.x))
+                            UMin[k][0]=v.x
+                            k=k+1
+
+            except:
+                print("Err")
+                print("--")
+                semiDefFlag=True
+
+
+            ## DEBUG
+            '''for d in range(UMin.shape[0]):
+                if (UMin[d][0]>UMax[i][0]):
+                    print(UMin)
+                    print(UMax)
+                    modelNewMin.write("minmodel.lp")
+                    modelNewMax.write("maxmodel.lp")
+                    exit(0)'''
+            ##
+
+            for i in range(self.n):
+                #print((UMin[i][0],UMax[i][0]))
+                #P_new.append((UMin[i][0],UMax[i][0]))
+                P_new.append((min(UMin[i][0],UMax[i][0]),max(UMin[i][0],UMax[i][0])))
+
+            #print(P_new)
+
+            starNew=(C_new,V_new,P_new)
+
+            '''print("-------Given Over-approximated Star-------")
+            print("Center: ",C)
+            print("Vector: ")
+            print(V)
+            print("Predicate (Box): ",P)
+            print("-----------------------")
+            print()
+            print("-------Computed U Star-------")
+            print("Center: ",C_new)
+            print("Vector: ")
+            print(V_new)
+            print("Predicate (Box): ",P_new)
+            print("-----------------------")'''
+
+            #exit(0)
+            star_list.append(starNew)
+
+        return star_list
+        #-------------------------------------
+
     def computeUncertainMat(self):
         '''
         Computes the interval uncertain matrix
@@ -371,13 +576,7 @@ class CompU:
         sv=V.shape[0]
         aS=V.shape[1]
 
-
-        #print(self.A)
-        #print(self.computeUncertainMat())
         Vp=np.matmul(self.computeUncertainMat()-self.Ac,V)
-        #print(Vp)
-        #print(C)
-        #print(P)
 
         U=np.zeros((self.n,1),dtype=object)
 
@@ -578,6 +777,19 @@ class CompU:
         return (C_new,V_new,P_new)
 
     @staticmethod
+    def addStarsList(st1,st2):
+        '''
+        Given two stars st1 and st2, this functions performs
+        minkowski sum of the two stars.
+        '''
+        l=[]
+
+        for i in range(len(st1)):
+            l.append(CompU.addStars(st1[i],st2[i]))
+
+        return l
+
+    @staticmethod
     def addStarsPred(st1,st2):
         '''
         Given two stars st1 and st2, this functions performs
@@ -638,6 +850,7 @@ class CompU:
 
         return (P_new, D_new)
 
+    @staticmethod
     def prodMatStars(M,RS):
         '''
         Given a matrix M and a star RS, perform M times RS
@@ -656,7 +869,18 @@ class CompU:
 
         return (C_new,V_new,P_new)
 
+    @staticmethod
+    def prodMatStarsList(M,RS_list):
+        '''
+        Given a matrix M and a star RS, perform M times RS
+        '''
 
+        l=[]
+
+        for rs in RS_list:
+            l.append(CompU.prodMatStars(M,rs))
+
+        return l
 
 
 if False:

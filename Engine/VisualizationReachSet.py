@@ -106,7 +106,8 @@ class Visualization:
                     if status == GRB.Status.INF_OR_UNBD or \
                        status == GRB.Status.INFEASIBLE  or \
                        status == GRB.Status.UNBOUNDED:
-                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                        0;
+                        #print('**The model cannot be solved because it is infeasible or unbounded**')
                     else:
                         xVal=model.getVarByName("X").x
                         yVal=model.getVarByName("Y").x
@@ -593,7 +594,7 @@ class Visualization:
         return (X_list,Y_list)
 
     @staticmethod
-    def displayPlot(th1,th2,lPlots,name):
+    def displayPlotOld(th1,th2,lPlots,name):
         #plt.axes()
         plt.autoscale(enable=True, axis='both', tight=False)
         plt.xlabel("State "+str(th1))
@@ -614,6 +615,35 @@ class Visualization:
             plt.plot(X1,Y1,'bo')
             plt.plot(X2,Y2,'ro')
             plt.plot(X3,Y3,'ko')
+
+        #plt.axis('scaled')
+        #plt.legend()
+        #plt.savefig("Plots/"+name)
+        plt.show()
+        plt.close()
+
+    @staticmethod
+    def displayPlot(th1,th2,lPlots,name):
+        #plt.axes()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+        #plt.plot(X2,Y2,'r+',label="Perturbed")
+
+        for l in lPlots:
+            XY=l[0] # Random Samples
+            X2=l[1] # RS X
+            Y2=l[2] # RS Y
+            X3=l[3] # ORS X
+            Y3=l[4] # ORS Y
+            XY2=l[5] # Random Predicates
+            #print(X2,Y2)
+            for (X,Y) in XY:
+                plt.plot(X,Y,'mo')
+            for (X,Y) in XY2:
+                plt.plot(X,Y,'co',alpha=0.02)
+            plt.plot(X2,Y2,'bo')
+            plt.plot(X3,Y3,'k.')
 
         #plt.axis('scaled')
         #plt.legend()

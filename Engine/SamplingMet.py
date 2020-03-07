@@ -16,6 +16,8 @@ from VisualizationReachSet import *
 
 PRECISION=1e5
 
+NO_SAMPPLES=20
+
 
 class Sampling:
     '''
@@ -24,7 +26,7 @@ class Sampling:
     and compute its reachable set
     '''
 
-    def __init__(self,A,er,i=100):
+    def __init__(self,A,er,i=NO_SAMPPLES):
         self.A=A
         self.Er=er
         self.n=self.A.shape[0]

@@ -412,7 +412,3 @@ class DriverCompU:
         T=2000
         sp=Split(A,E,rs,T)
         sp.printReachableSetRand(0,4,"Motor2")
-
-
-
-DriverCompU.stableSystem1()
