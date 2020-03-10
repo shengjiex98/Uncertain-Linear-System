@@ -647,8 +647,8 @@ class Visualization:
 
         #plt.axis('scaled')
         #plt.legend()
-        #plt.savefig("Plots/"+name)
-        plt.show()
+        plt.savefig("Plots/"+name)
+        #plt.show()
         plt.close()
 
     @staticmethod

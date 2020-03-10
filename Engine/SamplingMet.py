@@ -14,7 +14,7 @@ import numpy as np
 from ComputeU import *
 from VisualizationReachSet import *
 
-PRECISION=1e5
+PRECISION=1e15
 
 NO_SAMPPLES=20
 

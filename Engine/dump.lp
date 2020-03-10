@@ -6,7 +6,7 @@ Subject To
  Predicate-C-0.1: IS0 <= -6.9808e-07
  Predicate-C-1.1: IS1 <= 0
  Predicate-C-2.1: IS2 <= 0
- Predicate-C-3.1: IS3 <= -0.4255124677419355
+ Predicate-C-3.1: IS3 <= -0.2528983029139636
  Predicate-C-4.1: IS4 <= 0
 Bounds
  IS0 free

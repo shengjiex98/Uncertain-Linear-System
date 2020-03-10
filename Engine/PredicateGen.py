@@ -9,8 +9,8 @@ import numpy as np
 import random
 import math
 
-CLOSE=0.999
-PRECISION=1e5
+CLOSE=0.2
+PRECISION=1e15
 EPSILON=1e-3
 
 class PredGen:
@@ -56,6 +56,7 @@ class PredGen:
                     ub=EPSILON
                     rd=random.randrange(math.ceil(lb*PRECISION),math.floor(ub*PRECISION))
                     r=float(rd/PRECISION)
+                    #r=0
                 else:
                     rd=random.randrange(math.ceil(lb*PRECISION),math.floor(ub*PRECISION))
                     r=float(rd/PRECISION)

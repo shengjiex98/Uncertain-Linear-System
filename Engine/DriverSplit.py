@@ -415,4 +415,6 @@ class DriverCompU:
 
 
 
-DriverCompU.stableSystem1()
+DriverCompU.holesCXc()
+DriverCompU.motorTransmission1()
+DriverCompU.motorTransmission2()
