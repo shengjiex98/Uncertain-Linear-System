@@ -529,7 +529,10 @@ class Visualization:
         #-----------------------------------
 
         # Rotating Half space
-        '''obj=X+Y
+        an=-1
+        m=math.tan(math.radians(an))
+        obj=Y-(m*X)
+        #obj=X+Y
         model.setObjective(obj,GRB.MAXIMIZE)
         try:
             model.optimize()
@@ -550,7 +553,8 @@ class Visualization:
                     Y_list.append(yVal)
         except:
             semiDefFlag=True
-        exit(0)'''
+        Visualization.displayPlotTmp(0,1,(X_list,Y_list))
+        exit(0)
 
         model.update()
         for an in range(360):
@@ -652,6 +656,32 @@ class Visualization:
         plt.close()
 
     @staticmethod
+    def displayPlotOld2(th1,th2,lPlots,name):
+        #plt.axes()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+        #plt.plot(X2,Y2,'r+',label="Perturbed")
+
+        for l in lPlots:
+            X1=l[0] # RS X
+            Y1=l[1] # RS Y
+            X2=l[2] # ORS_compact X
+            Y2=l[3] # ORS_compact Y
+            X3=l[4] # ORS X
+            Y3=l[5] # ORS Y
+            #print(X2,Y2)
+            plt.plot(X1,Y1,'bo')
+            plt.plot(X3,Y3,'ko')
+            plt.plot(X2,Y2,'ro')
+
+        #plt.axis('scaled')
+        #plt.legend()
+        #plt.savefig("Plots/"+name)
+        plt.show()
+        plt.close()
+
+    @staticmethod
     def displayPlotSingle(th1,th2,lPlots,name):
         #plt.axes()
         plt.autoscale(enable=True, axis='both', tight=False)
@@ -705,3 +735,12 @@ if False:
 
     q=Visualization(0,1,rs)
     Visualization.displayPlotTmp(0,1,q.getPlotsLineFinePred())
+
+if False:
+    C=[100,100]
+    V=np.array([
+    [1,0],
+    [0,1]
+    ])
+    P=[(-1,1),(-1,1)]
+    Visualization(0,1,(C,V,P)).getPlotsHalfSpace()

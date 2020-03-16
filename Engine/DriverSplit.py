@@ -415,6 +415,5 @@ class DriverCompU:
 
 
 
-DriverCompU.holesCXc()
-DriverCompU.motorTransmission1()
+
 DriverCompU.motorTransmission2()

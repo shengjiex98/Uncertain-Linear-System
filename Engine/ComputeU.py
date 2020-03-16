@@ -562,7 +562,7 @@ class CompU:
         #print(A_tilde)
         return A_tilde
 
-    def computeUI_Interval(self,rs):
+    def computeUI_IntervalOld(self,rs):
         '''
         This method aprroximates a reachable set with uncertainties represented
         as a star to another bloated star
@@ -630,7 +630,7 @@ class CompU:
         UMax=np.zeros((self.n,1))
         try:
             modelNewMax.optimize()
-            modelNewMax.write('dump.lp')
+            #modelNewMax.write('dumpU.lp')
             status = modelNewMax.Status
             if status==GRB.Status.UNBOUNDED:
                 print("UNBOUNDED")
@@ -686,7 +686,7 @@ class CompU:
         UMin=np.zeros((self.n,1))
         try:
             modelNewMin.optimize()
-            modelNewMin.write('dump.lp')
+            #modelNewMin.write('dump.lp')
             status = modelNewMin.Status
             if status==GRB.Status.UNBOUNDED:
                 print("UNBOUNDED")
@@ -710,7 +710,73 @@ class CompU:
             #print((UMin[i][0],UMax[i][0]))
             P_new.append((UMin[i][0],UMax[i][0]))
 
-        #print(P_new)
+        # Manual Assert
+        for i in range(self.n):
+            if U[i][0][0]!=P_new[i][0] or U[i][0][1]!=P_new[i][1]:
+                print("Found!")
+                print(P_new)
+                print(U)
+                modelNewMin.write('dump.lp')
+                exit(0)
+        #--------------
+
+        starNew=(C_new,V_new,P_new)
+
+        '''print("-------Given Over-approximated Star-------")
+        print("Center: ",C)
+        print("Vector: ")
+        print(V)
+        print("Predicate (Box): ",P)
+        print("-----------------------")
+        print()
+        print("-------Computed U Star-------")
+        print("Center: ",C_new)
+        print("Vector: ")
+        print(V_new)
+        print("Predicate (Box): ",P_new)
+        print("-----------------------")'''
+
+        #exit(0)
+        return starNew
+        #-------------------------------------
+
+    def computeUI_Interval(self,rs):
+        '''
+        This method aprroximates a reachable set with uncertainties represented
+        as a star to another bloated star
+        '''
+
+        C=rs[0] # The center is always assumed to be 0 as of now
+        V=rs[1]
+        P=rs[2]
+
+
+        sv=V.shape[0]
+        aS=V.shape[1]
+
+        Vp=np.matmul(self.computeUncertainMat()-self.Ac,V)
+
+        U=np.zeros((self.n,1),dtype=object)
+
+        for i in range(sv):
+            s=0
+            for j in range(aS):
+                s=s+(mp.mpi(P[j][0],P[j][1])*Vp[i][j])
+            s=s+C[i]
+            s_min=float(mp.nstr(s).split(',')[0][1:])
+            s_max=float(mp.nstr(s).split(',')[1][:-1])
+            U[i][0]=(s_min,s_max)
+
+        #print(U)
+        C_new=np.zeros(self.n)
+        V_new=np.identity(self.n)
+        P_new=[]
+
+        for i in range(self.n):
+            #print((UMin[i][0],UMax[i][0]))
+            #P_new.append((UMin[i][0],UMax[i][0]))
+            P_new.append((U[i][0][0],U[i][0][1]))
+
 
         starNew=(C_new,V_new,P_new)
 
