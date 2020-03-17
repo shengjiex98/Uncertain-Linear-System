@@ -19,8 +19,8 @@ from ComputeU import *
 from SamplingMet import *
 
 BIGM=0.001
-EPSILON=1e-3
-INTERVAL=80
+EPSILON=1e-10
+INTERVAL=50
 SAMPLES=20
 
 
@@ -520,7 +520,7 @@ class Split:
         print("Time Taken: ",time_taken)
         print("")
 
-    def printReachableSetCompact(self,s1,s2,n):
+    def printReachableSetCompactOld(self,s1,s2,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
         the uncertain part
@@ -587,6 +587,80 @@ class Split:
 
 
             U=cu.computeUI_Interval(ORS)
+            U_compact=cu.computeUI_Interval(ORS_compact)
+            t=t+1
+        print("\n")
+        time_taken=time.time()-start_time
+        print("Time Taken: ",time_taken)
+        print("")
+
+    def printReachableSetCompact(self,s1,s2,n):
+        '''
+        Implements the main algorithm of splitting the effect of the constant and
+        the uncertain part
+        '''
+        name=n
+        nameU=n
+        intervalPlot=INTERVAL
+        lPlots=[]
+        start_time=time.time()
+        cu=CompU(self.A,self.Er)
+        #sample=Sampling(self.A,self.Er)
+        ORS=self.Theta
+        #ORS_old=self.Theta
+        #RS=self.Theta
+        ORS_compact=self.Theta
+        U=cu.computeUI_Interval(ORS)
+        U_compact=U
+        t=1
+        print()
+        print(n)
+        print("-----------------\n\n")
+
+        '''(X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,ORS_compact).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+        #lPlots.append((X1,Y1,X2,Y2,X3,Y3))
+        lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
+        #lPlots3=(X2,Y2,X3,Y3)
+        Visualization.displayPlot(s1,s2,lPlots,name+"_0")'''
+        #Visualization.displayPlotSingle(s1,s2,lPlots3,nameU+"U_0")
+
+        while (t<=self.T):
+            '''sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()'''
+            #RS=CompU.prodMatStars(self.A,RS)
+
+            #SRS=sample.prodMatStars(SRS)
+            #ORS_old=ORS
+            #U_old=U
+
+            #ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
+            ORS_compact=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact),U_compact)
+            ORS_compact=Split.filterPred(ORS_compact)
+
+            '''if t%intervalPlot==0:
+                (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                #(X2,Y2)=Visualization(s1,s2,ORS_old).getPlotsLineFine()
+                (X2,Y2)=Visualization(s1,s2,ORS_compact).getPlotsLineFine()
+                (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+                lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
+                #lPlots2=(X2,Y2,X3,Y3)
+                name=n+"_"+str(t)
+                #nameU=n+"U_"+str(t)
+                Visualization.displayPlot(s1,s2,lPlots,name)
+                #Visualization.displayPlotSingle(s1,s2,lPlots2,nameU)'''
+
+
+            '''print("Center of ORS: ",ORS[0])
+            print("Vector of ORS: ")
+            print(ORS[1])
+            print("Predicate of ORS: ",ORS[2])
+            print("\n\n")'''
+
+
+            #U=cu.computeUI_Interval(ORS)
             U_compact=cu.computeUI_Interval(ORS_compact)
             t=t+1
         print("\n")
@@ -668,6 +742,32 @@ class Split:
         print("Time Taken: ",time_taken)
         print("")
 
+    def printStarPredReport(RS,i):
+        pred=RS[2]
+        n=len(pred)
+        z=0
+
+        for p in pred:
+            if abs(p[0]-p[1])<EPSILON:
+                z=z+1
+        print("At Interval ",i,": ",z,"/",n," (",((z*100)/n),"% )")
+
+    def filterPred(RS):
+        C=RS[0]
+        V=RS[1]
+        P=RS[2]
+        z=[]
+        P_new=[]
+        n=len(P)
+        for i in range(n):
+            if abs(P[i][0]-P[i][1])<EPSILON:
+                z.append(i)
+            else:
+                P_new.append(P[i])
+        V_new=np.delete(V,z,axis=1)
+
+        return (C,V_new,P_new)
+
     def printReachableSetRand(self,s1,s2,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
@@ -681,39 +781,40 @@ class Split:
         print("-----------------\n\n")
         start_time=time.time()
         cu=CompU(self.A,self.Er)
-        sample=Sampling(self.A,self.Er)
+        #sample=Sampling(self.A,self.Er)
         ORS=self.Theta
-        RS=self.Theta
-        SRS=[self.Theta]
-        ORS_rand=[self.Theta]*SAMPLES
+        #RS=self.Theta
+        #SRS=[self.Theta]
+        #ORS_rand=[self.Theta]*SAMPLES
         U=cu.computeUI_Interval(ORS)
         t=1
-        U_rand=cu.computeUI_IntervalRand(ORS_rand)
+        #U_rand=cu.computeUI_IntervalRand(ORS_rand)
 
-        (X,Y)=Visualization(s1,s2,SRS[0]).getPlotsLineFine()
+        '''(X,Y)=Visualization(s1,s2,SRS[0]).getPlotsLineFine()
         (X2,Y2)=Visualization(s1,s2,RS).getPlotsLineFine()
         (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
         (X4,Y4)=Visualization(s1,s2,ORS_rand[0]).getPlotsLineFine()
         lPlots=[([(X,Y)],X2,Y2,X3,Y3,[(X4,Y4)])]
-        Visualization.displayPlot(s1,s2,lPlots,name+"_0")
+        Visualization.displayPlot(s1,s2,lPlots,name+"_0")'''
 
         while (t<=self.T):
-            sys.stdout.write('\r')
+            '''sys.stdout.write('\r')
             sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
-            sys.stdout.flush()
-            RS=CompU.prodMatStars(self.A,RS)
-            SRS=sample.prodMatStars(SRS)
+            sys.stdout.flush()'''
+            #RS=CompU.prodMatStars(self.A,RS)
+            #SRS=sample.prodMatStars(SRS)
             ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
-            ORS_rand=CompU.addStarsList(CompU.prodMatStarsList(self.Ac,ORS_rand),U_rand)
+            #ORS_rand=CompU.addStarsList(CompU.prodMatStarsList(self.Ac,ORS_rand),U_rand)
 
             if t%intervalPlot==0:
-                lst=Sampling.getPlotsLineFine(s1,s2,SRS)
+                '''lst=Sampling.getPlotsLineFine(s1,s2,SRS)
                 (X2,Y2)=Visualization(s1,s2,RS).getPlotsLineFine()
                 (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
                 lst2=Sampling.getPlotsLineFine(s1,s2,ORS_rand)
                 lPlots=[(lst,X2,Y2,X3,Y3,lst2)]
                 name=n+"_"+str(t)
-                Visualization.displayPlot(s1,s2,lPlots,name)
+                Visualization.displayPlot(s1,s2,lPlots,name)'''
+                #Split.printStarPredReport(ORS,t)
 
 
 
@@ -725,7 +826,7 @@ class Split:
 
 
             U=cu.computeUI_Interval(ORS)
-            U_rand=cu.computeUI_IntervalRand(ORS_rand)
+            #U_rand=cu.computeUI_IntervalRand(ORS_rand)
             t=t+1
         print("\n")
         time_taken=time.time()-start_time

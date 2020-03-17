@@ -145,7 +145,8 @@ class Visualization:
                     if status == GRB.Status.INF_OR_UNBD or \
                        status == GRB.Status.INFEASIBLE  or \
                        status == GRB.Status.UNBOUNDED:
-                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                        0;
+                        #print('**The model cannot be solved because it is infeasible or unbounded**')
                     else:
                         xVal=model.getVarByName("X").x
                         yVal=model.getVarByName("Y").x
@@ -183,7 +184,8 @@ class Visualization:
                     if status == GRB.Status.INF_OR_UNBD or \
                        status == GRB.Status.INFEASIBLE  or \
                        status == GRB.Status.UNBOUNDED:
-                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                        0;
+                        #print('**The model cannot be solved because it is infeasible or unbounded**')
                     else:
                         xVal=model.getVarByName("X").x
                         yVal=model.getVarByName("Y").x
@@ -221,7 +223,8 @@ class Visualization:
                     if status == GRB.Status.INF_OR_UNBD or \
                        status == GRB.Status.INFEASIBLE  or \
                        status == GRB.Status.UNBOUNDED:
-                        print('**The model cannot be solved because it is infeasible or unbounded**')
+                        0;
+                        #print('**The model cannot be solved because it is infeasible or unbounded**')
                     else:
                         xVal=model.getVarByName("X").x
                         yVal=model.getVarByName("Y").x
@@ -627,7 +630,7 @@ class Visualization:
         plt.close()
 
     @staticmethod
-    def displayPlot(th1,th2,lPlots,name):
+    def displayPlotORIGINAL(th1,th2,lPlots,name):
         #plt.axes()
         plt.autoscale(enable=True, axis='both', tight=False)
         plt.xlabel("State "+str(th1))
@@ -656,7 +659,7 @@ class Visualization:
         plt.close()
 
     @staticmethod
-    def displayPlotOld2(th1,th2,lPlots,name):
+    def displayPlot(th1,th2,lPlots,name):
         #plt.axes()
         plt.autoscale(enable=True, axis='both', tight=False)
         plt.xlabel("State "+str(th1))
@@ -673,12 +676,12 @@ class Visualization:
             #print(X2,Y2)
             plt.plot(X1,Y1,'bo')
             plt.plot(X3,Y3,'ko')
-            plt.plot(X2,Y2,'ro')
+            plt.plot(X2,Y2,'ro',alpha=0.04)
 
         #plt.axis('scaled')
         #plt.legend()
-        #plt.savefig("Plots/"+name)
-        plt.show()
+        plt.savefig("Plots/"+name)
+        #plt.show()
         plt.close()
 
     @staticmethod
