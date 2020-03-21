@@ -17,6 +17,7 @@ import time
 from operator import add
 
 from PredicateGen import *
+import Profiling
 
 BIGM=1e500
 EPSILON=1e-3
@@ -746,6 +747,7 @@ class CompU:
         as a star to another bloated star
         '''
 
+        start_time=time.time()
         C=rs[0] # The center is always assumed to be 0 as of now
         V=rs[1]
         P=rs[2]
@@ -778,6 +780,7 @@ class CompU:
             P_new.append((U[i][0][0],U[i][0][1]))
 
 
+        Profiling.comp_U=Profiling.comp_U+(time.time()-start_time)
         starNew=(C_new,V_new,P_new)
 
         '''print("-------Given Over-approximated Star-------")
@@ -822,6 +825,7 @@ class CompU:
         minkowski sum of the two stars.
         '''
 
+        start_time=time.time()
         C1=st1[0]
         C2=st2[0]
         C_new=list(map(add, C1, C2))
@@ -834,6 +838,8 @@ class CompU:
         P1=st1[2]
         P2=st2[2]
         P_new=P1+P2
+
+        Profiling.add_stars=Profiling.add_stars+(time.time()-start_time)
 
         #print("V_shape: ",V1.shape[1],V2.shape[1])
         #print("Ps: ",len(P1),len(P2))
@@ -922,6 +928,7 @@ class CompU:
         Given a matrix M and a star RS, perform M times RS
         '''
 
+        start_time=time.time()
         C=RS[0]
         C_new=np.matmul(M,C)
         #C_new=C1+C2
@@ -932,6 +939,8 @@ class CompU:
         P=RS[2]
         P_new=P
         #P_new=Visualization.landStars(P1,P2)
+        Profiling.prod_mat_stars=Profiling.prod_mat_stars+(time.time()-start_time)
+        #Profiling.prod_mat_stars=Profiling.prod_mat_stars+1
 
         return (C_new,V_new,P_new)
 

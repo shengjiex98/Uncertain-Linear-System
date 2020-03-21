@@ -18,6 +18,8 @@ from VisualizationReachSet import *
 from ComputeU import *
 from SamplingMet import *
 
+import Profiling
+
 BIGM=0.001
 EPSILON=1e-10
 INTERVAL=50
@@ -609,9 +611,9 @@ class Split:
         ORS=self.Theta
         #ORS_old=self.Theta
         #RS=self.Theta
-        ORS_compact=self.Theta
+        #ORS_compact=self.Theta
         U=cu.computeUI_Interval(ORS)
-        U_compact=U
+        #U_compact=U
         t=1
         print()
         print(n)
@@ -636,9 +638,9 @@ class Split:
             #ORS_old=ORS
             #U_old=U
 
-            #ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
-            ORS_compact=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact),U_compact)
-            ORS_compact=Split.filterPred(ORS_compact)
+            ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
+            #ORS_compact=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact),U_compact)
+            #ORS_compact=Split.filterPred(ORS_compact)
 
             '''if t%intervalPlot==0:
                 (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
@@ -660,13 +662,17 @@ class Split:
             print("\n\n")'''
 
 
-            #U=cu.computeUI_Interval(ORS)
-            U_compact=cu.computeUI_Interval(ORS_compact)
+            U=cu.computeUI_Interval(ORS)
+            #U_compact=cu.computeUI_Interval(ORS_compact)
             t=t+1
         print("\n")
         time_taken=time.time()-start_time
-        print("Time Taken: ",time_taken)
+        print("Total Time Taken: %.2f" % time_taken)
         print("")
+        print("Profiling Results")
+        print("- Addition of Stars: %.4f (%.2f %%)" % (Profiling.add_stars, (Profiling.add_stars*100)/time_taken))
+        print("- Product of Matrix and Stars: %.4f (%.2f %%)" % (Profiling.prod_mat_stars, (Profiling.prod_mat_stars*100)/time_taken))
+        print("- Generating Predicates while computing U (Interval Arithmetic): %.4f (%.2f %%)" % (Profiling.comp_U,(Profiling.comp_U*100)/time_taken))
 
     def printReachableSetPred(self,s1,s2,pnew,n):
         '''

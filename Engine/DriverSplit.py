@@ -416,5 +416,4 @@ class DriverCompU:
 
 
 
-DriverCompU.motorTransmission1()
-DriverCompU.motorTransmission2()
+DriverCompU.stableSystem1()
