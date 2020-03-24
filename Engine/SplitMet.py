@@ -13,6 +13,9 @@ from gurobipy import *
 import sys
 import time
 import math
+import random
+
+from pypolycontain.lib.zonotope import zonotope,zonotope_order_reduction_outer,zonotope_distance_cocenter
 
 from VisualizationReachSet import *
 from ComputeU import *
@@ -22,8 +25,10 @@ import Profiling
 
 BIGM=0.001
 EPSILON=1e-10
-INTERVAL=50
+PRED_EP=1e-3
+INTERVAL=10
 SAMPLES=20
+VLENGTH=10
 
 
 class Split:
@@ -450,6 +455,103 @@ class Split:
 
         return ORS_new
 
+
+    @staticmethod
+    def randomVec(V):
+        n=V.shape[0]
+        V_new=np.zeros((n,n))
+        for i in range(n):
+            for j in range(n):
+                V_new[i][j]=random.randint(-4,4)
+
+        return V_new
+
+    @staticmethod
+    def filter(V,P):
+        n=len(P)
+        z=[]
+        for i in range(n):
+            if abs(P[i][0]-P[i][1])<PRED_EP:
+                z.append(i)
+        V_new=np.delete(V,z,axis=1)
+
+        sz=V_new.shape[1]
+        if sz>n:
+            V_new=np.delete(V_new,list(range(n,sz)),axis=1)
+        #print(V_new)
+        #print(V_new)
+        #V_new=np.identity(n)
+        return V_new
+
+    @staticmethod
+    def star2Zono(RS):
+        C=RS[0]
+        V=RS[1]
+        P=RS[2]
+
+        r=V.shape[0]
+        c=V.shape[1]
+
+        x=np.asarray(C).reshape(r,1)
+
+        G=np.zeros(V.shape)
+        for i in range(r):
+            for j in range(c):
+                G[i][j]=V[i][j]*P[j][1]
+
+        Z=zonotope(x,G)
+
+        return Z
+
+    @staticmethod
+    def zono2Star(Z):
+        C=Z.x
+        V=Z.G
+        P=[(-1,1)]
+        n=V.shape[0]
+        c=V.shape[1]
+        C=C.reshape(1,n)[0]
+        P=P*c
+        RS=(C,V,P)
+
+        return RS
+
+
+    @staticmethod
+    def lowerDimProj(ORS):
+
+        C=ORS[0]
+        V=ORS[1]
+        P=ORS[2]
+
+        n=V.shape[0]
+
+        v_len=V.shape[1]
+
+
+        if v_len <= n*VLENGTH:
+            return ORS
+
+
+        print("PROJECTING ",n,v_len)
+
+        #BV=Split.filter(V,P)
+        Z=Split.star2Zono(ORS)
+        G_r=Split.filter(V,P)
+
+        #print("---")
+        #print("\n",Z.x)
+        #print("\n",Z.G)
+        #print(G_r)
+
+        Z_r,Z_r_list,eps=zonotope_order_reduction_outer(Z,G_r,delta=0.01,scale=1.06)
+        i_max=len(eps)
+
+        #ORS_compact=Split.zono2Star(Z_r_list[i_max-1])
+        ORS_compact=Split.zono2Star(Z_r)
+
+        return ORS_compact
+
     def printReachableSet(self,s1,s2,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
@@ -460,6 +562,9 @@ class Split:
         #intervalPlot=math.ceil(self.T/7)
         intervalPlot=INTERVAL
         lPlots=[]
+        add_stars=0
+        prod_mat_stars=0
+        comp_U=0
         start_time=time.time()
         cu=CompU(self.A,self.Er)
         sample=Sampling(self.A,self.Er)
@@ -596,7 +701,7 @@ class Split:
         print("Time Taken: ",time_taken)
         print("")
 
-    def printReachableSetCompact(self,s1,s2,n):
+    def printReachableSetCompactOld2(self,s1,s2,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
         the uncertain part
@@ -605,6 +710,9 @@ class Split:
         nameU=n
         intervalPlot=INTERVAL
         lPlots=[]
+        add_stars=0
+        prod_mat_stars=0
+        comp_U=0
         start_time=time.time()
         cu=CompU(self.A,self.Er)
         #sample=Sampling(self.A,self.Er)
@@ -673,6 +781,82 @@ class Split:
         print("- Addition of Stars: %.4f (%.2f %%)" % (Profiling.add_stars, (Profiling.add_stars*100)/time_taken))
         print("- Product of Matrix and Stars: %.4f (%.2f %%)" % (Profiling.prod_mat_stars, (Profiling.prod_mat_stars*100)/time_taken))
         print("- Generating Predicates while computing U (Interval Arithmetic): %.4f (%.2f %%)" % (Profiling.comp_U,(Profiling.comp_U*100)/time_taken))
+
+    def printReachableSetCompact(self,s1,s2,n):
+        '''
+        Implements the main algorithm of splitting the effect of the constant and
+        the uncertain part
+        '''
+        name=n
+        nameU=n
+        intervalPlot=INTERVAL
+        lPlots=[]
+        add_stars=0
+        prod_mat_stars=0
+        comp_U=0
+        start_time=time.time()
+        cu=CompU(self.A,self.Er)
+        #sample=Sampling(self.A,self.Er)
+        ORS=self.Theta
+        #ORS_old=self.Theta
+        RS=self.Theta
+        ORS_compact=self.Theta
+        U=cu.computeUI_Interval(ORS)
+        U_compact=U
+        t=1
+        print()
+        print(n)
+        print("-----------------\n\n")
+
+        '''(X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,ORS_compact).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+        #lPlots.append((X1,Y1,X2,Y2,X3,Y3))
+        lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
+        #lPlots3=(X2,Y2,X3,Y3)
+        Visualization.displayPlot(s1,s2,lPlots,name+"_0")'''
+        #Visualization.displayPlotSingle(s1,s2,lPlots3,nameU+"U_0")
+
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+
+            RS=CompU.prodMatStars(self.A,RS)
+            #SRS=sample.prodMatStars(SRS)
+            #ORS_old=ORS
+            #U_old=U
+
+            ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
+            ORS_compact=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact),U_compact)
+            ORS_compact=Split.lowerDimProj(ORS_compact)
+
+            if t%intervalPlot==0:
+                (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                #(X2,Y2)=Visualization(s1,s2,ORS_old).getPlotsLineFine()
+                (X2,Y2)=Visualization(s1,s2,ORS_compact).getPlotsLineFine()
+                (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+                lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
+                #lPlots2=(X2,Y2,X3,Y3)
+                name=n+"_"+str(t)
+                #nameU=n+"U_"+str(t)
+                Visualization.displayPlot(s1,s2,lPlots,name)
+                #Visualization.displayPlotSingle(s1,s2,lPlots2,nameU)
+
+
+            '''print("Center of ORS: ",ORS[0])
+            print("Vector of ORS: ")
+            print(ORS[1])
+            print("Predicate of ORS: ",ORS[2])
+            print("\n\n")'''
+
+
+            U=cu.computeUI_Interval(ORS)
+            U_compact=cu.computeUI_Interval(ORS_compact)
+            t=t+1
+        print("\n")
+        time_taken=time.time()-start_time
+
 
     def printReachableSetPred(self,s1,s2,pnew,n):
         '''
