@@ -480,7 +480,7 @@ class Split:
             V_new=np.delete(V_new,list(range(n,sz)),axis=1)
         #print(V_new)
         #print(V_new)
-        #V_new=np.identity(n)
+        V_new=np.identity(n)
         return V_new
 
     @staticmethod
@@ -533,7 +533,7 @@ class Split:
             return ORS
 
 
-        print("PROJECTING ",n,v_len)
+        #print("PROJECTING ",n,v_len)
 
         #BV=Split.filter(V,P)
         Z=Split.star2Zono(ORS)
