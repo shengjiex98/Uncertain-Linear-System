@@ -249,6 +249,13 @@ class Visualization:
 
         return (X_list,Y_list)
 
+    def getPlotsLineFineList(RS_list,s1,s2):
+        pltList=[]
+        for rs in RS_list:
+            (X,Y)=Visualization(s1,s2,rs).getPlotsLineFine()
+            pltList.append((X,Y))
+        return pltList
+
     def getPlotsLineFinePred(self):
 
         C=self.star1[0] # The center is always assumed to be 0 as of now
@@ -706,7 +713,7 @@ class Visualization:
         plt.show()
         plt.close()
 
-    def displayPlotTmp(th1,th2,lPlots):
+    def displayPlotTmp(th1,th2,lPlots,name):
         plt.axes()
         plt.autoscale(enable=True, axis='both', tight=False)
         plt.xlabel("State "+str(th1))
@@ -716,6 +723,21 @@ class Visualization:
         #plt.axis('scaled')
         plt.legend()
         plt.show()
+
+    def displayPlotList(th1,th2,lPlots,XY,name):
+        plt.axes()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+        for l in lPlots:
+            X=l[0]
+            Y=l[1]
+            plt.plot(X,Y,'bo')
+        plt.plot(XY[0],XY[1],'ro',alpha=0.1)
+        #plt.plot(lPlots[3][0],lPlots[3][1],'bo')
+        #plt.legend()
+        plt.show()
+        #plt.savefig("Plots/"+name)
 
 
 if False:

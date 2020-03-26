@@ -20,6 +20,7 @@ from pypolycontain.lib.zonotope import zonotope,zonotope_order_reduction_outer,z
 from VisualizationReachSet import *
 from ComputeU import *
 from SamplingMet import *
+from Gridding import *
 
 import Profiling
 
@@ -853,6 +854,57 @@ class Split:
 
             U=cu.computeUI_Interval(ORS)
             U_compact=cu.computeUI_Interval(ORS_compact)
+            t=t+1
+        print("\n")
+        time_taken=time.time()-start_time
+
+    def printReachableSetGrid(self,s1,s2,n):
+        '''
+        Implements the main algorithm of splitting the effect of the constant and
+        the uncertain part
+        '''
+        name=n
+        nameU=n
+        intervalPlot=INTERVAL
+        lPlots=[]
+        print()
+        print(n)
+        print("-----------------\n\n")
+        start_time_g=time.time()
+        start_time_o=start_time_g
+        cu=CompU(self.A,self.Er)
+        ORS_o=self.Theta
+        ORS_g=Grid(self.Theta,s1,s2).splitStar()
+        U_o=cu.computeUI_Interval(ORS_o)
+        U_g=[]
+        for rs in ORS_g:
+            U_g.append(cu.computeUI_Interval(rs))
+        t=1
+
+        plotList_g=Visualization.getPlotsLineFineList(ORS_g,s1,s2)
+        (X,Y)=Visualization(s1,s2,ORS_o).getPlotsLineFine()
+        Visualization.displayPlotList(s1,s2,plotList_g,(X,Y),name+"_0")
+
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+
+            ORS_o=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_o),U_o)
+            ORS_g=CompU.addStarsList(CompU.prodMatStarsList(self.Ac,ORS_g),U_g)
+
+            if t%intervalPlot==0:
+                plotList_g=Visualization.getPlotsLineFineList(ORS_g,s1,s2)
+                (X,Y)=Visualization(s1,s2,ORS_o).getPlotsLineFine()
+                Visualization.displayPlot(s1,s2,lPlots,name+"_0")
+                name=n+"_"+str(t)
+                Visualization.displayPlotList(s1,s2,plotList_g,(X,Y),name)
+
+            U_o=cu.computeUI_Interval(ORS_o)
+            tmp=[]
+            for rs in ORS_g:
+                tmp.append(cu.computeUI_Interval(rs))
+            U_g=copy.copy(tmp)
             t=t+1
         print("\n")
         time_taken=time.time()-start_time
