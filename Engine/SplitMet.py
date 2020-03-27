@@ -870,8 +870,7 @@ class Split:
         print()
         print(n)
         print("-----------------\n\n")
-        start_time_g=time.time()
-        start_time_o=start_time_g
+        start_time=time.time()
         cu=CompU(self.A,self.Er)
         ORS_o=self.Theta
         ORS_g=Grid(self.Theta,s1,s2).splitStar()
@@ -896,7 +895,6 @@ class Split:
             if t%intervalPlot==0:
                 plotList_g=Visualization.getPlotsLineFineList(ORS_g,s1,s2)
                 (X,Y)=Visualization(s1,s2,ORS_o).getPlotsLineFine()
-                Visualization.displayPlot(s1,s2,lPlots,name+"_0")
                 name=n+"_"+str(t)
                 Visualization.displayPlotList(s1,s2,plotList_g,(X,Y),name)
 

@@ -416,4 +416,4 @@ class DriverCompU:
 
 
 
-DriverCompU.dcConv()
+DriverCompU.motorTransmission2()

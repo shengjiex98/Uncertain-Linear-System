@@ -736,8 +736,9 @@ class Visualization:
         plt.plot(XY[0],XY[1],'ro',alpha=0.1)
         #plt.plot(lPlots[3][0],lPlots[3][1],'bo')
         #plt.legend()
-        plt.show()
-        #plt.savefig("Plots/"+name)
+        #plt.show()
+        plt.savefig("Plots/"+name)
+        plt.close()
 
 
 if False:
