@@ -713,6 +713,34 @@ class Visualization:
         #plt.show()
         plt.close()
 
+    @staticmethod
+    def displayPlotMultIS(th1,th2,lPlots,name):
+        #plt.axes()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+
+        X1=lPlots[0]
+        Y1=lPlots[1]
+        X2=lPlots[2]
+        Y2=lPlots[3]
+        X3=lPlots[4]
+        Y3=lPlots[5]
+        X4=lPlots[6]
+        Y4=lPlots[7]
+
+
+        plt.plot(X1,Y1,'ro')
+        plt.plot(X2,Y2,'bo')
+        plt.plot(X3,Y3,'ko')
+        plt.plot(X2,Y2,'co')
+
+        #plt.axis('scaled')
+        #plt.legend()
+        #plt.savefig("Plots/"+name)
+        plt.show()
+        plt.close()
+
     def displayPlotTmp(th1,th2,lPlots,name):
         plt.axes()
         plt.autoscale(enable=True, axis='both', tight=False)

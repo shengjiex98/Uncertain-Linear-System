@@ -28,6 +28,7 @@ BIGM=0.001
 EPSILON=1e-10
 PRED_EP=1e-3
 INTERVAL=100
+RED_INT=500
 SAMPLES=20
 VLENGTH=15
 
@@ -552,6 +553,38 @@ class Split:
 
         return ORS_compact
 
+    @staticmethod
+    def appxSB(ORS):
+        C=ORS[0] # The center is always assumed to be 0 as of now
+        V=ORS[1]
+        P=ORS[2]
+
+        sv=V.shape[0]
+        aS=V.shape[1]
+
+        U=np.zeros((sv,1),dtype=object)
+
+        for i in range(sv):
+            s=0
+            for j in range(aS):
+                s=s+(mp.mpi(P[j][0],P[j][1])*V[i][j])
+            s=s+C[i]
+            s_min=float(mp.nstr(s).split(',')[0][1:])
+            s_max=float(mp.nstr(s).split(',')[1][:-1])
+            U[i][0]=(s_min,s_max)
+
+        #print(U)
+        C_new=C
+        V_new=np.identity(sv)
+        P_new=[]
+
+        for i in range(sv):
+            P_new.append((U[i][0][0],U[i][0][1]))
+
+        starNew=(C_new,V_new,P_new)
+
+        return starNew
+
     def printReachableSet(self,s1,s2,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
@@ -782,7 +815,7 @@ class Split:
         print("- Product of Matrix and Stars: %.4f (%.2f %%)" % (Profiling.prod_mat_stars, (Profiling.prod_mat_stars*100)/time_taken))
         print("- Generating Predicates while computing U (Interval Arithmetic): %.4f (%.2f %%)" % (Profiling.comp_U,(Profiling.comp_U*100)/time_taken))
 
-    def printReachableSetCompact(self,s1,s2,n):
+    def printReachableSetCompactOld3(self,s1,s2,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
         the uncertain part
@@ -857,7 +890,7 @@ class Split:
         print("\n")
         time_taken=time.time()-start_time
 
-    def printReachableSetCompactTime(self,s1,s2,n):
+    def printReachableSetCompactTimeOld(self,s1,s2,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
         the uncertain part
@@ -927,6 +960,144 @@ class Split:
         print("----Timining Details for "+n+"----")
         print("Without Reduction: ",time_taken_interval)
         print("With Reduction: ",time_taken_reduction)
+
+    def printReachableSetCompactTime(self,s1,s2,n):
+        '''
+        Implements the main algorithm of splitting the effect of the constant and
+        the uncertain part
+        '''
+        name=n
+        nameU=n
+        intervalPlot=INTERVAL
+        lPlots=[]
+        time_taken_interval=0
+        time_taken_reduction=0
+        start_time_total=time.time()
+        cu=CompU(self.A,self.Er)
+        #sample=Sampling(self.A,self.Er)
+        ORS=self.Theta
+        #ORS_old=self.Theta
+        RS=self.Theta
+        ORS_compact=self.Theta
+        t_reduction=0
+        t_interval=time.time()
+        U=cu.computeUI_Interval(ORS)
+        time_taken_interval=time.time()-t_interval
+        time_taken_reduction=time_taken_interval
+        U_compact=U
+        t=1
+        print()
+        print(n)
+        print("-----------------\n\n")
+
+        (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,ORS_compact).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+        lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
+        Visualization.displayPlot(s1,s2,lPlots,name+"_0")
+
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+
+            RS=CompU.prodMatStars(self.A,RS)
+
+            t_interval=time.time()
+            ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
+            U=cu.computeUI_Interval(ORS)
+            time_taken_interval=time_taken_interval+(time.time()-t_interval)
+
+            t_reduction=time.time()
+            ORS_compact=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact),U_compact)
+            if t%RED_INT==0:
+                ORS_compact=Split.appxSB(ORS_compact)
+            U_compact=cu.computeUI_Interval(ORS_compact)
+            time_taken_reduction=time_taken_reduction+(time.time()-t_reduction)
+
+            if t%intervalPlot==0:
+                (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                (X2,Y2)=Visualization(s1,s2,ORS_compact).getPlotsLineFine()
+                (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+                lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
+                name=n+"_"+str(t)
+                Visualization.displayPlot(s1,s2,lPlots,name)
+
+            t=t+1
+
+        print("\n")
+        print("----Timining Details for "+n+"----")
+        print("Without Reduction: ",time_taken_interval)
+        print("With Reduction: ",time_taken_reduction)
+        print("Total Time: ",time.time()-start_time_total)
+
+    def printReachableSetMultIS(self,s1,s2,n,Th1,Th2,Th3):
+        '''
+        Implements the main algorithm of splitting the effect of the constant and
+        the uncertain part
+        '''
+        print()
+        print(n)
+        print("-----------------\n\n")
+
+        start_time_total=time.time()
+        name=n
+        nameU=n
+        intervalPlot=INTERVAL
+        lPlots=[]
+        cu=CompU(self.A,self.Er)
+        ORS=self.Theta
+        ORS2=Th1
+        ORS3=Th2
+        ORS4=Th3
+        RS=self.Theta
+        U=cu.computeUI_Interval(ORS)
+        U2=cu.computeUI_Interval(ORS2)
+        U3=cu.computeUI_Interval(ORS3)
+        U4=cu.computeUI_Interval(ORS4)
+        t=1
+
+        (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,ORS2).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,ORS3).getPlotsLineFine()
+        (X4,Y4)=Visualization(s1,s2,ORS4).getPlotsLineFine()
+        lPlots=[X1,Y1,X2,Y2,X3,Y3,X4,Y4]
+        name=n+"_"+str(t)
+        Visualization.displayPlotMultIS(s1,s2,lPlots,name)
+
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+
+            RS=CompU.prodMatStars(self.A,RS)
+
+            ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
+            U=cu.computeUI_Interval(ORS)
+
+            ORS2=CompU.addStars(CompU.prodMatStars(self.Ac,ORS2),U2)
+            U2=cu.computeUI_Interval(ORS2)
+
+            ORS3=CompU.addStars(CompU.prodMatStars(self.Ac,ORS3),U3)
+            U3=cu.computeUI_Interval(ORS3)
+
+            ORS4=CompU.addStars(CompU.prodMatStars(self.Ac,ORS4),U4)
+            U4=cu.computeUI_Interval(ORS4)
+
+            if t%intervalPlot==0:
+                (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                (X2,Y2)=Visualization(s1,s2,ORS2).getPlotsLineFine()
+                (X3,Y3)=Visualization(s1,s2,ORS3).getPlotsLineFine()
+                (X4,Y4)=Visualization(s1,s2,ORS4).getPlotsLineFine()
+                lPlots=[X1,Y1,X2,Y2,X3,Y3,X4,Y4]
+                name=n+"_"+str(t)
+                Visualization.displayPlotMultIS(s1,s2,lPlots,name)
+
+            t=t+1
+
+        print("\n")
+        print("----Timining Details for "+n+"----")
+        print("Total Time: ",time.time()-start_time_total)
 
     def printReachableSetGrid(self,s1,s2,n):
         '''

@@ -79,9 +79,16 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
+        P2=[(-2,2),(-2,2),(-2,2)]
+        P3=[(-3,3),(-3,3),(-3,3)]
+        P4=[(-4,4),(-4,4),(-4,4)]
+        rs2=(C,V,P2)
+        rs3=(C,V,P3)
+        rs4=(C,V,P4)
+
         T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSetCompactTime(1,2,"Stable1")
+        sp.printReachableSetMultIS(1,2,"Stable1",rs2,rs3,rs4)
 
     def stableSystem2():
         dynA=Benchmarks.StableSystem2.A
@@ -98,9 +105,15 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1)]
         rs=(C,V,P)
+        P2=[(-2,2),(-2,2)]
+        P3=[(-3,3),(-3,3)]
+        P4=[(-4,4),(-4,4)]
+        rs2=(C,V,P2)
+        rs3=(C,V,P3)
+        rs3=(C,V,P4)
         T=2000
         sp=Split(A,E,rs,T)
-        sp.printReachableSetCompactTime(0,1,"Stable2")
+        sp.printReachableSetMultIS(0,1,"Stable2",rs2,rs3,rs4)
 
     def stableSystem3():
         dynA=Benchmarks.StableSystem3.A
@@ -194,11 +207,17 @@ class DriverCompU:
         [0,0,0,-1,0,0,0,0,0,0,-1,0,0,0,1,0],
         [1,0,0,0,0,0,-1,0,0,0,0,0,-1,0,0,1]
         ])
-        P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
+        P=[(-1,-1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
+        P2=[(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2)]
+        P3=[(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3)]
+        P4=[(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4)]
         T=2000
+        rs2=(C,V,P2)
+        rs3=(C,V,P3)
+        rs4=(C,V,P4)
         sp=Split(A,E,rs,T)
-        sp.printReachableSetCompactTime(0,1,"FlightEnvelope20p")
+        sp.printReachableSetMultIS(0,1,"FlightEnvelope20p",rs2,rs3,rs4)
 
     def coOPVehiclesI():
         dynA=Benchmarks.CoOPVehiclesI.A
@@ -232,9 +251,15 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
+        P2=[(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2)]
+        P3=[(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3)]
+        P4=[(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4)]
+        rs2=(C,V,P2)
+        rs3=(C,V,P3)
+        rs4=(C,V,P4)
         T=2000
         sp=Split(A,E2,rs,T)
-        sp.printReachableSetCompactTime(0,1,"CoOpI")
+        sp.printReachableSetMultIS(0,1,"CoOpI",rs2,rs3,rs4)
 
     def pkpd2():
         dynA=Benchmarks.PKPD2.A
@@ -262,9 +287,15 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
         rs=(C,V,P)
+        P2=[(-2,2),(-2,2),(-2,2),(-2,2),(-2,2)]
+        P3=[(-3,3),(-3,3),(-3,3),(-3,3),(-3,3)]
+        P4=[(-4,4),(-4,4),(-4,4),(-4,4),(-4,4)]
         T=2000
+        rs2=(C,V,P2)
+        rs3=(C,V,P3)
+        rs4=(C,V,P4)
         sp=Split(A,E,rs,T)
-        sp.printReachableSetCompactTime(1,3,"PKPD2_20p")
+        sp.printReachableSetMultIS(1,3,"PKPD2_20p",rs2,rs3,rs4)
 
     def dcConv():
         dynA=Benchmarks.DCConv.A
@@ -320,11 +351,17 @@ class DriverCompU:
         [-1,-1,0,0,1,0],
         [1,-1,0,-1,0,1],
         ])
-        P=[(-1,1),(-1,1),(1,1),(1,1),(1,1),(1,1)]
+        P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
         rs=(C,V2,P)
+        P2=[(-2,2),(-2,2),(-2,2),(-2,2),(-2,2),(-2,2)]
+        P3=[(-3,3),(-3,3),(-3,3),(-3,3),(-3,3),(-3,3)]
+        P4=[(-4,4),(-4,4),(-4,4),(-4,4),(-4,4),(-4,4)]
         T=2000
+        rs2=(C,V2,P2)
+        rs3=(C,V2,P3)
+        rs4=(C,V2,P4)
         sp=Split(A,E,rs,T)
-        sp.printReachableSetCompactTime(0,1,"Spacev2")
+        sp.printReachableSetMultIS(0,1,"Spacev2",rs2,rs3,rs4)
 
     def holesCXc():
         dynA=Benchmarks.HolesCXc.A
@@ -416,24 +453,7 @@ class DriverCompU:
 
 
 
-#Batch 1
 DriverCompU.stableSystem1()
-DriverCompU.stableSystem2()
-DriverCompU.stableSystem3()
-DriverCompU.stableSystem4()
-DriverCompU.dcConv()
-DriverCompU.spaceCraftRndzvs()
-DriverCompU.motorTransmission2()
-
-'''
-#Batch 2
-DriverCompU.flightEnvelope()
-
-#Batch 3
-DriverCompU.pkpd2()
-DriverCompU.holesCXc()
-
-#Batch 4
-DriverCompU.coOPVehiclesI()
-DriverCompU.motorTransmission1()
-'''
+#DriverCompU.stableSystem1()
+#DriverCompU.pkpd2()
+#DriverCompU.coOPVehiclesI()
