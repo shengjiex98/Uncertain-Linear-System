@@ -27,9 +27,9 @@ import Profiling
 BIGM=0.001
 EPSILON=1e-10
 PRED_EP=1e-3
-INTERVAL=10
+INTERVAL=100
 SAMPLES=20
-VLENGTH=10
+VLENGTH=15
 
 
 class Split:
@@ -470,6 +470,7 @@ class Split:
     @staticmethod
     def filter(V,P):
         n=len(P)
+        dim=V.shape[0]
         z=[]
         for i in range(n):
             if abs(P[i][0]-P[i][1])<PRED_EP:
@@ -477,9 +478,9 @@ class Split:
         V_new=np.delete(V,z,axis=1)
 
         sz=V_new.shape[1]
-        if sz>n:
-            V_new=np.delete(V_new,list(range(n,sz)),axis=1)
-        #print(V_new)
+        if sz>dim:
+            V_new=np.delete(V_new,list(range(dim,sz)),axis=1)
+        #print(V_new.shape)
         #print(V_new)
         V_new=np.identity(n)
         return V_new
@@ -529,10 +530,8 @@ class Split:
 
         v_len=V.shape[1]
 
-
-        if v_len <= n*VLENGTH:
+        if v_len<n*VLENGTH:
             return ORS
-
 
         #print("PROJECTING ",n,v_len)
 
@@ -858,6 +857,77 @@ class Split:
         print("\n")
         time_taken=time.time()-start_time
 
+    def printReachableSetCompactTime(self,s1,s2,n):
+        '''
+        Implements the main algorithm of splitting the effect of the constant and
+        the uncertain part
+        '''
+        name=n
+        nameU=n
+        intervalPlot=INTERVAL
+        lPlots=[]
+        time_taken_interval=0
+        time_taken_reduction=0
+        start_time_total=time.time()
+        cu=CompU(self.A,self.Er)
+        #sample=Sampling(self.A,self.Er)
+        ORS=self.Theta
+        #ORS_old=self.Theta
+        RS=self.Theta
+        ORS_compact=self.Theta
+        t_reduction=0
+        t_interval=time.time()
+        U=cu.computeUI_Interval(ORS)
+        time_taken_interval=time.time()-t_interval
+        time_taken_reduction=time_taken_interval
+        U_compact=U
+        t=1
+        print()
+        print(n)
+        print("-----------------\n\n")
+
+        '''(X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,ORS_compact).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+        #lPlots.append((X1,Y1,X2,Y2,X3,Y3))
+        lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
+        #lPlots3=(X2,Y2,X3,Y3)
+        Visualization.displayPlot(s1,s2,lPlots,name+"_0")'''
+        #Visualization.displayPlotSingle(s1,s2,lPlots3,nameU+"U_0")
+
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+
+            RS=CompU.prodMatStars(self.A,RS)
+
+            t_interval=time.time()
+            ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
+            U=cu.computeUI_Interval(ORS)
+            time_taken_interval=time_taken_interval+(time.time()-t_interval)
+
+            t_reduction=time.time()
+            ORS_compact=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact),U_compact)
+            ORS_compact=Split.lowerDimProj(ORS_compact)
+            U_compact=cu.computeUI_Interval(ORS_compact)
+            time_taken_reduction=time_taken_reduction+(time.time()-t_reduction)
+
+            if t%intervalPlot==0:
+                (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                (X2,Y2)=Visualization(s1,s2,ORS_compact).getPlotsLineFine()
+                (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+                lPlots=[(X1,Y1,X2,Y2,X3,Y3)]
+                name=n+"_"+str(t)
+                Visualization.displayPlot(s1,s2,lPlots,name)
+
+            t=t+1
+
+        print("\n")
+        print("----Timining Details for "+n+"----")
+        print("Without Reduction: ",time_taken_interval)
+        print("With Reduction: ",time_taken_reduction)
+
     def printReachableSetGrid(self,s1,s2,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
@@ -906,7 +976,6 @@ class Split:
             t=t+1
         print("\n")
         time_taken=time.time()-start_time
-
 
     def printReachableSetPred(self,s1,s2,pnew,n):
         '''
@@ -981,6 +1050,64 @@ class Split:
         time_taken=time.time()-start_time
         print("Time Taken: ",time_taken)
         print("")
+
+    @staticmethod
+    def getVectorLength(RS):
+        return RS[1].shape[1]
+
+    def reachableSetProfile(self,s1,s2,n):
+        '''
+        Implements the main algorithm of splitting the effect of the constant and
+        the uncertain part
+        '''
+
+        print()
+        print(n)
+        print("-----------------\n\n")
+
+        name=n
+        nameU=n
+        strRep=""
+        intervalPlot=10
+        lPlots=[]
+        start_time=time.time()
+        cu=CompU(self.A,self.Er)
+        ORS=self.Theta
+        RS=self.Theta
+
+        U=cu.computeUI_Interval(ORS)
+        t=1
+
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+            RS=CompU.prodMatStars(self.A,RS)
+            ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
+            start_time_interval=time.time()
+            U=cu.computeUI_Interval(ORS)
+            time_taken_interval=time.time()-start_time_interval
+            if t%intervalPlot==0:
+                ORS_compact=ORS
+                if Split.getVectorLength(ORS)<400:
+                    start_time_reduction=time.time()
+                    ORS_compact=Split.lowerDimProj(ORS)
+                    time_taken_reduction=time.time()-start_time_reduction
+                    (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                    (X2,Y2)=Visualization(s1,s2,ORS_compact).getPlotsLineFine()
+                    lPlots=[X1,Y1,X2,Y2]
+                    name=n+"_"+str(t)
+                    Visualization.displayPlotSingle(s1,s2,lPlots,name)
+                else:
+                    time_taken_reduction=0
+                #print("Vector Size: ",Split.getVectorLength(ORS),"; Interval: ",time_taken_interval,"; Reduction: ",time_taken_reduction)
+                strRep=strRep+"Vector Size: "+str(Split.getVectorLength(ORS))+"; Interval: "+str(time_taken_interval)+"; Reduction: "+str(time_taken_reduction)+"\n"
+            t=t+1
+        print("\n")
+        time_taken=time.time()-start_time
+        print("\n\n----------Profiling Report for "+n+"----------")
+        print(strRep)
+        print("\nTotal Time: ",time_taken)
 
     def printStarPredReport(RS,i):
         pred=RS[2]

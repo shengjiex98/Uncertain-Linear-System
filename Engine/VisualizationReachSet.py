@@ -709,8 +709,8 @@ class Visualization:
 
         #plt.axis('scaled')
         #plt.legend()
-        #plt.savefig("PlotsU/"+name)
-        plt.show()
+        plt.savefig("Plots/"+name)
+        #plt.show()
         plt.close()
 
     def displayPlotTmp(th1,th2,lPlots,name):
