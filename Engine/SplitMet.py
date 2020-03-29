@@ -1011,7 +1011,8 @@ class Split:
             t_reduction=time.time()
             ORS_compact=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact),U_compact)
             if t%RED_INT==0:
-                ORS_compact=Split.appxSB(ORS_compact)
+                #ORS_compact=Split.appxSB(ORS_compact)
+                ORS_compact=Split.lowerDimProj(ORS_compact)
             U_compact=cu.computeUI_Interval(ORS_compact)
             time_taken_reduction=time_taken_reduction+(time.time()-t_reduction)
 

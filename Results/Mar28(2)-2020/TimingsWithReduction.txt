@@ -1,0 +1,147 @@
+Stable1
+-----------------
+
+
+Using license file /home/bineet/gurobi.lic
+Academic license - for non-commercial use only
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for Stable1----
+Without Reduction:  575.7255682945251
+With Reduction:  143.35403084754944
+Total Time:  1140.1613099575043
+
+Stable2
+-----------------
+
+
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for Stable2----
+Without Reduction:  331.28519678115845
+With Reduction:  82.74955630302429
+Total Time:  838.0425035953522
+
+Stable3
+-----------------
+
+
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for Stable3----
+Without Reduction:  321.7932574748993
+With Reduction:  80.8830304145813
+Total Time:  686.4533834457397
+
+Stable4
+-----------------
+
+
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for Stable4----
+Without Reduction:  735.8223321437836
+With Reduction:  183.8081283569336
+Total Time:  1364.481873512268
+
+DC_10p
+-----------------
+
+
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for DC_10p----
+Without Reduction:  778.9320776462555
+With Reduction:  194.49725937843323
+Total Time:  1497.1684861183167
+
+Spacev2
+-----------------
+
+
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for Spacev2----
+Without Reduction:  3217.653448343277
+With Reduction:  828.4598417282104
+Total Time:  5197.325018167496
+
+Motor2
+-----------------
+
+
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for Motor2----
+Without Reduction:  1550.096913576126
+With Reduction:  367.40776348114014
+Total Time:  2568.1937971115112
+
+
+CoOpI
+-----------------
+
+
+Using license file /home/bineet/gurobi.lic
+Academic license - for non-commercial use only
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for CoOpI----
+Without Reduction:  8480.019628286362
+With Reduction:  2207.4571211338043
+Total Time:  12402.99179983139
+
+Motor1_20p
+-----------------
+
+
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for Motor1_20p----
+Without Reduction:  2556.9412109851837
+With Reduction:  685.6680254936218
+Total Time:  3893.4897453784943
+
+
+PKPD2_20p
+-----------------
+
+
+Using license file /home/bineet/gurobi.lic
+Academic license - for non-commercial use only
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for PKPD2_20p----
+Without Reduction:  1889.5390412807465
+With Reduction:  461.5663022994995
+Total Time:  3365.6237075328827
+
+Holes20p
+-----------------
+
+
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for Holes20p----
+Without Reduction:  10813.39869594574
+With Reduction:  2808.900470972061
+Total Time:  15181.19488620758
+
+
+FlightEnvelope20p
+-----------------
+
+
+Using license file /home/bineet/gurobi.lic
+Academic license - for non-commercial use only
+Splitting Algorithm Progress (Optimization): 100.0%
+
+----Timining Details for FlightEnvelope20p----
+Without Reduction:  14497.835121393204
+With Reduction:  3625.258941888809
+Total Time:  20234.968859672546
+
+
+
+
+

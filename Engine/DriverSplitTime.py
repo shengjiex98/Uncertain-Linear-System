@@ -415,7 +415,7 @@ class DriverCompU:
 
 
 
-
+'''
 #Batch 1
 DriverCompU.stableSystem1()
 DriverCompU.stableSystem2()
@@ -424,16 +424,17 @@ DriverCompU.stableSystem4()
 DriverCompU.dcConv()
 DriverCompU.spaceCraftRndzvs()
 DriverCompU.motorTransmission2()
-
+'''
 '''
 #Batch 2
 DriverCompU.flightEnvelope()
-
+'''
+'''
 #Batch 3
 DriverCompU.pkpd2()
 DriverCompU.holesCXc()
+'''
 
 #Batch 4
 DriverCompU.coOPVehiclesI()
 DriverCompU.motorTransmission1()
-'''
