@@ -30,7 +30,7 @@ PRED_EP=1e-3
 INTERVAL=100
 RED_INT=500
 SAMPLES=20
-VLENGTH=15
+VLENGTH=17
 
 
 class Split:
@@ -483,7 +483,7 @@ class Split:
             V_new=np.delete(V_new,list(range(dim,sz)),axis=1)
         #print(V_new.shape)
         #print(V_new)
-        V_new=np.identity(n)
+        V_new=np.identity(dim)
         return V_new
 
     @staticmethod
@@ -1261,7 +1261,7 @@ class Split:
             time_taken_interval=time.time()-start_time_interval
             if t%intervalPlot==0:
                 ORS_compact=ORS
-                if Split.getVectorLength(ORS)<400:
+                if Split.getVectorLength(ORS)<900:
                     start_time_reduction=time.time()
                     ORS_compact=Split.lowerDimProj(ORS)
                     time_taken_reduction=time.time()-start_time_reduction
