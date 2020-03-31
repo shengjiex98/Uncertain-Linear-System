@@ -733,12 +733,12 @@ class Visualization:
         plt.plot(X1,Y1,'ro')
         plt.plot(X2,Y2,'bo')
         plt.plot(X3,Y3,'ko')
-        plt.plot(X2,Y2,'co')
+        plt.plot(X4,Y4,'co')
 
         #plt.axis('scaled')
         #plt.legend()
-        #plt.savefig("Plots/"+name)
-        plt.show()
+        plt.savefig("Plots/"+name)
+        #plt.show()
         plt.close()
 
     def displayPlotTmp(th1,th2,lPlots,name):
