@@ -9,6 +9,7 @@ Documentation: Not yet available. (TODO)
 import math
 import numpy as np
 import copy
+import mpmath as mp
 
 class Grid:
     '''
@@ -66,6 +67,69 @@ class Grid:
             print("Vector: \n",star[1])
             print("Predicate: ",star[2])
 
+class GridMat:
+    '''
+    Grids the given uncertain matrix into pieces
+    '''
+
+    def __init__(self,A,Er):
+
+        self.A=A
+        self.Er=Er
+
+    def splitEr(self):
+        '''
+        Breaks the interval matrix to 4 interval matrices
+        by spiltting two random intervals from state1
+        and state2
+        '''
+
+        n=self.A.shape[0]
+        Er1=copy.copy(self.Er)
+        Er2=copy.copy(self.Er)
+        Er3=copy.copy(self.Er)
+        Er4=copy.copy(self.Er)
+
+        l=len(self.Er)
+
+        if l==1:
+            (x1,y1)=list(self.Er.keys())[0]
+            mid1=(self.Er[(x1,y1)][1]-self.Er[(x1,y1)][0])/2
+            I1=(self.Er[(x1,y1)][0],self.Er[(x1,y1)][0]+mid1)
+            I2=(self.Er[(x1,y1)][0]+mid1,self.Er[(x1,y1)][1])
+            Er1[(x1,y1)]=I1
+            Er2[(x1,y1)]=I2
+
+            return [Er1,Er2,Er1,Er2]
+
+        else:
+            (x1,y1)=list(self.Er.keys())[0]
+            (x2,y2)=list(self.Er.keys())[l-1]
+            mid1=(self.Er[(x1,y1)][1]-self.Er[(x1,y1)][0])/2
+            mid2=(self.Er[(x2,y2)][1]-self.Er[(x2,y2)][0])/2
+            I1=[self.Er[(x1,y1)][0],self.Er[(x1,y1)][0]+mid1]
+            I2=[self.Er[(x1,y1)][0]+mid1,self.Er[(x1,y1)][1]]
+            I3=[self.Er[(x2,y2)][0],self.Er[(x2,y2)][0]+mid2]
+            I4=[self.Er[(x2,y2)][0]+mid2,self.Er[(x2,y2)][1]]
+            Er1[(x1,y1)]=I1
+            Er1[(x2,y2)]=I3
+            Er2[(x1,y1)]=I1
+            Er2[(x2,y2)]=I4
+            Er3[(x1,y1)]=I2
+            Er3[(x2,y2)]=I3
+            Er4[(x1,y1)]=I2
+            Er4[(x2,y2)]=I4
+
+            erList=[Er1,Er2,Er3,Er4]
+
+            return erList
+
+    def printEr(listMat):
+
+        for mat in listMat:
+            print("--Error--")
+            print(mat)
+
 if False:
     C=[0,0,0]
     V=np.array([
@@ -76,3 +140,17 @@ if False:
     P=[(-6,5),(-7,9),(-2,9)]
     rs=(C,V,P)
     Grid.printStars(Grid(rs,0,2).splitStar())
+
+if False:
+    A=np.array([
+    [2,1,-2,1],
+    [2,1.2,0,0],
+    [0,0.1,1.1,1],
+    [0,0,0,1]
+    ])
+    E={
+    (0,1):[0.9,1.1],
+    (1,0):[0.8,1.2],
+    (2,3):[0.9,1.1]
+    }
+    GridMat.printEr(GridMat(A,E).splitEr())

@@ -14,6 +14,8 @@ import math
 import mpmath as mp
 from gurobipy import *
 from operator import add
+import io
+from PIL import Image
 
 class Visualization:
     '''
@@ -757,10 +759,10 @@ class Visualization:
         plt.autoscale(enable=True, axis='both', tight=False)
         plt.xlabel("State "+str(th1))
         plt.ylabel("State "+str(th2))
-        for l in lPlots:
-            X=l[0]
-            Y=l[1]
-            plt.plot(X,Y,'bo')
+        plt.plot(lPlots[0][0],lPlots[0][1],'bo')
+        plt.plot(lPlots[1][0],lPlots[1][1],'co')
+        plt.plot(lPlots[2][0],lPlots[2][1],'mo')
+        plt.plot(lPlots[3][0],lPlots[3][1],'ko')
         plt.plot(XY[0],XY[1],'ro',alpha=0.1)
         #plt.plot(lPlots[3][0],lPlots[3][1],'bo')
         #plt.legend()
@@ -768,6 +770,24 @@ class Visualization:
         plt.savefig("Plots/"+name)
         plt.close()
 
+    def getPlotList(th1,th2,lPlots,XY,name):
+        #plt.axes()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+        plt.plot(lPlots[0][0],lPlots[0][1],'bo')
+        plt.plot(lPlots[1][0],lPlots[1][1],'co')
+        plt.plot(lPlots[2][0],lPlots[2][1],'mo')
+        plt.plot(lPlots[3][0],lPlots[3][1],'ko')
+        plt.plot(XY[0],XY[1],'ro',alpha=0.1)
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        im = Image.open(buf)
+        plt.savefig("Plots/"+name)
+        plt.close()
+        #im.show()
+        return im
 
 if False:
     C=[0,0]

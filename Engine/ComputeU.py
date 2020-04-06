@@ -746,6 +746,8 @@ class CompU:
         as a star to another bloated star
         '''
 
+        #print(self.Er)
+
         start_time=time.time()
         C=rs[0] # The center is always assumed to be 0 as of now
         V=rs[1]
