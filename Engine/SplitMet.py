@@ -28,8 +28,8 @@ import Profiling
 BIGM=0.001
 EPSILON=1e-10
 PRED_EP=1e-3
-INTERVAL=40
-RED_INT=500
+INTERVAL=2
+RED_INT=5
 SAMPLES=20
 VLENGTH=17
 
@@ -1012,8 +1012,8 @@ class Split:
             t_reduction=time.time()
             ORS_compact=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact),U_compact)
             if t%RED_INT==0:
-                #ORS_compact=Split.appxSB(ORS_compact)
-                ORS_compact=Split.lowerDimProj(ORS_compact)
+                ORS_compact=Split.appxSB(ORS_compact)
+                #ORS_compact=Split.lowerDimProj(ORS_compact)
             U_compact=cu.computeUI_Interval(ORS_compact)
             time_taken_reduction=time_taken_reduction+(time.time()-t_reduction)
 

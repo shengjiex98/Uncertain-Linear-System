@@ -413,6 +413,208 @@ class DriverCompU:
         sp=Split(A,E,rs,T)
         sp.printReachableSetCompactTime(0,4,"Motor2")
 
+    def aircraftDynamics():
+        dynA=Benchmarks.AircraftDynamics.A
+        dynB=Benchmarks.AircraftDynamics.B
+        A=DriverCompU.createMatrix(dynA,dynB,mode,h)
+        P=80
+        E={
+        (2,3): [1-(P/100),1+(P/100)],
+        (3,2): [1-(P/100),1+(P/100)]
+        }
+        C=[0,0,0,0]
+        V=np.array([
+        [1,0,0,0],
+        [0,1,0,0],
+        [0,0,1,0],
+        [0,0,0,1]
+        ])
+        P=[(-1,1),(-1,1),(20,30),(20,30)]
+        rs=(C,V,P)
+        T=200
+        sp=Split(A,E,rs,T)
+        sp.printReachableSetCompactTime(0,1,"AircraftDynamics")
+
+    def giradI():
+        dynA=Benchmarks.GiradI.A
+        dynB=Benchmarks.GiradI.B
+        A=DriverCompU.createMatrix(dynA,dynB,mode,h)
+        P=10
+        E={
+        (0,0): [1-(P/100),1+(P/100)],
+        (1,0): [1-(P/100),1+(P/100)]
+        }
+        C=[0,0]
+        V=np.array([
+        [1,0],
+        [0,1]
+        ])
+        P=[(0.9,1.1),(-0.1,0.1)]
+        rs=(C,V,P)
+        T=20
+        sp=Split(A,E,rs,T)
+        sp.printReachableSetCompactTime(0,1,"GiradI")
+
+    def giradII():
+        dynA=Benchmarks.GiradII.A
+        dynB=Benchmarks.GiradII.B
+        A=DriverCompU.createMatrix(dynA,dynB,mode,h)
+        P=10
+        E={
+        (0,0): [1-(P/100),1+(P/100)],
+        (2,2): [1-(P/100),1+(P/100)],
+        (4,4): [1-(P/100),1+(P/100)]
+        }
+        C=[0,0,0,0,0]
+        V=np.array([
+        [1,0,0,0,0],
+        [0,1,0,0,0],
+        [0,0,1,0,0],
+        [0,0,0,1,0],
+        [0,0,0,0,1],
+        ])
+        P=[(0.9,1.1),(-0.1,0.1),(0.9,1.1),(-0.1,0.1),(0.9,1.1)]
+        rs=(C,V,P)
+        T=20
+        sp=Split(A,E,rs,T)
+        sp.printReachableSetCompactTime(0,3,"GiradII")
+
+    def acc():
+        dynA=Benchmarks.ACC.A
+        dynB=Benchmarks.ACC.B
+        A=DriverCompU.createMatrix(dynA,dynB,mode,h)
+        P=10
+        E=Benchmarks.ACC.E
+        C=[0,0,0,0]
+        V=np.array([
+        [1,0,0,0],
+        [0,1,0,0],
+        [0,0,1,0],
+        [0,0,0,1],
+        ])
+        P=[(0,35),(5,50),(0,35),(1,1)]
+        rs=(C,V,P)
+        T=20
+        sp=Split(A,E,rs,T)
+        sp.printReachableSetCompactTime(1,2,"ACC")
+
+    def laneChange():
+        dynA=Benchmarks.LaneChange.A
+        dynB=Benchmarks.LaneChange.B
+        A=DriverCompU.createMatrix(dynA,dynB,mode,h)
+        P=10
+        E=Benchmarks.LaneChange.E
+        C=[0,0,0,0,0,0,0]
+        V=np.array([
+        [1,0,0,0,0,0,0],
+        [0,1,0,0,0,0,0],
+        [0,0,1,0,0,0,0],
+        [0,0,0,1,0,0,0],
+        [0,0,0,0,1,0,0],
+        [0,0,0,0,0,1,0],
+        [0,0,0,0,0,0,1],
+        ])
+        P=[(0,50),(3,3.5),(0,0),(20,30),(0,0),(0,0),(1,1)]
+        rs=(C,V,P)
+        T=20
+        sp=Split(A,E,rs,T)
+        sp.printReachableSetCompactTime(0,1,"LaneChange")
+
+    def coOPVehiclesII():
+        dynA=Benchmarks.CoOPVehiclesII.A
+        dynB=Benchmarks.CoOPVehiclesII.B
+        A=DriverCompU.createMatrix(dynA,dynB,mode,h)
+        P=20
+        E={
+        (0,0): [1-(P/100),1+(P/100)],
+        (2,0): [1-(P/100),1+(P/100)],
+        (2,1): [1-(P/100),1+(P/100)],
+        (2,8): [1-(P/100),1+(P/100)],
+        (5,0): [1-(P/100),1+(P/100)],
+        (5,8): [1-(P/100),1+(P/100)]
+        }
+        E2={
+        (2,0): [1-(P/100),1+(P/100)],
+        (5,0): [1-(P/100),1+(P/100)]
+        }
+        C=[0,0,0,0,0,0,0,0,0,0]
+        V=np.array([
+        [1,0,0,0,0,0,0,0,0,0],
+        [0,1,0,0,0,0,0,0,0,0],
+        [0,0,1,0,0,0,0,0,0,0],
+        [0,0,0,1,0,0,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0,0],
+        [0,0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,0],
+        [0,0,0,0,0,0,0,1,0,0],
+        [0,0,0,0,0,0,0,0,1,0],
+        [0,0,0,0,0,0,0,0,0,1]
+        ])
+        P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1)]
+        rs=(C,V,P)
+        T=20
+        sp=Split(A,E,rs,T)
+        sp.printReachableSetCompactTime(0,1,"CoOpII")
+
+    def fiveVehiclePlatton():
+        dynA=Benchmarks.FiveVehiclePlatton.A
+        dynB=Benchmarks.FiveVehiclePlatton.B
+        A=DriverCompU.createMatrix(dynA,dynB,mode,h)
+        P=20
+        E={
+        (3,7): [1-(P/100),1+(P/100)],
+        (4,6): [1-(P/100),1+(P/100)]
+        }
+        E2={
+        (2,1): [1-(P/100),1+(P/100)],
+        (5,1): [1-(P/100),1+(P/100)],
+        (5,3): [1-(P/100),1+(P/100)],
+        (8,3): [1-(P/100),1+(P/100)],
+        (3,7): [1-(P/100),1+(P/100)],
+        (4,6): [1-(P/100),1+(P/100)]
+        }
+        C=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        VI=np.array([
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]
+        ])
+        V=np.array([
+        [1,0,0,0,1,0,0,1,0,0,0,-1,0,0,1,1],
+        [0,1,0,0,1,0,0,0,0,0,0,1,0,0,1,0],
+        [-1,0,1,0,0,0,-1,0,1,0,1,0,0,-1,0,0],
+        [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,-1,0,0,1,0,0,0,1,0,-1,0,1,0,0,0],
+        [1,0,-1,0,0,1,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,-1,0,0,0,0,-1,0],
+        [0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+        [0,-1,0,0,0,0,0,0,1,0,0,0,0,1,0,0],
+        [0,0,0,0,0,0,0,0,0,1,0,0,0,-1,0,0],
+        [0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+        [1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,-1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
+        [0,-1,0,0,0,0,-1,0,0,0,0,0,0,1,0,0],
+        [0,0,0,-1,0,0,0,0,0,0,-1,0,0,0,1,0],
+        [1,0,0,0,0,0,-1,0,0,0,0,0,-1,0,0,1]
+        ])
+        P=[(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1),(0.9,1.1)]
+        rs=(C,VI,P)
+        T=20
+        sp=Split(A,E2,rs,T)
+        sp.printReachableSetCompactTime(0,1,"FiveVehiclePlatton")
+
 
 '''
 #Batch 1
@@ -425,16 +627,21 @@ DriverCompU.spaceCraftRndzvs()
 DriverCompU.motorTransmission2()
 '''
 
+'''
 #Batch 2
 DriverCompU.flightEnvelope()
+'''
 
 '''
 #Batch 3
 DriverCompU.pkpd2()
 DriverCompU.holesCXc()
 '''
+
 '''
 #Batch 4
 DriverCompU.coOPVehiclesI()
 DriverCompU.motorTransmission1()
 '''
+
+DriverCompU.fiveVehiclePlatton()
