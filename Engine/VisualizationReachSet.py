@@ -789,6 +789,36 @@ class Visualization:
         #im.show()
         return im
 
+    def getPlotAll(th1,th2,lPlots,name):
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+
+        XY=lPlots[0]
+        X1=lPlots[1][0]
+        Y1=lPlots[1][1]
+        X2=lPlots[1][2]
+        Y2=lPlots[1][3]
+        X3=lPlots[1][4]
+        Y3=lPlots[1][5]
+        X4=lPlots[1][6]
+        Y4=lPlots[1][7]
+        for (X,Y) in XY:
+            plt.plot(X,Y,'mo')
+        plt.plot(X1,Y1,'bo')
+        plt.plot(X2,Y2,'co')
+        plt.plot(X3,Y3,'go')
+        plt.plot(X4,Y4,'ro')
+
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        im = Image.open(buf)
+        plt.savefig("Plots/"+name)
+        #plt.show()
+        plt.close()
+        return im
+
 if False:
     C=[0,0]
     V=np.array([
