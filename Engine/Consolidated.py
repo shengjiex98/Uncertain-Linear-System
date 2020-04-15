@@ -33,7 +33,7 @@ class SplitBloat:
 
     def getStats(self,th1,th2,start,n,step,methodList,p='slow'):
         sp=Split(self.A,self.Er,self.Theta,self.T)
-        #sp.printReachableSetAll(th1,th2,self.name)
+        sp.printReachableSetAll(th1,th2,self.name)
         self.plotTimeCompare(start,n,step,methodList,p)
 
     def matrixify(self):

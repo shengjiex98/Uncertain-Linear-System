@@ -767,9 +767,9 @@ DriverCompU.motorTransmission1()
 DriverCompU.coOPVehiclesI()
 '''
 
-'''
+
 #Batch for Zono (Ac Basis)
-DriverCompU.stableSystem1()
+#DriverCompU.stableSystem1()
 #DriverCompU.stableSystem2()
 #DriverCompU.stableSystem3()
 #DriverCompU.stableSystem4()
@@ -787,7 +787,4 @@ DriverCompU.stableSystem1()
 #DriverCompU.holesCXc()
 #DriverCompU.pkpd2()
 #DriverCompU.motorTransmission1()
-#DriverCompU.coOPVehiclesI()
-'''
-
-DriverCompU.fiveVehiclePlatton()
+DriverCompU.coOPVehiclesI()
