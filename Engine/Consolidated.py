@@ -33,7 +33,7 @@ class SplitBloat:
 
     def getStats(self,th1,th2,start,n,step,methodList,p='slow'):
         sp=Split(self.A,self.Er,self.Theta,self.T)
-        sp.printReachableSetAll(th1,th2,self.name)
+        #sp.printReachableSetAll(th1,th2,self.name)
         self.plotTimeCompare(start,n,step,methodList,p)
 
     def matrixify(self):
@@ -94,6 +94,7 @@ class SplitBloat:
         plt.legend(loc='best')
         plt.savefig("BloatPlot/"+self.name+"Bloat")
         #plt.show()
+        plt.close()
         print("-")
         print("Kagstrom 1: ",time_taken_kagstrom1)
         print("Kagstrom 2: ",time_taken_kagstrom2)

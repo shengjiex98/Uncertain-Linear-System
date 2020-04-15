@@ -28,9 +28,9 @@ import Profiling
 BIGM=0.001
 EPSILON=1e-10
 PRED_EP=1e-3
-INTERVAL=40
-RED_INT_ZONO=5
-RED_INT_INTRVL=5
+INTERVAL=50
+RED_INT_ZONO=500
+RED_INT_INTRVL=500
 SAMPLES=20
 VLENGTH=17
 
@@ -1291,8 +1291,8 @@ class Split:
             sys.stdout.flush()
 
             ORS_o=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_o),U_o)
-            ORS_g1=CompU.addStars(CompU.prodMatStars(Ac1,ORS_g1),U_g1)
-            ORS_g2=CompU.addStars(CompU.prodMatStars(Ac2,ORS_g2),U_g2)
+            ORS_g1=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_g1),U_g1)
+            ORS_g2=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_g2),U_g2)
 
             if t%intervalPlot==0:
                 (X,Y)=Visualization(s1,s2,ORS_o).getPlotsLineFine()

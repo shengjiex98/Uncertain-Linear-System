@@ -16,7 +16,7 @@ from VisualizationReachSet import *
 
 PRECISION=1e15
 
-NO_SAMPPLES=20
+NO_SAMPPLES=50
 
 
 class Sampling:
