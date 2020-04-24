@@ -219,14 +219,14 @@ class DriverCompU:
         [1,0,0,0,0,0,-1,0,0,0,0,0,-1,0,0,1]
         ])
         P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(1,1),(1,1),(1,1),(1,1)]
-        rs=(C,V,P)
+        rs=(C,VI,P)
         T=2050
         th1=0
         th2=1
-        start=0
-        n=200
+        start=50
+        n=1000
         step=0.01
-        methodList=['Kagstrom1','Kagstrom2','Loan']
+        methodList=['Loan']
         co=SplitBloat(A,E,rs,T,"FlightEnvelope20p")
         co.getStats(th1,th2,start,n,step,methodList,'fast')
 
@@ -276,36 +276,39 @@ class DriverCompU:
         dynA=Benchmarks.PKPD2.A
         dynB=Benchmarks.PKPD2.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=20
+        P=200
         E={
         (0,4): [1-(P/100),1+(P/100)],
+        #(2,0): [1-(P/100),1+(P/100)],
+        #(2,2): [1-(P/100),1+(P/100)]
+        (3,0): [1-(P/100),1+(P/100)],
         (3,3): [1-(P/100),1+(P/100)]
         }
         C=[0,0,0,0,0]
-        V2=np.array([
+        V=np.array([
         [1,0,0,0,0],
         [0,1,0,0,0],
         [0,0,1,0,0],
         [0,0,0,1,0],
         [0,0,0,0,1],
         ])
-        V=np.array([
+        V2=np.array([
         [1,0,-1,0,-1],
         [0,1,1,0,0],
         [1,1,0,0,-1],
         [1,0,-1,1,0],
         [1,1,0,1,1],
         ])
-        P=[(-1,1),(-1,1),(-1,1),(-1,1),(1,1)]
+        P=[(1,6),(0,10),(0,10),(1,8),(0,200)]
         rs=(C,V,P)
         T=2050
-        th1=0
-        th2=1
+        th1=1
+        th2=2
         start=0
         n=50
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"PKPD2")
+        co=SplitBloat(A,E,rs,T,"PKPD2-3")
         co.getStats(th1,th2,start,n,step,methodList,'fast')
 
     def dcConv():
@@ -333,10 +336,10 @@ class DriverCompU:
         T=2050
         th1=0
         th2=2
-        start=0
-        n=200
+        start=10
+        n=20
         step=0.01
-        methodList=['Kagstrom1','Kagstrom2','Loan']
+        methodList=['Kagstrom1','Loan']
         co=SplitBloat(A,E,rs,T,"DC_10p")
         co.getStats(th1,th2,start,n,step,methodList,'slow')
 
@@ -409,10 +412,10 @@ class DriverCompU:
         T=2050
         th1=0
         th2=1
-        start=0
-        n=200
+        start=50
+        n=2000
         step=0.01
-        methodList=['Kagstrom1','Kagstrom2','Loan']
+        methodList=['Kagstrom1','Loan']
         co=SplitBloat(A,E,rs,T,"Holes20p")
         co.getStats(th1,th2,start,n,step,methodList,'fast')
 
@@ -449,10 +452,10 @@ class DriverCompU:
         T=2050
         th1=0
         th2=1
-        start=0
-        n=200
+        start=50
+        n=5000
         step=0.01
-        methodList=['Kagstrom1','Kagstrom2','Loan']
+        methodList=['Kagstrom1','Loan']
         co=SplitBloat(A,E,rs,T,"Motor1_20p")
         co.getStats(th1,th2,start,n,step,methodList,'fast')
 
@@ -587,8 +590,8 @@ class DriverCompU:
         T=2050
         th1=1
         th2=2
-        start=0
-        n=200
+        start=50
+        n=2000
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
         co=SplitBloat(A,E,rs,T,"ACC")
@@ -616,7 +619,7 @@ class DriverCompU:
         th1=0
         th2=1
         start=0
-        n=200
+        n=3
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
         co=SplitBloat(A,E,rs,T,"LaneChange")
@@ -731,6 +734,32 @@ class DriverCompU:
         co=SplitBloat(A,E2,rs,T,"FiveVehiclePlatton")
         co.getStats(th1,th2,start,n,step,methodList,'fast')
 
+    def mathias():
+        dynA=Benchmarks.Mathias.A
+        dynB=Benchmarks.Mathias.B
+        A=DriverCompU.createMatrix(dynA,dynB,mode,h)
+        P=20
+        E=Benchmarks.Mathias.E
+        C=[0,0,0,0,0]
+        V=np.array([
+        [1,0,0,0,0],
+        [0,1,0,0,0],
+        [0,0,1,0,0],
+        [0,0,0,1,0],
+        [0,0,0,0,1],
+        ])
+        P=[(-0.1,0.1),(-0.1,0.1),(-0.1,0.1),(-0.1,0.1),(-0.1,0.1)]
+        rs=(C,V,P)
+        T=2050
+        th1=0
+        th2=1
+        start=0
+        n=50
+        step=0.01
+        methodList=['Kagstrom1','Kagstrom2','Loan']
+        co=SplitBloat(A,E,rs,T,"Mathias")
+        co.getStats(th1,th2,start,n,step,methodList,'fast')
+
 
 '''
 #Batch 1
@@ -787,4 +816,4 @@ DriverCompU.coOPVehiclesI()
 #DriverCompU.holesCXc()
 #DriverCompU.pkpd2()
 #DriverCompU.motorTransmission1()
-DriverCompU.coOPVehiclesI()
+DriverCompU.laneChange()

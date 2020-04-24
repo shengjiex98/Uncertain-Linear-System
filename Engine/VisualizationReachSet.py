@@ -97,7 +97,7 @@ class Visualization:
                 model.addConstr(X==0,"Angle")
             else:
                 m=math.tan(math.radians(an))
-                model.addConstr(Y==m*X,"Angle")
+                model.addConstr(Y==m*(X),"Angle")
             try:
                 model.optimize()
                 #model.write("dump.bas")
@@ -125,6 +125,7 @@ class Visualization:
             model.remove(model.getConstrByName("Angle"))
         #-----------------------------
 
+        #'''
         # 2nd Quadrant
 
         obj=X-Y
@@ -248,6 +249,7 @@ class Visualization:
 
         #print(X_list,Y_list)
         #exit(0)
+        #'''
 
         return (X_list,Y_list)
 
@@ -808,7 +810,7 @@ class Visualization:
         plt.plot(X1,Y1,'bo')
         plt.plot(X2,Y2,'co')
         plt.plot(X3,Y3,'go')
-        plt.plot(X4,Y4,'ro')
+        plt.plot(X4,Y4,'ro',alpha=0.4)
 
         buf = io.BytesIO()
         plt.savefig(buf, format='png')

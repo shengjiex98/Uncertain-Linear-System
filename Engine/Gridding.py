@@ -146,6 +146,33 @@ class GridMat:
 
         return [Er1,Er2]
 
+    def splitErOne2(self):
+        '''
+        Breaks the interval matrix to 2 interval matrices
+        by spiltting two random intervals from state1
+        and state2
+        '''
+
+        n=self.A.shape[0]
+        Er1={}
+        Er2={}
+        Er3={}
+        Er4={}
+
+
+        (x1,y1)=list(self.Er.keys())[0]
+        samp=(self.Er[(x1,y1)][1]-self.Er[(x1,y1)][0])/4
+        I1=(self.Er[(x1,y1)][0],self.Er[(x1,y1)][0]+samp)
+        I2=(self.Er[(x1,y1)][0]+samp,self.Er[(x1,y1)][0]+(2*samp))
+        I3=(self.Er[(x1,y1)][0]+(2*samp),self.Er[(x1,y1)][0]+(3*samp))
+        I4=(self.Er[(x1,y1)][0]+(3*samp),self.Er[(x1,y1)][1])
+        Er1[(x1,y1)]=I1
+        Er2[(x1,y1)]=I2
+        Er3[(x1,y1)]=I3
+        Er4[(x1,y1)]=I4
+
+        return [Er1,Er2,Er3,Er4]
+
 
     def printEr(listMat):
 

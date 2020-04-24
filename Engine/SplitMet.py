@@ -28,7 +28,7 @@ import Profiling
 BIGM=0.001
 EPSILON=1e-10
 PRED_EP=1e-3
-INTERVAL=50
+INTERVAL=100
 RED_INT_ZONO=500
 RED_INT_INTRVL=500
 SAMPLES=20
@@ -1309,6 +1309,97 @@ class Split:
         print("\n")
         images[0].save("GIFs/"+n+'.gif',save_all=True, append_images=images[1:], optimize=False, duration=250, loop=0)
         time_taken=time.time()-start_time
+
+    def printReachableSetGridOneMat2(self,s1,s2,n):
+        '''
+        Implements the main algorithm of splitting the effect of the constant and
+        the uncertain part
+        '''
+        name=n
+        nameU=n
+        images=[]
+        intervalPlot=INTERVAL
+        lPlots=[]
+        lPlotsList=[]
+        print()
+        print(n)
+        print("-----------------\n\n")
+        start_time=time.time()
+        cu=CompU(self.A,self.Er)
+        ORS_o=self.Theta
+        ORS_g1=self.Theta
+        ORS_g2=self.Theta
+        ORS_g3=self.Theta
+        ORS_g4=self.Theta
+        erList=GridMat(self.A,self.Er).splitErOne2()
+        cu1=CompU(self.A,erList[0])
+        cu2=CompU(self.A,erList[1])
+        cu3=CompU(self.A,erList[2])
+        cu4=CompU(self.A,erList[3])
+        #print(erList[2],self.Er)
+        Ac1=cu1.computeCenter()
+        Ac2=cu2.computeCenter()
+        Ac3=cu3.computeCenter()
+        Ac4=cu4.computeCenter()
+        U_o=cu.computeUI_Interval(ORS_o)
+        U_g1=cu1.computeUI_Interval(ORS_g1)
+        U_g2=cu2.computeUI_Interval(ORS_g2)
+        U_g3=cu3.computeUI_Interval(ORS_g3)
+        U_g4=cu1.computeUI_Interval(ORS_g4)
+
+        print("----Eigenvalues----")
+        print("Ac: ",LA.eig(self.Ac)[0])
+        print(LA.eig(Ac1)[0])
+        print(LA.eig(Ac2)[0])
+        print(LA.eig(Ac3)[0])
+        print(LA.eig(Ac4)[0])
+        print("------\n\n")
+        print("----Singular Values----")
+        print("Ac: ",LA.norm(self.Ac,2))
+        print(LA.norm(Ac1,2))
+        print(LA.norm(Ac2,2))
+        print(LA.norm(Ac3,2))
+        print(LA.norm(Ac4,2))
+        print("------\n\n")
+        t=1
+        (X,Y)=Visualization(s1,s2,ORS_o).getPlotsLineFine()
+        (X1,Y1)=Visualization(s1,s2,ORS_g1).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,ORS_g2).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,ORS_g3).getPlotsLineFine()
+        (X4,Y4)=Visualization(s1,s2,ORS_g4).getPlotsLineFine()
+        Visualization.displayPlotList(s1,s2,[(X1,Y1),(X2,Y2),(X3,Y3),(X4,Y4)],(X,Y),name+"_0")
+
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+
+            ORS_o=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_o),U_o)
+            ORS_g1=CompU.addStars(CompU.prodMatStars(Ac1,ORS_g1),U_g1)
+            ORS_g2=CompU.addStars(CompU.prodMatStars(Ac2,ORS_g2),U_g2)
+            ORS_g3=CompU.addStars(CompU.prodMatStars(Ac3,ORS_g3),U_g3)
+            ORS_g4=CompU.addStars(CompU.prodMatStars(Ac4,ORS_g4),U_g4)
+
+            if t%intervalPlot==0:
+                (X,Y)=Visualization(s1,s2,ORS_o).getPlotsLineFine()
+                (X1,Y1)=Visualization(s1,s2,ORS_g1).getPlotsLineFine()
+                (X2,Y2)=Visualization(s1,s2,ORS_g2).getPlotsLineFine()
+                (X3,Y3)=Visualization(s1,s2,ORS_g3).getPlotsLineFine()
+                (X4,Y4)=Visualization(s1,s2,ORS_g4).getPlotsLineFine()
+
+                name=n+"_"+str(t)
+                images.append(Visualization.getPlotList(s1,s2,[(X1,Y1),(X2,Y2),(X3,Y3),(X4,Y4)],(X,Y),name))
+
+            U_o=cu.computeUI_Interval(ORS_o)
+            U_g1=cu.computeUI_Interval(ORS_g1)
+            U_g2=cu.computeUI_Interval(ORS_g2)
+            U_g3=cu.computeUI_Interval(ORS_g3)
+            U_g4=cu.computeUI_Interval(ORS_g4)
+            t=t+1
+        print("\n")
+        images[0].save("TempGIFs/"+n+'.gif',save_all=True, append_images=images[1:], optimize=False, duration=30, loop=0)
+        time_taken=time.time()-start_time
+
 
     def printReachableSetAll(self,s1,s2,n):
         name=n

@@ -8,6 +8,7 @@ Documentation: Not yet available. (TODO)
 
 from SplitMet import *
 from BloatAPI import *
+from OrderUncertainties import *
 
 class SplitBloat:
     '''
@@ -32,9 +33,10 @@ class SplitBloat:
         self.name=n
 
     def getStats(self,th1,th2,start,n,step,methodList,p='slow'):
-        sp=Split(self.A,self.Er,self.Theta,self.T)
-        sp.printReachableSetAll(th1,th2,self.name)
-        self.plotTimeCompare(start,n,step,methodList,p)
+        #sp=Split(self.A,self.Er,self.Theta,self.T)
+        #sp.printReachableSetAll(th1,th2,self.name)
+        #self.plotTimeCompare(start,n,step,methodList,p)
+        OrdUnc(self.A).printReport()
 
     def matrixify(self):
         '''
