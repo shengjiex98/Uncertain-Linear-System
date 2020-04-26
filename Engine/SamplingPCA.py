@@ -10,16 +10,18 @@ Documentation: Not yet available. (TODO)
 '''
 
 import random
+import math
 import numpy as np
 from ComputeU import *
+
 from VisualizationReachSet import *
 
-PRECISION=1e15
+PRECISION=1e25
 
-NO_SAMPPLES=1
+NO_SAMPPLES=50
 
 
-class Sampling:
+class SampPCA:
     '''
     Given an uncertain linear system, this class provides the
     necessary functions to sample the system at random points
@@ -31,9 +33,9 @@ class Sampling:
         self.Er=er
         self.n=self.A.shape[0]
         self.nSamples=i
-        self.samples=self.getSamples()
+        self.samples=self.getSamplesULS()
 
-    def getSamples(self):
+    def getSamplesULS(self):
         '''
         Returns random samples of the uncertain linear
         system.
@@ -49,6 +51,68 @@ class Sampling:
         exit(0)'''
 
         return sam
+
+    def getRandIS(starSet):
+        is_list=[]
+        for i in range(NO_SAMPPLES):
+            is_list.append(SampPCA.getISpoint(starSet))
+        return is_list
+
+    @staticmethod
+    def getISpoint(starSet):
+        C=starSet[0]
+        V=starSet[1]
+        P=starSet[2]
+        (n,m)=V.shape
+
+        P_point=[]
+        IS=np.zeros((n,1))
+        for p in P:
+            lb=p[0]*PRECISION
+            ub=p[1]*PRECISION
+            if lb!=ub:
+                rd=random.randrange(lb,ub)
+                rd=rd/PRECISION
+            else:
+                rd=lb/PRECISION
+            P_point.append(rd)
+
+        for i in range(n):
+            obj=0
+            for j in range(m):
+                obj=obj+(P_point[j]*V[i][j])
+            IS[i][0]=C[i]+obj
+
+        #print(IS)
+
+        return IS
+
+    @staticmethod
+    def getISpoint2(starSet):
+        C=starSet[0]
+        V=starSet[1]
+        P=starSet[2]
+        (n,m)=V.shape
+
+        P_point=[]
+        IS=np.zeros((n,1))
+        for p in P:
+            lb=p[0]
+            ub=p[1]
+            if lb!=ub:
+                rd=(lb+ub)/2
+                rd=rd
+            else:
+                rd=lb
+            P_point.append(rd)
+
+        for i in range(n):
+            obj=0
+            for j in range(m):
+                obj=obj+(P_point[j]*V[i][j])
+            IS[i][0]=C[i]+obj
+
+        return IS
 
     def getRandMat(self):
         '''
@@ -87,6 +151,30 @@ class Sampling:
 
         return rMat
 
+    def prodMatIS(self,RS_list):
+        '''
+        Multiply the random samples with RS_list
+        '''
+
+        is_list=[]
+
+        if (len(RS_list)==1):
+            for s in self.samples:
+                is_list.append(np.matmul(s,RS_list[0]))
+        else:
+            for i in range(len(RS_list)):
+                is_list.append(np.matmul(self.samples[i],RS_list[i]))
+
+
+        '''if (len(RS_list)==1):
+            for s in self.samples:
+                is_list.append(np.matmul(self.A,RS_list[0]))
+        else:
+            for i in range(len(RS_list)):
+                is_list.append(np.matmul(self.A,RS_list[i]))'''
+
+        return is_list
+
     def prodMatStars(self,RS_list):
         '''
         Multiply the random samples with RS_list
@@ -110,14 +198,15 @@ class Sampling:
 
         plots=[]
 
-        for star in RS_list:
-            (X,Y)=Visualization(th1,th2,star).getPlotsLineFine()
+        for s in RS_list:
+            X=s[th1]
+            Y=s[th2]
             plots.append((X,Y))
 
         return plots
 
     @staticmethod
-    def getPlotsLineFinePred(th1,th2,RS_list):
+    def getPlotsLineFine2(th1,th2,RS_list):
         '''
         Returns the plots for the given RS_list
         '''
@@ -125,7 +214,7 @@ class Sampling:
         plots=[]
 
         for star in RS_list:
-            (X,Y)=Visualization(th1,th2,star).getPlotsLineFinePred()
+            (X,Y)=Visualization(th1,th2,star).getPlotsLineFine()
             plots.append((X,Y))
 
         return plots

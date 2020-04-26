@@ -10,7 +10,7 @@ Documentation: Not yet available. (TODO)
 import sys
 
 from Benchmarks import *
-from Consolidated import *
+from SplitMetPCA import *
 
 mode='.'
 h=0.01
@@ -86,8 +86,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Stable1")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitPCA(A,E,rs,T,"Stable1")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'slow')
 
     def stableSystem2():
         dynA=Benchmarks.StableSystem2.A
@@ -104,15 +104,15 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1)]
         rs=(C,V,P)
-        T=2050
+        T=1000
         th1=0
         th2=1
         start=0
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Stable2")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitPCA(A,E,rs,T)
+        co.printReachableSet(th1,th2,"Stable2")
 
     def stableSystem3():
         dynA=Benchmarks.StableSystem3.A
@@ -136,8 +136,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Stable3")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitPCA(A,E,rs,T,"Stable3")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'slow')
 
     def stableSystem4():
         dynA=Benchmarks.StableSystem4.A
@@ -163,8 +163,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Stable4")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitPCA(A,E,rs,T,"Stable4")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'slow')
 
     def flightEnvelope():
         dynA=Benchmarks.FlightEnvelope.A
@@ -227,8 +227,8 @@ class DriverCompU:
         n=1000
         step=0.01
         methodList=['Loan']
-        co=SplitBloat(A,E,rs,T,"FlightEnvelope20p")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T,"FlightEnvelope20p")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'fast')
 
     def coOPVehiclesI():
         dynA=Benchmarks.CoOPVehiclesI.A
@@ -262,15 +262,15 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(1,1)]
         rs=(C,V,P)
-        T=2050
+        T=20
         th1=0
         th2=1
         start=0
         n=200
         step=0.01
         methodList=['Kagstrom1','Loan']
-        co=SplitBloat(A,E,rs,T,"CoOpI")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T)
+        co.printReachableSet(th1,th2,"CoOpI")
 
     def pkpd2():
         dynA=Benchmarks.PKPD2.A
@@ -308,8 +308,8 @@ class DriverCompU:
         n=50
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"PKPD2-3")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T)
+        co.printReachableSet(th1,th2,"PKPD2-3")
 
     def dcConv():
         dynA=Benchmarks.DCConv.A
@@ -340,8 +340,8 @@ class DriverCompU:
         n=20
         step=0.01
         methodList=['Kagstrom1','Loan']
-        co=SplitBloat(A,E,rs,T,"DC_10p")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitPCA(A,E,rs,T,"DC_10p")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'slow')
 
     def spaceCraftRndzvs():
         dynA=Benchmarks.SpaceCraftRndzvs.A
@@ -373,15 +373,15 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1),(1,1),(1,1),(1,1),(1,1)]
         rs=(C,V2,P)
-        T=2050
+        T=2000
         th1=0
         th2=1
         start=0
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Spacev2")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T)
+        co.printReachableSet(th1,th2,"Spacev2")
 
     def holesCXc():
         dynA=Benchmarks.HolesCXc.A
@@ -416,8 +416,8 @@ class DriverCompU:
         n=2000
         step=0.01
         methodList=['Kagstrom1','Loan']
-        co=SplitBloat(A,E,rs,T,"Holes20p")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T,"Holes20p")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'fast')
 
     def motorTransmission1():
         dynA=Benchmarks.MotorTransmission1.A
@@ -456,8 +456,8 @@ class DriverCompU:
         n=5000
         step=0.01
         methodList=['Kagstrom1','Loan']
-        co=SplitBloat(A,E,rs,T,"Motor1_20p")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T,"Motor1_20p")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'fast')
 
     def motorTransmission2():
         dynA=Benchmarks.MotorTransmission2.A
@@ -485,8 +485,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Motor2")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T,"Motor2")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'fast')
 
     def aircraftDynamics():
         dynA=Benchmarks.AircraftDynamics.A
@@ -506,15 +506,15 @@ class DriverCompU:
         ])
         P=[(-1,1),(-1,1),(20,30),(20,30)]
         rs=(C,V,P)
-        T=2050
+        T=2000
         th1=0
         th2=1
         start=0
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"AircraftDynamics")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitPCA(A,E,rs,T)
+        co.printReachableSet(th1,th2,"AircraftDynamics")
 
     def giradI():
         dynA=Benchmarks.GiradI.A
@@ -539,8 +539,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"GiradI")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitPCA(A,E,rs,T,"GiradI")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'slow')
 
     def giradII():
         dynA=Benchmarks.GiradII.A
@@ -562,15 +562,15 @@ class DriverCompU:
         ])
         P=[(0.9,1.1),(-0.1,0.1),(0.9,1.1),(-0.1,0.1),(0.9,1.1)]
         rs=(C,V,P)
-        T=2050
+        T=2000
         th1=0
         th2=3
         start=0
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"GiradII")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T)
+        co.printReachableSet(th1,th2,"GiradII")
 
     def acc():
         dynA=Benchmarks.ACC.A
@@ -594,8 +594,8 @@ class DriverCompU:
         n=2000
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"ACC")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitPCA(A,E,rs,T)
+        co.printReachableSet(th1,th2,"ACC")
 
     def laneChange():
         dynA=Benchmarks.LaneChange.A
@@ -615,15 +615,15 @@ class DriverCompU:
         ])
         P=[(0,50),(3,3.5),(0,0),(20,30),(0,0),(0,0),(1,1)]
         rs=(C,V,P)
-        T=2050
+        T=20
         th1=0
         th2=1
         start=0
         n=3
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"LaneChange")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T)
+        co.printReachableSet(th1,th2,'LaneChange')
 
     def coOPVehiclesII():
         dynA=Benchmarks.CoOPVehiclesII.A
@@ -664,8 +664,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"CoOpII")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T,"CoOpII")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'fast')
 
     def fiveVehiclePlatton():
         dynA=Benchmarks.FiveVehiclePlatton.A
@@ -731,8 +731,8 @@ class DriverCompU:
         methodList=['Kagstrom1','Loan']
         #sp=Split(A,E2,rs,T)
         #sp.printReachableSetAll(0,1,"FiveVehiclePlatton")
-        co=SplitBloat(A,E2,rs,T,"FiveVehiclePlatton")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E2,rs,T,"FiveVehiclePlatton")
+        co.printReachableSet(th1,th2,start,n,step,methodList,'fast')
 
     def mathias():
         dynA=Benchmarks.Mathias.A
@@ -750,70 +750,21 @@ class DriverCompU:
         ])
         P=[(-0.1,0.1),(-0.1,0.1),(-0.1,0.1),(-0.1,0.1),(-0.1,0.1)]
         rs=(C,V,P)
-        T=2050
+        T=2000
         th1=0
         th2=1
         start=0
         n=50
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Mathias")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitPCA(A,E,rs,T)
+        co.printReachableSet(th1,th2,"Mathias")
 
 
-'''
-#Batch 1
-DriverCompU.stableSystem1()
-DriverCompU.stableSystem2()
-DriverCompU.stableSystem3()
-DriverCompU.stableSystem4()
-#DriverCompU.dcConv()
-DriverCompU.giradI()
+
+#DriverCompU.stableSystem2()
+#DriverCompU.mathias()
+#DriverCompU.aircraftDynamics()
+#DriverCompU.acc()
+#DriverCompU.giradII()
 DriverCompU.spaceCraftRndzvs()
-DriverCompU.giradII()
-DriverCompU.aircraftDynamics()
-DriverCompU.motorTransmission2()
-'''
-
-'''
-#Batch 2
-DriverCompU.acc()
-DriverCompU.flightEnvelope()
-DriverCompU.coOPVehiclesII()
-'''
-
-'''
-#Batch 3
-DriverCompU.laneChange()
-DriverCompU.fiveVehiclePlatton()
-'''
-
-'''
-#Batch 4
-DriverCompU.holesCXc()
-DriverCompU.pkpd2()
-DriverCompU.motorTransmission1()
-DriverCompU.coOPVehiclesI()
-'''
-
-
-#Batch for Zono (Ac Basis)
-DriverCompU.stableSystem1()
-DriverCompU.stableSystem2()
-DriverCompU.stableSystem3()
-DriverCompU.stableSystem4()
-DriverCompU.dcConv()
-DriverCompU.giradI()
-DriverCompU.spaceCraftRndzvs()
-DriverCompU.giradII()
-DriverCompU.aircraftDynamics()
-DriverCompU.motorTransmission2()
-DriverCompU.acc()
-DriverCompU.flightEnvelope()
-DriverCompU.coOPVehiclesII()
-DriverCompU.laneChange()
-DriverCompU.fiveVehiclePlatton()
-DriverCompU.holesCXc()
-DriverCompU.pkpd2()
-DriverCompU.motorTransmission1()
-DriverCompU.laneChange()

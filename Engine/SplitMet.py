@@ -1400,7 +1400,6 @@ class Split:
         images[0].save("TempGIFs/"+n+'.gif',save_all=True, append_images=images[1:], optimize=False, duration=30, loop=0)
         time_taken=time.time()-start_time
 
-
     def printReachableSetAll(self,s1,s2,n):
         name=n
         nameU=n

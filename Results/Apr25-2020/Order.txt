@@ -1,0 +1,264 @@
+======= Stable1 =======
+----- Sensitivity of the cells in decreasing order -----
+(0, 0)
+(1, 1)
+(0, 1)
+(1, 0)
+(0, 2)
+... 4  more ...
+Time Taken:  0.02439117431640625
+Case: Multiple and Positive
+Singular Values:  [1.   1.   0.99]
+---------------------<END>--------------------
+-------------------------
+
+
+======= Stable2 =======
+----- Sensitivity of the cells in decreasing order -----
+(1, 1)
+(0, 0)
+(0, 1)
+(1, 0)
+Time Taken:  0.00019121170043945312
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= Stable3 =======
+----- Sensitivity of the cells in decreasing order -----
+(0, 0)
+(1, 1)
+(1, 0)
+(0, 1)
+Time Taken:  0.00015473365783691406
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= Stable4 =======
+----- Sensitivity of the cells in decreasing order -----
+(0, 0)
+(1, 1)
+(2, 2)
+(1, 0)
+(0, 1)
+... 4  more ...
+Time Taken:  0.0003077983856201172
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= DC_10p =======
+----- Sensitivity of the cells in decreasing order -----
+(2, 2)
+(1, 0)
+(0, 0)
+(1, 1)
+(0, 1)
+... 4  more ...
+Time Taken:  0.0004367828369140625
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= GiradI =======
+----- Sensitivity of the cells in decreasing order -----
+(1, 1)
+(0, 0)
+(0, 1)
+(1, 0)
+Time Taken:  0.0002970695495605469
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= Spacev2 =======
+----- Sensitivity of the cells in decreasing order -----
+(3, 3)
+(2, 2)
+(4, 4)
+(1, 1)
+(5, 0)
+... 31  more ...
+Time Taken:  0.001993894577026367
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= GiradII =======
+----- Sensitivity of the cells in decreasing order -----
+(1, 1)
+(0, 0)
+(0, 1)
+(1, 0)
+(0, 4)
+... 20  more ...
+Time Taken:  0.004740715026855469
+Case: Multiple and Positive
+Singular Values:  [0.99080775 0.99080775 0.98       0.97005155 0.97005155]
+---------------------<END>--------------------
+-------------------------
+
+
+======= AircraftDynamics =======
+----- Sensitivity of the cells in decreasing order -----
+(3, 3)
+(2, 2)
+(0, 0)
+(1, 1)
+(1, 3)
+... 11  more ...
+Time Taken:  0.0007576942443847656
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= Motor2 =======
+----- Sensitivity of the cells in decreasing order -----
+(2, 2)
+(1, 1)
+(0, 0)
+(3, 3)
+(4, 4)
+... 20  more ...
+Time Taken:  0.0012772083282470703
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= ACC =======
+----- Sensitivity of the cells in decreasing order -----
+(2, 2)
+(2, 1)
+(0, 0)
+(0, 3)
+(3, 0)
+... 11  more ...
+Time Taken:  0.0006766319274902344
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= FlightEnvelope20p =======
+----- Sensitivity of the cells in decreasing order -----
+(3, 3)
+(4, 4)
+(4, 6)
+(6, 4)
+(7, 7)
+... 251  more ...
+Time Taken:  0.19275641441345215
+Case: Multiple and Positive
+Singular Values:  [1.05068287 1.05068287 1.00708353 1.00708353 1.00503706 1.00503706
+ 1.00004949 1.00004949 1.000025   1.000025   0.99503743 0.99503743
+ 0.99294147 0.99294147 0.95166777 0.95166777]
+---------------------<END>--------------------
+-------------------------
+
+
+======= CoOpII =======
+----- Sensitivity of the cells in decreasing order -----
+(3, 3)
+(4, 4)
+(7, 7)
+(5, 5)
+(7, 8)
+... 95  more ...
+Time Taken:  0.010150909423828125
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= LaneChange =======
+----- Sensitivity of the cells in decreasing order -----
+(3, 3)
+(0, 5)
+(1, 6)
+(6, 6)
+(1, 1)
+... 44  more ...
+Time Taken:  0.0036520957946777344
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= FiveVehiclePlatton =======
+----- Sensitivity of the cells in decreasing order -----
+(13, 13)
+(12, 12)
+(10, 10)
+(5, 5)
+(11, 11)
+... 220  more ...
+Time Taken:  0.03957962989807129
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= Holes20p =======
+----- Sensitivity of the cells in decreasing order -----
+(5, 5)
+(3, 3)
+(9, 9)
+(0, 0)
+(6, 6)
+... 95  more ...
+Time Taken:  0.010164976119995117
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= PKPD2-3 =======
+----- Sensitivity of the cells in decreasing order -----
+(1, 1)
+(2, 2)
+(3, 3)
+(4, 4)
+(0, 0)
+... 20  more ...
+Time Taken:  0.0014104843139648438
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= Motor1_20p =======
+----- Sensitivity of the cells in decreasing order -----
+(4, 4)
+(3, 3)
+(2, 2)
+(0, 0)
+(1, 1)
+... 44  more ...
+Time Taken:  0.003507852554321289
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+
+
+======= LaneChange =======
+----- Sensitivity of the cells in decreasing order -----
+(3, 3)
+(0, 5)
+(1, 6)
+(6, 6)
+(1, 1)
+... 44  more ...
+Time Taken:  0.0036077499389648438
+Case: Distinct and Positive
+---------------------<END>--------------------
+-------------------------
+

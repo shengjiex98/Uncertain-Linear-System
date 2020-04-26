@@ -800,6 +800,66 @@ class CompU:
         return starNew
         #-------------------------------------
 
+    def computeU_PCA(self,rs,VB):
+        '''
+        This method aprroximates a reachable set with uncertainties represented
+        as a star to another bloated star
+        '''
+
+        #print(self.Er)
+
+        start_time=time.time()
+        C=rs[0] # The center is always assumed to be 0 as of now
+        V=rs[1]
+        P=rs[2]
+
+
+        sv=V.shape[0]
+        aS=V.shape[1]
+
+        Vp=np.matmul(self.computeUncertainMat()-self.Ac,V)
+
+        U=np.zeros((self.n,1),dtype=object)
+
+        for i in range(sv):
+            s=0
+            for j in range(aS):
+                s=s+(mp.mpi(P[j][0],P[j][1])*Vp[i][j])
+            s=s+C[i]
+            s_min=float(mp.nstr(s).split(',')[0][1:])
+            s_max=float(mp.nstr(s).split(',')[1][:-1])
+            U[i][0]=(s_min,s_max)
+
+        #print(U)
+        C_new=np.zeros(self.n)
+        V_new=VB
+        P_new=[]
+
+        for i in range(self.n):
+            #print((UMin[i][0],UMax[i][0]))
+            #P_new.append((UMin[i][0],UMax[i][0]))
+            P_new.append((U[i][0][0],U[i][0][1]))
+
+        starNew=(C_new,V_new,P_new)
+
+        '''print("-------Given Over-approximated Star-------")
+        print("Center: ",C)
+        print("Vector: ")
+        print(V)
+        print("Predicate (Box): ",P)
+        print("-----------------------")
+        print()
+        print("-------Computed U Star-------")
+        print("Center: ",C_new)
+        print("Vector: ")
+        print(V_new)
+        print("Predicate (Box): ",P_new)
+        print("-----------------------")'''
+
+        #exit(0)
+        return starNew
+        #-------------------------------------
+
 
 
     @staticmethod
@@ -929,6 +989,10 @@ class CompU:
         start_time=time.time()
         C=RS[0]
         C_new=np.matmul(M,C)
+        '''print(M)
+        print(C)
+        print(C_new)
+        exit(0)'''
         #C_new=C1+C2
 
         V=RS[1]

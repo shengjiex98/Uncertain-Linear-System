@@ -816,6 +816,39 @@ class Visualization:
         plt.savefig(buf, format='png')
         buf.seek(0)
         im = Image.open(buf)
+        #plt.savefig("Plots/"+name)
+        plt.show()
+        plt.close()
+        return im
+
+    def getPlotPCA(th1,th2,lPlots,name):
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+
+        XY=lPlots[0]
+        XY2=lPlots[1]
+        X1=lPlots[2][0]
+        Y1=lPlots[2][1]
+        X2=lPlots[2][2]
+        Y2=lPlots[2][3]
+        X3=lPlots[2][4]
+        Y3=lPlots[2][5]
+
+        for (X,Y) in XY2:
+            plt.plot(X,Y,'mo')
+
+        plt.plot(X1,Y1,'bo')
+        plt.plot(X2,Y2,'ro')
+        plt.plot(X3,Y3,'co')
+
+        for (X,Y) in XY:
+            plt.plot(X,Y,'ko')
+
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        im = Image.open(buf)
         plt.savefig("Plots/"+name)
         #plt.show()
         plt.close()
