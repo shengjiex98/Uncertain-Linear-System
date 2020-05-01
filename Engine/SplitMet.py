@@ -1709,6 +1709,58 @@ class Split:
         print("Time Taken: ",time_taken)
         print("")
 
+    def printReachableSetTwo(self,s1,s2,Er2,n):
+        name=n
+        nameU=n
+        intervalPlot=INTERVAL
+        lPlots=[]
+        images=[]
+        start_time_total=time.time()
+        cu=CompU(self.A,self.Er)
+        cu2=CompU(self.A,Er2)
+        ORS=self.Theta
+        ORS2=self.Theta
+        RS=self.Theta
+        U=cu.computeUI_Interval(ORS)
+        U2=cu.computeUI_Interval(ORS2)
+        t=1
+        print()
+        print(n)
+        print("-----------------\n\n")
+
+        (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,ORS).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,ORS2).getPlotsLineFine()
+        lPlots=[X1,Y1,X2,Y2,X3,Y3]
+        images.append(Visualization.getPlotTwo(s1,s2,lPlots,name+"_0"))
+
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+
+            RS=CompU.prodMatStars(self.A,RS)
+
+            ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
+            U=cu.computeUI_Interval(ORS)
+
+            ORS2=CompU.addStars(CompU.prodMatStars(self.Ac,ORS2),U2)
+            U2=cu2.computeUI_Interval(ORS2)
+
+            if t%intervalPlot==0:
+                (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                (X2,Y2)=Visualization(s1,s2,ORS).getPlotsLineFine()
+                (X3,Y3)=Visualization(s1,s2,ORS2).getPlotsLineFine()
+                lPlots=[X1,Y1,X2,Y2,X3,Y3]
+                name=n+"_"+str(t)
+                images.append(Visualization.getPlotTwo(s1,s2,lPlots,name))
+
+            t=t+1
+
+        print("\n")
+        images[0].save("GIFs/"+n+'.gif',save_all=True, append_images=images[1:], optimize=False, duration=250, loop=0)
+        print("----Timining Details for "+n+"----")
+        print("Total Time: ",time.time()-start_time_total)
 
 
 if False:

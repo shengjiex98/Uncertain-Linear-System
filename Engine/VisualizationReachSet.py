@@ -816,8 +816,32 @@ class Visualization:
         plt.savefig(buf, format='png')
         buf.seek(0)
         im = Image.open(buf)
-        #plt.savefig("Plots/"+name)
-        plt.show()
+        plt.savefig("Plots/"+name)
+        #plt.show()
+        plt.close()
+        return im
+
+    def getPlotTwo(th1,th2,lPlots,name):
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+
+        X1=lPlots[0]
+        Y1=lPlots[1]
+        X2=lPlots[2]
+        Y2=lPlots[3]
+        X3=lPlots[4]
+        Y3=lPlots[5]
+        plt.plot(X1,Y1,'bo')
+        plt.plot(X2,Y2,'ro')
+        plt.plot(X3,Y3,'go')
+
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        im = Image.open(buf)
+        plt.savefig("Plots/"+name)
+        #plt.show()
         plt.close()
         return im
 

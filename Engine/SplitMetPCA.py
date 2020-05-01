@@ -96,8 +96,6 @@ class SplitPCA:
             SRS=sample.prodMatIS(SRS)
             SRS2=sample.prodMatStars(SRS2)
 
-            self.getBasis(SRS)
-
             ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
             U=cu.computeUI_Interval(ORS)
 

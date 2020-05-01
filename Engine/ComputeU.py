@@ -20,6 +20,7 @@ from PredicateGen import *
 
 BIGM=1e500
 EPSILON=1e-3
+PRED_EP=1e-50
 
 
 class CompU:
@@ -749,7 +750,8 @@ class CompU:
         #print(self.Er)
 
         start_time=time.time()
-        C=rs[0] # The center is always assumed to be 0 as of now
+        sc=len(rs[0])
+        C=np.reshape(rs[0],(sc,1))
         V=rs[1]
         P=rs[2]
 
@@ -758,6 +760,7 @@ class CompU:
         aS=V.shape[1]
 
         Vp=np.matmul(self.computeUncertainMat()-self.Ac,V)
+        Cp=np.matmul(self.computeUncertainMat()-self.Ac,C)
 
         U=np.zeros((self.n,1),dtype=object)
 
@@ -765,7 +768,7 @@ class CompU:
             s=0
             for j in range(aS):
                 s=s+(mp.mpi(P[j][0],P[j][1])*Vp[i][j])
-            s=s+C[i]
+            s=s+Cp[i][0]
             s_min=float(mp.nstr(s).split(',')[0][1:])
             s_max=float(mp.nstr(s).split(',')[1][:-1])
             U[i][0]=(s_min,s_max)
@@ -809,7 +812,8 @@ class CompU:
         #print(self.Er)
 
         start_time=time.time()
-        C=rs[0] # The center is always assumed to be 0 as of now
+        sc=len(rs[0])
+        C=np.reshape(rs[0],(sc,1))
         V=rs[1]
         P=rs[2]
 
@@ -817,22 +821,28 @@ class CompU:
         sv=V.shape[0]
         aS=V.shape[1]
 
-        Vp=np.matmul(self.computeUncertainMat()-self.Ac,V)
+        (Cb,Vb)=CompU.changeBasis(C,V,P,VB)
+
+        Vp=np.matmul(self.computeUncertainMat()-self.Ac,Vb)
+        Cp=np.matmul(self.computeUncertainMat()-self.Ac,Cb)
 
         U=np.zeros((self.n,1),dtype=object)
+
+        sv=Vp.shape[0]
+        aS=Vp.shape[1]
 
         for i in range(sv):
             s=0
             for j in range(aS):
                 s=s+(mp.mpi(P[j][0],P[j][1])*Vp[i][j])
-            s=s+C[i]
+            s=s+Cp[i][0]
             s_min=float(mp.nstr(s).split(',')[0][1:])
             s_max=float(mp.nstr(s).split(',')[1][:-1])
             U[i][0]=(s_min,s_max)
 
         #print(U)
         C_new=np.zeros(self.n)
-        V_new=VB
+        V_new=np.identity(self.n)
         P_new=[]
 
         for i in range(self.n):
@@ -859,8 +869,6 @@ class CompU:
         #exit(0)
         return starNew
         #-------------------------------------
-
-
 
     @staticmethod
     def joinBasisVecs(v1,v2):
@@ -987,8 +995,10 @@ class CompU:
         '''
 
         start_time=time.time()
-        C=RS[0]
-        C_new=np.matmul(M,C)
+        sc=len(RS[0])
+        C=np.reshape(RS[0],(sc,1))
+        C_tmp=np.matmul(M,C)
+        C_new=list(np.reshape(C_tmp,(sc)))
         '''print(M)
         print(C)
         print(C_new)
@@ -1017,6 +1027,31 @@ class CompU:
             l.append(CompU.prodMatStars(M,rs))
 
         return l
+
+    @staticmethod
+    def changeBasis(C,V,P,VB):
+        V=CompU.filter(V,P)
+        U_transpose=np.transpose(VB)
+        n=len(C)
+        Cb=np.matmul(U_transpose,np.reshape(C,(n,1)))
+        Vb=np.transpose(np.matmul(U_transpose,np.transpose(V)))
+        return (Cb,Vb)
+
+    @staticmethod
+    def filter(V,P):
+        n=len(P)
+        dim=V.shape[0]
+        z=[]
+        for i in range(n):
+            if abs(P[i][0]-P[i][1])<PRED_EP and P[i][0]!=P[i][1]:
+                z.append(i)
+        V_new=np.delete(V,z,axis=1)
+
+        sz=V_new.shape[1]
+        if sz>dim:
+            V_new=np.delete(V_new,list(range(dim,sz)),axis=1)
+        #print(V_new)
+        return V_new
 
 
 if False:

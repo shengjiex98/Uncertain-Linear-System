@@ -16,6 +16,7 @@ import time
 
 PRINT_COUNT=5
 EPSILON=1e-2
+P=1
 
 class OrdUnc:
     '''
@@ -56,6 +57,38 @@ class OrdUnc:
             for i in range(self.n):
                 for j in range(self.n):
                     B[i][j]=1
+                    # Processing
+                    ordMat[i][j]=self.multSig(B)
+                    # End: Processing
+                    B[i][j]=0
+
+        #print(ordMat)
+        ord=OrdUnc.sortMat(ordMat)
+
+        return ord
+
+    def getOrderRelative(self):
+
+        '''
+        Returns an ordering of the cells based on
+        decreasing sensitivity to perturbation
+        '''
+
+        ordMat=np.zeros((self.n,self.n))
+        B=np.zeros((self.n,self.n))
+
+        if self.determineCase()==1:
+            for i in range(self.n):
+                for j in range(self.n):
+                    B[i][j]=self.A[i][j]
+                    # Processing
+                    ordMat[i][j]=self.distinctPos(B)
+                    # End: Processing
+                    B[i][j]=0
+        else:
+            for i in range(self.n):
+                for j in range(self.n):
+                    B[i][j]=self.A[i][j]
                     # Processing
                     ordMat[i][j]=self.multSig(B)
                     # End: Processing
@@ -233,6 +266,58 @@ class OrdUnc:
             (u,sVals,vh)=LA.svd(self.A)
             print("Singular Values: ",sVals)
         print("---------------------<END>--------------------")
+
+    def printReportCompare(self):
+
+        '''
+        Prints the cells in decreasing order of
+        sensitivity towards perturbation
+        '''
+
+        start_time=time.time()
+        ord=self.getOrder()
+        ordRel=self.getOrderRelative()
+        end_time=time.time()-start_time
+        l=len(ord)
+        #print(ord)
+
+        ct=1
+        print("Relative == Absolute: ",ord==ordRel)
+        print("Relative == Absolute (top 5): ",ord[:PRINT_COUNT]==ordRel[:PRINT_COUNT])
+        print("Relative == Absolute (bottom 5): ",ord[l-PRINT_COUNT:]==ordRel[l-PRINT_COUNT:])
+        print("Time Taken: ",end_time)
+        print("Details>>>>")
+        print("----- Sensitivity of the top cells in decreasing order (Relative)-----")
+        for o in ordRel:
+            print(o)
+            ct=ct+1
+            if ct>PRINT_COUNT:
+                print("...",(self.n*self.n-PRINT_COUNT)," more ...")
+                break
+
+        print("----- Sensitivity of the bottom cells in decreasing order (Relative)-----")
+        for o in ordRel[l-PRINT_COUNT:]:
+            print(o)
+            ct=ct+1
+        print("...",(self.n*self.n-PRINT_COUNT)," more ...")
+
+        Er=OrdUnc.dictionarify(ordRel[:PRINT_COUNT])
+        Er2=OrdUnc.dictionarify(ordRel[l-PRINT_COUNT:])
+
+        #print(Er)
+        #print(Er2)
+
+        return (Er,Er2)
+
+        print("---------------------<END>--------------------")
+
+    def dictionarify(ord):
+        Er={}
+
+        for o in ord:
+            Er[o]=[1-(P/100),1+(P/100)]
+
+        return Er
 
 
 if False:

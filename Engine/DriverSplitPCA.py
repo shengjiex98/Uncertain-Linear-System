@@ -347,7 +347,7 @@ class DriverCompU:
         dynA=Benchmarks.SpaceCraftRndzvs.A
         dynB=Benchmarks.SpaceCraftRndzvs.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=2
+        P=10
         E={
         (2,1): [1-(P/100),1+(P/100)],
         (2,0): [1-(P/100),1+(P/100)],
