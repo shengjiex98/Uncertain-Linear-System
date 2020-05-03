@@ -826,12 +826,16 @@ class Visualization:
         plt.xlabel("State "+str(th1))
         plt.ylabel("State "+str(th2))
 
-        X1=lPlots[0]
-        Y1=lPlots[1]
-        X2=lPlots[2]
-        Y2=lPlots[3]
-        X3=lPlots[4]
-        Y3=lPlots[5]
+        XY=lPlots[0]
+        X1=lPlots[1][0]
+        Y1=lPlots[1][1]
+        X2=lPlots[1][2]
+        Y2=lPlots[1][3]
+        X3=lPlots[1][4]
+        Y3=lPlots[1][5]
+
+        for (X,Y) in XY:
+            plt.plot(X,Y,'mo')
         plt.plot(X1,Y1,'bo')
         plt.plot(X2,Y2,'ro')
         plt.plot(X3,Y3,'go')

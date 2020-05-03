@@ -29,7 +29,7 @@ BIGM=0.001
 EPSILON=1e-10
 PRED_EP=1e-3
 INTERVAL=100
-RED_INT_ZONO=500
+RED_INT_ZONO=5000
 RED_INT_INTRVL=500
 SAMPLES=20
 VLENGTH=17
@@ -1718,9 +1718,11 @@ class Split:
         start_time_total=time.time()
         cu=CompU(self.A,self.Er)
         cu2=CompU(self.A,Er2)
+        sample=Sampling(self.A,self.Er)
         ORS=self.Theta
         ORS2=self.Theta
         RS=self.Theta
+        SRS=[self.Theta]
         U=cu.computeUI_Interval(ORS)
         U2=cu.computeUI_Interval(ORS2)
         t=1
@@ -1731,7 +1733,8 @@ class Split:
         (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
         (X2,Y2)=Visualization(s1,s2,ORS).getPlotsLineFine()
         (X3,Y3)=Visualization(s1,s2,ORS2).getPlotsLineFine()
-        lPlots=[X1,Y1,X2,Y2,X3,Y3]
+        (X4,Y4)=Visualization(s1,s2,SRS[0]).getPlotsLineFine()
+        lPlots=[[(X4,Y4)],[X1,Y1,X2,Y2,X3,Y3]]
         images.append(Visualization.getPlotTwo(s1,s2,lPlots,name+"_0"))
 
         while (t<=self.T):
@@ -1740,6 +1743,8 @@ class Split:
             sys.stdout.flush()
 
             RS=CompU.prodMatStars(self.A,RS)
+
+            SRS=sample.prodMatStars(SRS)
 
             ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
             U=cu.computeUI_Interval(ORS)
@@ -1751,7 +1756,8 @@ class Split:
                 (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
                 (X2,Y2)=Visualization(s1,s2,ORS).getPlotsLineFine()
                 (X3,Y3)=Visualization(s1,s2,ORS2).getPlotsLineFine()
-                lPlots=[X1,Y1,X2,Y2,X3,Y3]
+                lst=Sampling.getPlotsLineFine(s1,s2,SRS)
+                lPlots=[lst,[X1,Y1,X2,Y2,X3,Y3]]
                 name=n+"_"+str(t)
                 images.append(Visualization.getPlotTwo(s1,s2,lPlots,name))
 

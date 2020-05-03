@@ -93,11 +93,17 @@ class DriverCompU:
         (ErT,ErB)=(ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def stableSystem2():
         dynA=Benchmarks.StableSystem2.A
         dynB=Benchmarks.StableSystem2.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
+        P=2
+        E={
+        (0,1): [1-(P/100),1+(P/100)]
+        }
         C=[0,0]
         V=np.array([
         [1,0],
@@ -115,8 +121,10 @@ class DriverCompU:
         print(">>>>>>>>>",name,"<<<<<<<<<\n\n")
         o=OrdUnc(A)
         (ErT,ErB)=o.printReportCompare()
-        sp=Split(A,ErT,rs,T)
-        sp.printReachableSetTwo(th1,th2,ErB,name)
+        #sp=Split(A,ErT,rs,T)
+        #sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def stableSystem3():
         dynA=Benchmarks.StableSystem3.A
@@ -145,6 +153,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def stableSystem4():
         dynA=Benchmarks.StableSystem4.A
@@ -175,6 +185,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def flightEnvelope():
         dynA=Benchmarks.FlightEnvelope.A
@@ -242,6 +254,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def coOPVehiclesI():
         dynA=Benchmarks.CoOPVehiclesI.A
@@ -287,6 +301,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def pkpd2():
         dynA=Benchmarks.PKPD2.A
@@ -327,8 +343,10 @@ class DriverCompU:
         print(">>>>>>>>>",name,"<<<<<<<<<\n\n")
         o=OrdUnc(A)
         (ErT,ErB)=o.printReportCompare()
-        sp=Split(A,ErT,rs,T)
-        sp.printReachableSetTwo(th1,th2,ErB,name)
+        #sp=Split(A,ErT,rs,T)
+        #sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def dcConv():
         dynA=Benchmarks.DCConv.A
@@ -362,8 +380,10 @@ class DriverCompU:
         print(">>>>>>>>>",name,"<<<<<<<<<\n\n")
         o=OrdUnc(A)
         (ErT,ErB)=o.printReportCompare()
-        sp=Split(A,ErT,rs,T)
-        sp.printReachableSetTwo(th1,th2,ErB,name)
+        #sp=Split(A,ErT,rs,T)
+        #sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def spaceCraftRndzvs():
         dynA=Benchmarks.SpaceCraftRndzvs.A
@@ -407,6 +427,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def holesCXc():
         dynA=Benchmarks.HolesCXc.A
@@ -446,6 +468,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def motorTransmission1():
         dynA=Benchmarks.MotorTransmission1.A
@@ -489,6 +513,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def motorTransmission2():
         dynA=Benchmarks.MotorTransmission2.A
@@ -521,6 +547,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def aircraftDynamics():
         dynA=Benchmarks.AircraftDynamics.A
@@ -552,6 +580,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def giradI():
         dynA=Benchmarks.GiradI.A
@@ -581,6 +611,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def giradII():
         dynA=Benchmarks.GiradII.A
@@ -614,6 +646,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def acc():
         dynA=Benchmarks.ACC.A
@@ -642,6 +676,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def laneChange():
         dynA=Benchmarks.LaneChange.A
@@ -673,6 +709,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def coOPVehiclesII():
         dynA=Benchmarks.CoOPVehiclesII.A
@@ -716,8 +754,10 @@ class DriverCompU:
         print(">>>>>>>>>",name,"<<<<<<<<<\n\n")
         o=OrdUnc(A)
         (ErT,ErB)=o.printReportCompare()
-        sp=Split(A,ErT,rs,T)
-        sp.printReachableSetTwo(th1,th2,ErB,name)
+        #sp=Split(A,ErT,rs,T)
+        #sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def fiveVehiclePlatton():
         dynA=Benchmarks.FiveVehiclePlatton.A
@@ -786,6 +826,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def mathias():
         dynA=Benchmarks.Mathias.A
@@ -815,6 +857,8 @@ class DriverCompU:
         (ErT,ErB)=o.printReportCompare()
         sp=Split(A,ErT,rs,T)
         sp.printReachableSetTwo(th1,th2,ErB,name)
+        sp2=Split(A,E,rs,T)
+        sp2.printReachableSetAll(th1,th2,name+"_Org")
 
 
 '''
@@ -866,7 +910,7 @@ DriverCompU.coOPVehiclesI()
 #DriverCompU.motorTransmission2()
 #DriverCompU.acc()
 #DriverCompU.flightEnvelope()
-#DriverCompU.coOPVehiclesII()
+DriverCompU.coOPVehiclesII()
 #DriverCompU.laneChange()
 #DriverCompU.fiveVehiclePlatton()
 #DriverCompU.holesCXc()
