@@ -86,8 +86,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Stable1")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitBloat(E,rs,T,"Stable1")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'slow')
 
     def stableSystem2():
         dynA=Benchmarks.StableSystem2.A
@@ -111,8 +111,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Stable2")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitBloat(E,rs,T,"Stable2")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'slow')
 
     def stableSystem3():
         dynA=Benchmarks.StableSystem3.A
@@ -136,8 +136,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Stable3")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitBloat(E,rs,T,"Stable3")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'slow')
 
     def stableSystem4():
         dynA=Benchmarks.StableSystem4.A
@@ -163,8 +163,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Stable4")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitBloat(E,rs,T,"Stable4")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'slow')
 
     def flightEnvelope():
         dynA=Benchmarks.FlightEnvelope.A
@@ -226,9 +226,9 @@ class DriverCompU:
         start=50
         n=1000
         step=0.01
-        methodList=['Loan']
-        co=SplitBloat(A,E,rs,T,"FlightEnvelope20p")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        methodList=['Kagstrom1','Kagstrom2','Loan']
+        co=SplitBloat(E,rs,T,"FlightEnvelope20p")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def coOPVehiclesI():
         dynA=Benchmarks.CoOPVehiclesI.A
@@ -269,14 +269,14 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Loan']
-        co=SplitBloat(A,E,rs,T,"CoOpI")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitBloat(E,rs,T,"CoOpI")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def pkpd2():
         dynA=Benchmarks.PKPD2.A
         dynB=Benchmarks.PKPD2.B
         A=DriverCompU.createMatrix(dynA,dynB,mode,h)
-        P=200
+        P=20
         E={
         (0,4): [1-(P/100),1+(P/100)],
         #(2,0): [1-(P/100),1+(P/100)],
@@ -304,12 +304,12 @@ class DriverCompU:
         T=2050
         th1=1
         th2=2
-        start=0
-        n=50
+        start=50
+        n=500
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"PKPD2-3")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitBloat(E,rs,T,"PKPD2-3")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def dcConv():
         dynA=Benchmarks.DCConv.A
@@ -339,9 +339,9 @@ class DriverCompU:
         start=10
         n=20
         step=0.01
-        methodList=['Kagstrom1','Loan']
-        co=SplitBloat(A,E,rs,T,"DC_10p")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        methodList=['Kagstrom1','Kagstrom2','Loan']
+        co=SplitBloat(E,rs,T,"DC_10p")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'slow')
 
     def spaceCraftRndzvs():
         dynA=Benchmarks.SpaceCraftRndzvs.A
@@ -380,8 +380,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Spacev2")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitBloat(E,rs,T,"Spacev2")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def holesCXc():
         dynA=Benchmarks.HolesCXc.A
@@ -415,9 +415,9 @@ class DriverCompU:
         start=50
         n=2000
         step=0.01
-        methodList=['Kagstrom1','Loan']
-        co=SplitBloat(A,E,rs,T,"Holes20p")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        methodList=['Kagstrom1','Kagstrom2','Loan']
+        co=SplitBloat(E,rs,T,"Holes20p")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def motorTransmission1():
         dynA=Benchmarks.MotorTransmission1.A
@@ -455,9 +455,9 @@ class DriverCompU:
         start=50
         n=5000
         step=0.01
-        methodList=['Kagstrom1','Loan']
-        co=SplitBloat(A,E,rs,T,"Motor1_20p")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        methodList=['Kagstrom1','Kagstrom2','Loan']
+        co=SplitBloat(E,rs,T,"Motor1_20p")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def motorTransmission2():
         dynA=Benchmarks.MotorTransmission2.A
@@ -485,8 +485,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Motor2")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitBloat(E,rs,T,"Motor2")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def aircraftDynamics():
         dynA=Benchmarks.AircraftDynamics.A
@@ -513,8 +513,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"AircraftDynamics")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitBloat(E,rs,T,"AircraftDynamics")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'slow')
 
     def giradI():
         dynA=Benchmarks.GiradI.A
@@ -539,8 +539,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"GiradI")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitBloat(E,rs,T,"GiradI")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'slow')
 
     def giradII():
         dynA=Benchmarks.GiradII.A
@@ -569,8 +569,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"GiradII")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitBloat(E,rs,T,"GiradII")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def acc():
         dynA=Benchmarks.ACC.A
@@ -594,8 +594,8 @@ class DriverCompU:
         n=2000
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"ACC")
-        co.getStats(th1,th2,start,n,step,methodList,'slow')
+        co=SplitBloat(E,rs,T,"ACC")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'slow')
 
     def laneChange():
         dynA=Benchmarks.LaneChange.A
@@ -618,12 +618,12 @@ class DriverCompU:
         T=2050
         th1=0
         th2=1
-        start=0
-        n=3
+        start=50
+        n=500
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"LaneChange")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitBloat(E,rs,T,"LaneChange")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def coOPVehiclesII():
         dynA=Benchmarks.CoOPVehiclesII.A
@@ -664,8 +664,8 @@ class DriverCompU:
         n=200
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"CoOpII")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitBloat(E,rs,T,"CoOpII")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def fiveVehiclePlatton():
         dynA=Benchmarks.FiveVehiclePlatton.A
@@ -731,8 +731,8 @@ class DriverCompU:
         methodList=['Kagstrom1','Loan']
         #sp=Split(A,E2,rs,T)
         #sp.printReachableSetAll(0,1,"FiveVehiclePlatton")
-        co=SplitBloat(A,E2,rs,T,"FiveVehiclePlatton")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitBloat(E2,rs,T,"FiveVehiclePlatton")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
     def mathias():
         dynA=Benchmarks.Mathias.A
@@ -757,8 +757,8 @@ class DriverCompU:
         n=50
         step=0.01
         methodList=['Kagstrom1','Kagstrom2','Loan']
-        co=SplitBloat(A,E,rs,T,"Mathias")
-        co.getStats(th1,th2,start,n,step,methodList,'fast')
+        co=SplitBloat(E,rs,T,"Mathias")
+        co.getStats(dynA,dynB,th1,th2,start,n,step,methodList,'fast')
 
 
 '''
@@ -796,7 +796,7 @@ DriverCompU.motorTransmission1()
 DriverCompU.coOPVehiclesI()
 '''
 
-'''
+
 #Batch for Zono (Ac Basis)
 DriverCompU.stableSystem1()
 DriverCompU.stableSystem2()
@@ -810,13 +810,13 @@ DriverCompU.aircraftDynamics()
 DriverCompU.motorTransmission2()
 DriverCompU.acc()
 DriverCompU.flightEnvelope()
-DriverCompU.coOPVehiclesII()
+DriverCompU.coOPVehiclesI()
 DriverCompU.laneChange()
 DriverCompU.fiveVehiclePlatton()
 DriverCompU.holesCXc()
 DriverCompU.pkpd2()
 DriverCompU.motorTransmission1()
 DriverCompU.laneChange()
-'''
 
-DriverCompU.holesCXc()
+
+#DriverCompU.motorTransmission1()
