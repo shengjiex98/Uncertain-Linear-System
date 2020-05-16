@@ -849,6 +849,34 @@ class Visualization:
         plt.close()
         return im
 
+    def getPlotOrdComp(th1,th2,lPlots,name):
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+
+        X1=lPlots[0]
+        Y1=lPlots[1]
+        XY=lPlots[2] #magenta
+        XY2=lPlots[3] #green
+
+        for (X,Y) in XY:
+            plt.plot(X,Y,'mo')
+
+        for (X,Y) in XY2:
+            plt.plot(X,Y,'go')
+
+        plt.plot(X1,Y1,'bo')
+
+
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        im = Image.open(buf)
+        plt.savefig("Plots/"+name)
+        #plt.show()
+        plt.close()
+        return im
+
     def getPlotPCA(th1,th2,lPlots,name):
         plt.autoscale(enable=True, axis='both', tight=False)
         plt.xlabel("State "+str(th1))

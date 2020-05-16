@@ -1768,6 +1768,54 @@ class Split:
         print("----Timining Details for "+n+"----")
         print("Total Time: ",time.time()-start_time_total)
 
+    def printReachableSetOrdComp(self,s1,s2,Er2,n):
+        name=n
+        nameU=n
+        intervalPlot=INTERVAL
+        lPlots=[]
+        images=[]
+        start_time_total=time.time()
+        sample=Sampling(self.A,self.Er)
+        sample2=Sampling(self.A,Er2)
+        RS=self.Theta
+        SRS=[self.Theta]
+        SRS2=[self.Theta]
+        t=1
+        print()
+        print(n)
+        print("-----------------\n\n")
+
+        (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,SRS[0]).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,SRS2[0]).getPlotsLineFine()
+        lPlots=[X1,Y1,[(X2,Y2)],[(X3,Y3)]]
+        images.append(Visualization.getPlotOrdComp(s1,s2,lPlots,name+"_0"))
+
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+
+            RS=CompU.prodMatStars(self.A,RS)
+
+            SRS=sample.prodMatStars(SRS)
+            SRS2=sample2.prodMatStars(SRS2)
+
+            if t%intervalPlot==0:
+                (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                lst=Sampling.getPlotsLineFine(s1,s2,SRS)
+                lst2=Sampling.getPlotsLineFine(s1,s2,SRS2)
+                lPlots=[X1,Y1,lst,lst2]
+                name=n+"_"+str(t)
+                images.append(Visualization.getPlotOrdComp(s1,s2,lPlots,name))
+
+            t=t+1
+
+        print("\n")
+        images[0].save("GIFs/"+n+'.gif',save_all=True, append_images=images[1:], optimize=False, duration=250, loop=0)
+        print("----Timining Details for "+n+"----")
+        print("Total Time: ",time.time()-start_time_total)
+
 
 if False:
     A2=np.array([
