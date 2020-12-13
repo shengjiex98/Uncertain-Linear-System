@@ -910,6 +910,27 @@ class Visualization:
         plt.close()
         return im
 
+    @staticmethod
+    def displayPlotEgHeuristics(th1,th2,ac,intvl,zono):
+        #plt.axes()
+        (X1,Y1)=Visualization(th1,th2,ac).getPlotsLineFine()
+        (X2,Y2)=Visualization(th1,th2,intvl).getPlotsLineFine()
+        (X3,Y3)=Visualization(th1,th2,zono).getPlotsLineFine()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+
+
+        plt.plot(X1,Y1,'ro') # Actual
+        plt.plot(X2,Y2,'bo') # Interval
+        plt.plot(X3,Y3,'go') # Zono
+
+        #plt.axis('scaled')
+        #plt.legend()
+        #plt.savefig("Plots/"+name)
+        plt.show()
+        plt.close()
+
 if False:
     C=[0,0]
     V=np.array([

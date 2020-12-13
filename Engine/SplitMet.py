@@ -533,8 +533,8 @@ class Split:
 
         v_len=V.shape[1]
 
-        if v_len<n*VLENGTH:
-            return ORS
+        '''if v_len<n*VLENGTH:
+            return ORS'''
 
         #print("PROJECTING ",n,v_len)
 
@@ -1816,6 +1816,25 @@ class Split:
         print("----Timining Details for "+n+"----")
         print("Total Time: ",time.time()-start_time_total)
 
+    def egHeuristics():
+        '''
+        Just to generate examples for the heuritics
+        '''
+        C=[0,0]
+        V=np.array([
+        [0,1,0.5,0.9],
+        [1,-1,0.2,0.3]
+        ])
+        P=[(-10,10),(-10,10),(-2,2),(-1,1)]
+        rs=(C,V,P)
+
+        rsInterval=Split.appxSB(rs)
+        rsZono=Split.lowerDimProj(rs)
+
+        print(rsInterval)
+        print(rsZono)
+        Visualization.displayPlotEgHeuristics(0,1,rs,rsInterval,rsZono)
+
 
 if False:
     A2=np.array([
@@ -1911,3 +1930,6 @@ if False:
 
     sp=Split(A,E,rs,T)
     sp.printReachableSet(0,1,pnew,"Test")
+
+if True:
+    Split.egHeuristics()
