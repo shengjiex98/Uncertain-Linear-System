@@ -1486,6 +1486,107 @@ class Split:
         print("With Reduction (Interval): ",time_taken_reduction_interval)
         print("Total Time: ",time.time()-start_time_total)
 
+    def getReachableSetAll(self,s1=0,s2=0,n="RS"):
+        name=n
+        nameU=n
+        intervalPlot=INTERVAL
+        lPlots=[]
+        images=[]
+        time_taken_interval=0
+        time_taken_reduction=0
+        start_time_total=time.time()
+        cu=CompU(self.A,self.Er)
+        sample=Sampling(self.A,self.Er)
+        ORS=self.Theta
+        #SRS=[self.Theta]
+        #RS=self.Theta
+        #ORS_compact_zono=self.Theta
+        #ORS_compact_interval=self.Theta
+        #t_reduction_zono=0
+        #t_reduction_interval=0
+        #t_interval=time.time()
+        U=cu.computeUI_Interval(ORS)
+        #time_taken_interval=time.time()-t_interval
+        #time_taken_reduction_zono=time_taken_interval
+        #time_taken_reduction_interval=time_taken_interval
+        #U_compact_zono=U
+        #U_compact_interval=U
+        t=1
+        print()
+        #print(n)
+        print("-----------------\n\n")
+
+        #(X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        #(X2,Y2)=Visualization(s1,s2,ORS_compact_zono).getPlotsLineFine()
+        #(X3,Y3)=Visualization(s1,s2,ORS_compact_interval).getPlotsLineFine()
+        #(X4,Y4)=Visualization(s1,s2,ORS).getPlotsLineFine()
+        #(X5,Y5)=Visualization(s1,s2,SRS[0]).getPlotsLineFine()
+        #lPlots=[[(X5,Y5)],[X1,Y1,X2,Y2,X3,Y3,X4,Y4]]
+        #images.append(Visualization.getPlotAll(s1,s2,lPlots,name+"_0"))
+
+        while (t<=self.T):
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
+
+            #RS=CompU.prodMatStars(self.A,RS)
+
+            #SRS=sample.prodMatStars(SRS)
+
+            t_interval=time.time()
+            ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
+            U=cu.computeUI_Interval(ORS)
+            time_taken_interval=time_taken_interval+(time.time()-t_interval)
+
+            '''t_reduction_interval=time.time()
+            ORS_compact_interval=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact_interval),U_compact_interval)
+            if t%RED_INT_INTRVL==0:
+                ORS_compact_interval=Split.appxSB(ORS_compact_interval)
+            U_compact_interval=cu.computeUI_Interval(ORS_compact_interval)
+            time_taken_reduction_interval=time_taken_reduction_interval+(time.time()-t_reduction_interval)
+            '''
+            '''
+            t_reduction_zono=time.time()
+            ORS_compact_zono=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact_zono),U_compact_zono)
+            if t%RED_INT_ZONO==0:
+                ORS_compact_zono=Split.lowerDimProj(ORS_compact_zono)
+            U_compact_zono=cu.computeUI_Interval(ORS_compact_zono)
+            time_taken_reduction_zono=time_taken_reduction_zono+(time.time()-t_reduction_zono)
+            '''
+
+            if False:
+                (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                (X2,Y2)=Visualization(s1,s2,ORS_compact_zono).getPlotsLineFine()
+                (X3,Y3)=Visualization(s1,s2,ORS_compact_interval).getPlotsLineFine()
+                (X4,Y4)=Visualization(s1,s2,ORS).getPlotsLineFine()
+                lst=Sampling.getPlotsLineFine(s1,s2,SRS)
+                lPlots=[lst,[X1,Y1,X2,Y2,X3,Y3,X4,Y4]]
+                name=n+"_"+str(t)
+                images.append(Visualization.getPlotAll(s1,s2,lPlots,name))
+
+            t=t+1
+
+        print("\n")
+        t=t-1
+        #images[0].save("GIFs/"+n+'.gif',save_all=True, append_images=images[1:], optimize=False, duration=250, loop=0)
+        print("----Timining Details for "+n+"----")
+        print("Without Reduction: ",time_taken_interval)
+        #print("With Reduction (Zono): ",time_taken_reduction_zono)
+        #print("With Reduction (Interval): ",time_taken_reduction_interval)
+        #print("Total Time: ",time.time()-start_time_total)
+
+        '''(X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,ORS_compact_zono).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,ORS_compact_interval).getPlotsLineFine()
+        (X4,Y4)=Visualization(s1,s2,ORS).getPlotsLineFine()
+        lst=Sampling.getPlotsLineFine(s1,s2,SRS)
+        lPlots=[lst,[X1,Y1,X2,Y2,X3,Y3,X4,Y4]]
+        name=n+"_"+str(t)
+        images.append(Visualization.getPlotAll(s1,s2,lPlots,name))'''
+
+        return ORS
+        #return (ORS,ORS_compact_zono,ORS_compact_interval)
+
     def printReachableSetPred(self,s1,s2,pnew,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
@@ -1931,5 +2032,5 @@ if False:
     sp=Split(A,E,rs,T)
     sp.printReachableSet(0,1,pnew,"Test")
 
-if True:
+if False:
     Split.egHeuristics()

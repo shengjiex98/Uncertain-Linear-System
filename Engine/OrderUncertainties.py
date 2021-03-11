@@ -41,14 +41,20 @@ class OrdUnc:
         Returns an ordering of the cells based on
         decreasing sensitivity to perturbation
         '''
+        ord=OrdUnc.sortMat(ordMat)
+        return ord
 
+    def getSVSentivity(self,pert=1):
+        '''
+        Run the ordering algorithm
+        '''
         ordMat=np.zeros((self.n,self.n))
         B=np.zeros((self.n,self.n))
 
         if self.determineCase()==1:
             for i in range(self.n):
                 for j in range(self.n):
-                    B[i][j]=1
+                    B[i][j]=pert
                     # Processing
                     ordMat[i][j]=self.distinctPos(B)
                     # End: Processing
@@ -56,16 +62,12 @@ class OrdUnc:
         else:
             for i in range(self.n):
                 for j in range(self.n):
-                    B[i][j]=1
+                    B[i][j]=pert
                     # Processing
                     ordMat[i][j]=self.multSig(B)
                     # End: Processing
                     B[i][j]=0
-
-        #print(ordMat)
-        ord=OrdUnc.sortMat(ordMat)
-
-        return ord
+        return ordMat
 
     def getOrderRelative(self):
 

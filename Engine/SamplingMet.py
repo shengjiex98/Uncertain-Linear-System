@@ -70,6 +70,8 @@ class Sampling:
                     #print(math.ceil(lb*PRECISION),math.floor(ub*PRECISION))
                     if lb==0 and ub==0:
                         r=0
+                    elif lb==ub:
+                        r=lb
                     else:
                         rd=random.randrange(math.ceil(lb*PRECISION),math.floor(ub*PRECISION))
                         r=float(rd/PRECISION)

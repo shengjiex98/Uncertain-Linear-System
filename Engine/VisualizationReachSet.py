@@ -931,6 +931,18 @@ class Visualization:
         plt.show()
         plt.close()
 
+    def displayRSnUnsafe(RS,unsafe,th1=0,th2=1,name="RS"):
+        (RS_X,RS_Y)=Visualization(th1,th2,RS).getPlotsLineFine()
+        (U_X,U_Y)=Visualization(th1,th2,unsafe).getPlotsLineFine()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+        plt.plot(RS_X,RS_Y,'bo')
+        plt.plot(U_X,U_Y,'ro')
+        #plt.savefig("Plots/"+name)
+        plt.show()
+        plt.close()
+
 if False:
     C=[0,0]
     V=np.array([
