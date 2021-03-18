@@ -791,7 +791,7 @@ class Visualization:
         #im.show()
         return im
 
-    def getPlotAll(th1,th2,lPlots,name):
+    def getPlotAll(th1,th2,lPlots,flow,name):
         plt.autoscale(enable=True, axis='both', tight=False)
         plt.xlabel("State "+str(th1))
         plt.ylabel("State "+str(th2))
@@ -807,10 +807,12 @@ class Visualization:
         Y4=lPlots[1][7]
         for (X,Y) in XY:
             plt.plot(X,Y,'mo')
-        plt.plot(X1,Y1,'bo')
-        plt.plot(X2,Y2,'co')
-        plt.plot(X3,Y3,'go')
-        plt.plot(X4,Y4,'ro',alpha=0.4)
+        plt.plot(X1,Y1,'bo') # Nominal
+        plt.plot(X2,Y2,'co') # Zono reduction
+        plt.plot(X3,Y3,'go') # Interval reduction
+        plt.plot(X4,Y4,'ro',alpha=0.4) # No reduction
+
+        plt.plot(flow[0],flow[1],color='black',linewidth=6) # Flow*
 
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
@@ -939,6 +941,20 @@ class Visualization:
         plt.ylabel("State "+str(th2))
         plt.plot(RS_X,RS_Y,'bo')
         plt.plot(U_X,U_Y,'ro')
+        #plt.savefig("Plots/"+name)
+        plt.show()
+        plt.close()
+
+    def displayCompHeu(RS_lin,RS_har,RS_eq,th1=0,th2=1,name="RS"):
+        (RS_lin_X,RS_lin_Y)=Visualization(th1,th2,RS_lin).getPlotsLineFine()
+        (RS_har_X,RS_har_Y)=Visualization(th1,th2,RS_har).getPlotsLineFine()
+        (RS_eq_X,RS_eq_Y)=Visualization(th1,th2,RS_eq).getPlotsLineFine()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("State "+str(th1))
+        plt.ylabel("State "+str(th2))
+        plt.plot(RS_lin_X,RS_lin_Y,'bo')
+        plt.plot(RS_har_X,RS_har_Y,'go')
+        plt.plot(RS_eq_X,RS_eq_Y,'ko')
         #plt.savefig("Plots/"+name)
         plt.show()
         plt.close()

@@ -17,7 +17,36 @@ class RobustMetric:
         self.A=A # Linear system (without perturbation)
         self.cells=cells
 
-    def distributePerturbation(self,p):
+    def distributePerturbation(self,p,choice=2):
+        '''
+        Given a perturbation budget `p`, disribute it in the cells
+        mentioned in `self.cells`
+        cells=[...,(i,j),...], where (i,j) is a cell in `self.A`
+
+        choices:
+            - 1: Linear Distribution
+            - 2: Harmonic Distribution
+            - 3: Equal Distribution
+            - 4: Return All
+        '''
+
+        if choice==1:
+            Er=self.distributePerturbationLinear(p)
+            return Er
+        elif choice==2:
+            Er=self.distributePerturbationHarmonic(p)
+            return Er
+        elif choice==3:
+            Er=self.distributePerturbationEqual(p)
+            return Er
+        elif choice==4:
+            ErLin=self.distributePerturbationLinear(p)
+            ErHar=self.distributePerturbationHarmonic(p)
+            ErEq=self.distributePerturbationEqual(p)
+            return (ErLin,ErHar,ErEq)
+
+
+    def distributePerturbationLinear(self,p):
         '''
         Given a perturbation budget `p`, disribute it in the cells
         mentioned in `self.cells`
@@ -32,11 +61,82 @@ class RobustMetric:
         '''
         Er={}
         sensitivityMat=OrdUnc(self.A).getSVSentivity(p)
+        ep=np.amin(sensitivityMat)
         sm=0
         for i in self.cells:
+            if sensitivityMat[i]==0:
+                sensitivityMat[i]=1e-7
             sm+=sensitivityMat[i]
+        sortedCells=self.sortCells(sensitivityMat)
+        for i in range(len(sortedCells)):
+            tmp=(p/sm)*sensitivityMat[sortedCells[-1-i]]
+            #print(self.cells[i],": ",tmp)
+            Er[sortedCells[i]]=[(100-tmp)/100,(100+tmp)/100]
+        #print(Er)
+
+        return Er
+
+    def sortCells(self,sensitivityMat):
+        '''
+        sort cells based on sensitivityMat values
+        '''
+
+        n_cells=len(self.cells)
+        cellsOrg=self.cells.copy()
+        for i in range(n_cells):
+            indx=i
+            mx=-9999
+            for j in range(i,n_cells):
+                if sensitivityMat[cellsOrg[j]]>mx:
+                    mx=sensitivityMat[cellsOrg[j]]
+                    indx=j
+            #print(cellsOrg[indx])
+            tm=cellsOrg[i]
+            cellsOrg[i]=cellsOrg[indx]
+            cellsOrg[indx]=tm
+        return cellsOrg
+
+    def distributePerturbationHarmonic(self,p):
+        '''
+        Given a perturbation budget `p`, disribute it in the cells
+        mentioned in `self.cells`
+        cells=[...,(i,j),...], where (i,j) is a cell in `self.A`
+
+        # Algorithm
+
+        - for a cell c_i \in cells, plug p, B[c_i]=p; and call the ordering algorithm
+        - obtain the \sigma_{c_i} from the ordering algorithm
+        - each cell gets perturbation based on the proportion of 1/sigma_{c_i}
+        '''
+        Er={}
+        sensitivityMat=OrdUnc(self.A).getSVSentivity(p)
+        sm=0
+        for i in self.cells:
+            if sensitivityMat[i]==0:
+                sensitivityMat[i]=0.1
+            sm+=float(1/sensitivityMat[i])
+
         for i in range(len(self.cells)):
-            tmp=(p/sm)*sensitivityMat[self.cells[-1-i]]
+            tmp=float(p/sm)*float(1/sensitivityMat[self.cells[i]])
+            #print(self.cells[i],": ",tmp)
+            Er[self.cells[i]]=[(100-tmp)/100,(100+tmp)/100]
+
+        return Er
+
+    def distributePerturbationEqual(self,p):
+        '''
+        Given a perturbation budget `p`, disribute it in the cells
+        mentioned in `self.cells`
+        cells=[...,(i,j),...], where (i,j) is a cell in `self.A`
+
+        # Algorithm
+
+        - all cells get equal share of perturbation
+        '''
+        Er={}
+        n_cells=len(self.cells)
+        for i in range(n_cells):
+            tmp=p/n_cells
             #print(self.cells[i],": ",tmp)
             Er[self.cells[i]]=[(100-tmp)/100,(100+tmp)/100]
         #print(Er)
@@ -154,7 +254,7 @@ class RobustMetric:
             - if unsafe:
                 break
         '''
-        p=100
+        p=10000
         delta=100
 
         it=1
@@ -181,6 +281,20 @@ class RobustMetric:
             it+=1
 
         return -404
+
+    def compareHeus(self,p,IS,t):
+        '''
+        Compare the three heuristics
+        '''
+        (ErLin,ErHar,ErEq)=self.distributePerturbation(p,choice=4)
+        sp=Split(self.A,ErLin,IS,t)
+        RS_lin=sp.getReachableSetAll()
+        sp2=Split(self.A,ErHar,IS,t)
+        RS_har=sp2.getReachableSetAll()
+        sp3=Split(self.A,ErEq,IS,t)
+        RS_eq=sp3.getReachableSetAll()
+
+        Visualization.displayCompHeu(RS_lin,RS_har,RS_eq,th1=0,th2=1,name="Heu")
 
 
 # Test Case

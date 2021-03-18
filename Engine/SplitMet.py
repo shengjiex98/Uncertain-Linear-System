@@ -29,8 +29,8 @@ BIGM=0.001
 EPSILON=1e-10
 PRED_EP=1e-3
 INTERVAL=100
-RED_INT_ZONO=5000
-RED_INT_INTRVL=500
+RED_INT_ZONO=35
+RED_INT_INTRVL=35
 SAMPLES=20
 VLENGTH=17
 
@@ -1400,7 +1400,7 @@ class Split:
         images[0].save("TempGIFs/"+n+'.gif',save_all=True, append_images=images[1:], optimize=False, duration=30, loop=0)
         time_taken=time.time()-start_time
 
-    def printReachableSetAll(self,s1,s2,n):
+    def printReachableSetAll(self,s1,s2,flow,n):
         name=n
         nameU=n
         intervalPlot=INTERVAL
@@ -1430,13 +1430,13 @@ class Split:
         print(n)
         print("-----------------\n\n")
 
-        (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
-        (X2,Y2)=Visualization(s1,s2,ORS_compact_zono).getPlotsLineFine()
-        (X3,Y3)=Visualization(s1,s2,ORS_compact_interval).getPlotsLineFine()
-        (X4,Y4)=Visualization(s1,s2,ORS).getPlotsLineFine()
-        (X5,Y5)=Visualization(s1,s2,SRS[0]).getPlotsLineFine()
-        lPlots=[[(X5,Y5)],[X1,Y1,X2,Y2,X3,Y3,X4,Y4]]
-        images.append(Visualization.getPlotAll(s1,s2,lPlots,name+"_0"))
+        #(X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        #(X2,Y2)=Visualization(s1,s2,ORS_compact_zono).getPlotsLineFine()
+        #(X3,Y3)=Visualization(s1,s2,ORS_compact_interval).getPlotsLineFine()
+        #(X4,Y4)=Visualization(s1,s2,ORS).getPlotsLineFine()
+        #(X5,Y5)=Visualization(s1,s2,SRS[0]).getPlotsLineFine()
+        #lPlots=[[(X5,Y5)],[X1,Y1,X2,Y2,X3,Y3,X4,Y4]]
+        #images.append(Visualization.getPlotAll(s1,s2,lPlots,name+"_0"))
 
         while (t<=self.T):
             sys.stdout.write('\r')
@@ -1474,12 +1474,12 @@ class Split:
                 lst=Sampling.getPlotsLineFine(s1,s2,SRS)
                 lPlots=[lst,[X1,Y1,X2,Y2,X3,Y3,X4,Y4]]
                 name=n+"_"+str(t)
-                images.append(Visualization.getPlotAll(s1,s2,lPlots,name))
+                images.append(Visualization.getPlotAll(s1,s2,lPlots,flow,name))
 
             t=t+1
 
         print("\n")
-        images[0].save("GIFs/"+n+'.gif',save_all=True, append_images=images[1:], optimize=False, duration=250, loop=0)
+        #images[0].save("GIFs/"+n+'.gif',save_all=True, append_images=images[1:], optimize=False, duration=250, loop=0)
         print("----Timining Details for "+n+"----")
         print("Without Reduction: ",time_taken_interval)
         print("With Reduction (Zono): ",time_taken_reduction_zono)

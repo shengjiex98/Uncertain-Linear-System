@@ -72,7 +72,7 @@ class DriverRM:
         ])
         P=[(-1,1),(-1,1),(1,1)]
         rs=(C,V,P)
-        T=10
+        T=4
         th1=0
         th2=2
         name="DcConv"
@@ -80,14 +80,15 @@ class DriverRM:
         P_unsafe=[(2,3),(-1,1),(1,1)]
         unsafe=(C,V,P_unsafe)
         rm=RobustMetric(A,cells)
-        metric=rm.getRobustMetric(rs,T,unsafe)
-        print(metric)
+        #metric=rm.getRobustMetric(rs,T,unsafe)
+        rm.compareHeus(100,rs,T)
+        #print(metric)
 
     def holesCXc():
         dynA=Benchmarks.HolesCXc.A
         dynB=Benchmarks.HolesCXc.B
         A=DriverRM.createMatrix(dynA,dynB,mode,h)
-        cells=[(0,3),(1,2),(3,2),(4,3)]
+        cells=[(0,3),(1,2),(3,2),(4,3),(5,5),(9,9)]
         cells=[]
         for i in range(10):
             for j in range(10):
@@ -115,8 +116,9 @@ class DriverRM:
         P_unsafe=[(-1,1),(-1,1),(1,1),(-1,1),(-1,1),(1,1),(1,1),(1,1),(1,1),(1,1)]
         unsafe=(C,V,P_unsafe)
         rm=RobustMetric(A,cells)
-        metric=rm.getRobustMetric(rs,T,unsafe)
-        print(metric)
+        #metric=rm.getRobustMetric(rs,T,unsafe)
+        #print(metric)
+        rm.compareHeus(1000000,rs,T)
         #sp2.printReachableSetAll(th1,th2,name+"_Org")
 
     def acc():
@@ -134,7 +136,7 @@ class DriverRM:
         ])
         P=[(0,35),(5,50),(0,35),(1,1)]
         rs=(C,V,P)
-        T=10
+        T=50
         th1=0
         th2=1
         name="ACC"
@@ -142,8 +144,9 @@ class DriverRM:
         P_unsafe=[(40,45),(5,50),(0,35),(1,1)]
         unsafe=(C,V,P_unsafe)
         rm=RobustMetric(A,cells)
-        metric=rm.getRobustMetric(rs,T,unsafe)
-        print(metric)
+        #metric=rm.getRobustMetric(rs,T,unsafe)
+        rm.compareHeus(20000,rs,T)
+        #print(metric)
 
     def laneChange():
         dynA=Benchmarks.LaneChange.A
@@ -162,7 +165,7 @@ class DriverRM:
         ])
         P=[(0,50),(3,3.5),(0,0),(20,30),(0,0),(0,0),(1,1)]
         rs=(C,V,P)
-        T=10
+        T=50
         th1=0
         th2=1
         start=0
@@ -173,14 +176,15 @@ class DriverRM:
         P_unsafe=[(52,60),(3,3.5),(0,0),(20,30),(0,0),(0,0),(1,1)]
         unsafe=(C,V,P_unsafe)
         rm=RobustMetric(A,cells)
-        metric=rm.getRobustMetric(rs,T,unsafe)
+        #metric=rm.getRobustMetric(rs,T,unsafe)
+        rm.compareHeus(20,rs,T)
         print(metric)
 
     def pkpd2():
         dynA=Benchmarks.PKPD2.A
         dynB=Benchmarks.PKPD2.B
         A=DriverRM.createMatrix(dynA,dynB,mode,h)
-        cells=[(0,4)]
+        cells=[(0,4),(0,0)]
         C=[5,5,5,5,5]
         V=np.array([
         [1,0,0,0,0],
@@ -191,13 +195,14 @@ class DriverRM:
         ])
         P=[(1,6),(0,10),(0,10),(1,8),(0,200)]
         rs=(C,V,P)
-        T=10
+        T=30
         name="PKPD2"
         print(">>>>>>>>>",name,"<<<<<<<<<\n\n")
         P_unsafe=[(7,9),(0,10),(0,10),(1,8),(0,200)]
         unsafe=(C,V,P_unsafe)
         rm=RobustMetric(A,cells)
-        metric=rm.getRobustMetric(rs,T,unsafe)
+        #metric=rm.getRobustMetric(rs,T,unsafe)
+        rm.compareHeus(20,rs,T)
         print(metric)
         #sp2=Split(A,E,rs,T)
         #sp2.printReachableSetAll(th1,th2,name+"_Org")
@@ -225,9 +230,10 @@ class DriverRM:
         P_unsafe=[(1.2,1.7),(-0.1,0.1)]
         unsafe=(C,V,P_unsafe)
         rm=RobustMetric(A,cells)
-        metric=rm.getRobustMetric(rs,T,unsafe)
+        #metric=rm.getRobustMetric(rs,T,unsafe)
+        rm.compareHeus(20,rs,T)
         print(metric)
 
 
 
-DriverRM.giradI()
+DriverRM.pkpd2()
