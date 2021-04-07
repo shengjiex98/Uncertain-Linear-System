@@ -15,7 +15,7 @@ import time
 import math
 import random
 
-from pypolycontain.lib.zonotope import zonotope,zonotope_order_reduction_outer,zonotope_distance_cocenter
+#from pypolycontain.lib.zonotope import zonotope,zonotope_order_reduction_outer,zonotope_distance_cocenter
 from PIL import Image
 
 from VisualizationReachSet import *

@@ -9,6 +9,7 @@ Documentation: Not yet available. (TODO)
 from SplitMet import *
 from BloatAPI import *
 from OrderUncertainties import *
+import matplotlib.pyplot as plt
 
 class SplitBloat:
     '''

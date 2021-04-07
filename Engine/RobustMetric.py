@@ -7,6 +7,9 @@ from OrderUncertainties import *
 from SplitMet import *
 from VisualizationReachSet import *
 
+from BloatAPI import *
+from Consolidated import *
+
 class RobustMetric:
     '''
     Compute the robustness metric of a given linear uncertain
@@ -17,7 +20,7 @@ class RobustMetric:
         self.A=A # Linear system (without perturbation)
         self.cells=cells
 
-    def distributePerturbation(self,p,choice=2):
+    def distributePerturbation(self,p,choice=3):
         '''
         Given a perturbation budget `p`, disribute it in the cells
         mentioned in `self.cells`
@@ -113,7 +116,7 @@ class RobustMetric:
         sm=0
         for i in self.cells:
             if sensitivityMat[i]==0:
-                sensitivityMat[i]=0.1
+                sensitivityMat[i]=1e-7
             sm+=float(1/sensitivityMat[i])
 
         for i in range(len(self.cells)):
@@ -254,8 +257,8 @@ class RobustMetric:
             - if unsafe:
                 break
         '''
-        p=10000
-        delta=100
+        p=0.1
+        delta=2
 
         it=1
 
@@ -272,12 +275,12 @@ class RobustMetric:
                 t_taken=time.time()-t_taken
                 if True:
                     print("* Number of iterations: ",it)
-                    print("* Total Perturbation: ",p-delta)
+                    print("* Total Perturbation: ",p/delta)
                     print("* Total Time Taken: ",t_taken)
                 Visualization.displayRSnUnsafe(RS,unsafe,th1=0,th2=1,name="RS")
-                return ((p-delta),Er)
+                return ((p/delta),Er)
             #Visualization.displayRSnUnsafe(RS,unsafe,th1=0,th2=1,name="RS")
-            p+=delta
+            p*=delta
             it+=1
 
         return -404
@@ -295,6 +298,63 @@ class RobustMetric:
         RS_eq=sp3.getReachableSetAll()
 
         Visualization.displayCompHeu(RS_lin,RS_har,RS_eq,th1=0,th2=1,name="Heu")
+
+    def getRobustMetricAll(self,IS,t,unsafe):
+        '''
+        Given initial set, unsafe set: return the robustness metric
+
+        # Algorithm:
+        - Keep increasing p:
+            - \Lambda=self.distributePerturbation(p)
+            - if unsafe:
+                break
+        '''
+        p=0.1
+        delta=2
+
+        it=1
+
+        t_taken=time.time()
+        er_dict={'lin':[],'har':[],'eq':[]}
+        fg_lin=True
+        fg_har=True
+        fg_eq=True
+        while True:
+            Er_lin=self.distributePerturbation(p,choice=1)
+            Er_har=self.distributePerturbation(p,choice=2)
+            Er_eq=self.distributePerturbation(p,choice=3)
+            sp_lin=Split(self.A,Er_lin,IS,t)
+            sp_har=Split(self.A,Er_har,IS,t)
+            sp_eq=Split(self.A,Er_eq,IS,t)
+            RS_lin=sp_lin.getReachableSetAll()
+            RS_har=sp_har.getReachableSetAll()
+            RS_eq=sp_eq.getReachableSetAll()
+            fg_intersect_lin=RobustMetric.checkIntersection(RS_lin,unsafe)
+            fg_intersect_har=RobustMetric.checkIntersection(RS_har,unsafe)
+            fg_intersect_eq=RobustMetric.checkIntersection(RS_eq,unsafe)
+            if fg_lin==True and fg_intersect_lin==True:
+                matE=SplitBloat(Er_lin,[],0,"c").matrixify(self.A)
+                nrm=BloatKagstrom(self.A,matE).intervalNorm(p='fast')
+                er_dict['lin']=[(p/delta),nrm,Er_lin]
+                fg_lin=False
+            if fg_har==True and fg_intersect_har==True:
+                matE=SplitBloat(Er_har,[],0,"c").matrixify(self.A)
+                nrm=BloatKagstrom(self.A,matE).intervalNorm(p='fast')
+                er_dict['har']=[(p/delta),nrm,Er_har]
+                fg_har=False
+            if fg_eq==True and fg_intersect_eq==True:
+                matE=SplitBloat(Er_eq,[],0,"c").matrixify(self.A)
+                nrm=BloatKagstrom(self.A,matE).intervalNorm(p='fast')
+                er_dict['eq']=[(p/delta),nrm,Er_eq]
+                fg_eq=False
+            if fg_eq==False and fg_har==False and fg_lin==False:
+                return er_dict
+            p*=delta
+            it+=1
+
+        return -404
+
+
 
 
 # Test Case
