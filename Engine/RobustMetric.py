@@ -68,7 +68,7 @@ class RobustMetric:
         sm=0
         for i in self.cells:
             if sensitivityMat[i]==0:
-                sensitivityMat[i]=1e-7
+                sensitivityMat[i]=1e-20
             sm+=sensitivityMat[i]
         sortedCells=self.sortCells(sensitivityMat)
         for i in range(len(sortedCells)):
@@ -116,7 +116,7 @@ class RobustMetric:
         sm=0
         for i in self.cells:
             if sensitivityMat[i]==0:
-                sensitivityMat[i]=1e-7
+                sensitivityMat[i]=1e-20
             sm+=float(1/sensitivityMat[i])
 
         for i in range(len(self.cells)):
@@ -309,8 +309,8 @@ class RobustMetric:
             - if unsafe:
                 break
         '''
-        p=0.1
-        delta=2
+        p=10
+        delta=3
 
         it=1
 
