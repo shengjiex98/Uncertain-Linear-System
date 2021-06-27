@@ -28,7 +28,7 @@ import Profiling
 BIGM=0.001
 EPSILON=1e-10
 PRED_EP=1e-3
-INTERVAL=100
+INTERVAL=1000000
 RED_INT_ZONO=35
 RED_INT_INTRVL=35
 SAMPLES=20
@@ -587,13 +587,11 @@ class Split:
 
         return starNew
 
-    def printReachableSet(self,s1,s2,n):
+    def getReachableSet(self):
         '''
         Implements the main algorithm of splitting the effect of the constant and
         the uncertain part
         '''
-        name=n
-        nameU=n
         #intervalPlot=math.ceil(self.T/7)
         intervalPlot=INTERVAL
         lPlots=[]
@@ -609,24 +607,21 @@ class Split:
         SRS=[self.Theta]
         U=cu.computeUI_Interval(ORS)
         t=1
-        print()
-        print(n)
-        print("-----------------\n\n")
 
-        (X,Y)=Visualization(s1,s2,SRS[0]).getPlotsLineFine()
+        '''(X,Y)=Visualization(s1,s2,SRS[0]).getPlotsLineFine()
         (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
         (X2,Y2)=Visualization(s1,s2,ORS_old).getPlotsLineFine()
         (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
         #lPlots.append((X1,Y1,X2,Y2,X3,Y3))
         lPlots=[([(X,Y)],X1,Y1,X2,Y2,X3,Y3)]
         lPlots3=(X2,Y2,X3,Y3)
-        Visualization.displayPlot(s1,s2,lPlots,name+"_0")
-        Visualization.displayPlotSingle(s1,s2,lPlots3,nameU+"U_0")
+        #Visualization.displayPlot(s1,s2,lPlots,name+"_0")
+        #Visualization.displayPlotSingle(s1,s2,lPlots3,nameU+"U_0")'''
 
         while (t<=self.T):
-            sys.stdout.write('\r')
-            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
-            sys.stdout.flush()
+            #sys.stdout.write('\r')
+            #sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            #sys.stdout.flush()
             RS=CompU.prodMatStars(self.A,RS)
 
             SRS=sample.prodMatStars(SRS)
@@ -635,7 +630,7 @@ class Split:
 
             ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
 
-            if t%intervalPlot==0:
+            '''if t%intervalPlot==0:
                 lst=Sampling.getPlotsLineFine(s1,s2,SRS)
                 (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
                 (X2,Y2)=Visualization(s1,s2,ORS_old).getPlotsLineFine()
@@ -645,7 +640,7 @@ class Split:
                 name=n+"_"+str(t)
                 nameU=n+"U_"+str(t)
                 Visualization.displayPlot(s1,s2,lPlots,name)
-                Visualization.displayPlotSingle(s1,s2,lPlots2,nameU)
+                #Visualization.displayPlotSingle(s1,s2,lPlots2,nameU)'''
 
 
             '''print("Center of ORS: ",ORS[0])
@@ -657,10 +652,11 @@ class Split:
 
             U=cu.computeUI_Interval(ORS)
             t=t+1
-        print("\n")
-        time_taken=time.time()-start_time
-        print("Time Taken: ",time_taken)
-        print("")
+        #print("\n")
+        #time_taken=time.time()-start_time
+        #print("Time Taken: ",time_taken)
+        #print("")
+        return ORS
 
     def printReachableSetCompactOld(self,s1,s2,n):
         '''
