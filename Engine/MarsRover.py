@@ -78,7 +78,19 @@ class Rover:
         VisualizeMarsRover.vizMarsTrajRS(self.obs,self.image,spline_path,path_mpc,path,rsList)
 
 
+    def getCellOrder(self):
+        '''
+        Get cell orders
+        '''
+        v=0.1
+        phi=0.1
+        delta=0.1
+        cellOrder=BicycleModel.getCellOrderBasedError(v,phi,delta)
+        return cellOrder
+
+
 
 if True:
     rov=Rover()
-    rov.getReachSets()
+    #rov.getReachSets()
+    rov.getCellOrder()

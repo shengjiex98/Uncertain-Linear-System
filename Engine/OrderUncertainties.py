@@ -41,6 +41,7 @@ class OrdUnc:
         Returns an ordering of the cells based on
         decreasing sensitivity to perturbation
         '''
+        ordMat=self.getSVSentivity()
         ord=OrdUnc.sortMat(ordMat)
         return ord
 

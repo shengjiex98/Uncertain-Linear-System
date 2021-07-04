@@ -640,13 +640,14 @@ class VisualizeMarsRover:
 
         plt.plot(spline_path[0], spline_path[1], c='black', marker='o', linewidth=1, markersize=1, linestyle='-', alpha=1.0)
 
-        for rs in traj:
-            (X,Y)=VisualizeMarsRover.getPlotsLineFine(rs,th1,th2)
-            fgSafe=StarOp.checkIntersectionPoints(rs,obs)
-            if fgSafe==True:
-                plt.plot(X,Y,'r.',alpha=0.05)
-            else:
-                plt.plot(X,Y,'b.',alpha=0.05)
+        for rsList in traj:
+            for rs in rsList:    
+                (X,Y)=VisualizeMarsRover.getPlotsLineFine(rs,th1,th2)
+                fgSafe=StarOp.checkIntersectionPoints(rs,obs)
+                if fgSafe==True:
+                    plt.plot(X,Y,'r.',alpha=0.05)
+                else:
+                    plt.plot(X,Y,'b.',alpha=0.05)
 
         # point cloud obstacle
         plt.scatter(obs[:,0], obs[:,1], c='red', s=2)

@@ -10,6 +10,7 @@ import math
 
 from Parameters import *
 from SplitMet import *
+from OrderUncertainties import *
 
 
 class BicycleModel:
@@ -91,7 +92,7 @@ class BicycleModel:
         B[3, 2] = - DT * v * delta / (WB * math.cos(delta) ** 2) # For C[3]
         B[4, 2] = 1
 
-        p=220
+        p=20
         Er={
         #(0,0): [1-(p/100),1+(p/100)],
         (0,2): [1-(p/100),1+(p/100)],
@@ -134,12 +135,12 @@ class BicycleModel:
                 P[4]=(A[i],A[i]) # Update a
                 P[5]=(D[i],D[i]) # Update \delta
                 initialSet=(C,V,P)
-                reachS=BicycleModel.getRSPoint(initialSet)
-                rsList.append(reachS)
+                reachSList=BicycleModel.getRSPoints(initialSet)
+                rsList.append(reachSList)
 
         return rsList
 
-    def getRSPoint(initialSet):
+    def getRSPoints(initialSet):
         C=initialSet[0]
         V=initialSet[1]
         P=initialSet[2]
@@ -148,6 +149,27 @@ class BicycleModel:
         delta=P[5][0]
         (dynA,dynB,Er)=BicycleModel.getDynamics(v,phi,delta)
         A=BicycleModel.createMatrix(dynA,dynB,'+',1)
-        rs=Split(A,Er,initialSet,1)
-        reachS=rs.getReachableSet()
-        return reachS
+        reachS=initialSet
+        reachSList=[initialSet]
+        for i in range(RS_STEPS+1):
+            rs=Split(A,Er,reachS,1)
+            reachS=rs.getReachableSet()
+            reachSList.append(reachS)
+        return reachSList
+
+    def getCellOrderBasedError(v,phi,delta):
+        '''
+        Returns cell ordering for the bicycle model
+        '''
+
+        (A,B,Er)=BicycleModel.getDynamics(v,phi,delta)
+        A_club=BicycleModel.createMatrix(A,B,'+',1)
+        cellOrder=OrdUnc(A_club).getOrder()
+
+        if True:
+            np.set_printoptions(precision=3,suppress=True)
+            print(cellOrder)
+            print("\n\n")
+            print(A_club)
+
+        return cellOrder
