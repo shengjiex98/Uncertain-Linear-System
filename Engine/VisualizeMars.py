@@ -641,13 +641,86 @@ class VisualizeMarsRover:
         plt.plot(spline_path[0], spline_path[1], c='black', marker='o', linewidth=1, markersize=1, linestyle='-', alpha=1.0)
 
         for rsList in traj:
-            for rs in rsList:    
+            for rs in rsList:
                 (X,Y)=VisualizeMarsRover.getPlotsLineFine(rs,th1,th2)
                 fgSafe=StarOp.checkIntersectionPoints(rs,obs)
                 if fgSafe==True:
                     plt.plot(X,Y,'r.',alpha=0.05)
                 else:
                     plt.plot(X,Y,'b.',alpha=0.05)
+
+        # point cloud obstacle
+        plt.scatter(obs[:,0], obs[:,1], c='red', s=2)
+
+        for path_xy in mpc_path:
+            path_x = path_xy[0]
+            path_y = path_xy[1]
+
+            plt.plot(path_x, path_y, c='m', marker='o', linewidth=0.5, markersize=1, linestyle=linestyle, alpha=1.0)
+
+        for path in ref_path:
+            x_ref=[p[0] for p in path]
+            y_ref=[p[1] for p in path]
+            plt.scatter(x_ref, y_ref, marker='*', c='m', s=70, alpha=1)
+
+        # start
+        plt.plot(ref_path[0][0][0], ref_path[0][0][1], c='g', marker='o', markersize=7)
+        # end
+        plt.plot(ref_path[-1][-1][0], ref_path[-1][-1][1], c='y', marker='s', markersize=7)
+
+        ax = fig.gca()
+        ax.set_xticks(np.arange(xmin,xmax,50))
+        ax.set_yticks(np.arange(ymin,ymax,50))
+        ax.set_aspect('equal')
+        ax.imshow(terrain_img, cmap='gray')
+        plt.xlim(xmin, xmax)
+        plt.ylim(ymax, ymin)
+        plt.grid()
+        plt.title(title_str)
+
+        if True:
+            plt.savefig(ROVER_RESULTS+fname, dpi=100, bbox_inches='tight')
+            plt.close()
+        else:
+            plt.show()
+
+    def vizMarsTrajRSComp(obs, terrain_img, spline_path, mpc_path, ref_path, trajTop, trajBot, fname="TrajRSComp", xlim=(0,224), ylim=(0,224), title_str="Point Clouds"):
+        '''
+        Modified from: https://bitbucket.org/nakanoya/tasknet-icra2021/src/master/Motion_Planning/utils/visualize_utils.py
+        '''
+        xmin = xlim[0]
+        xmax = xlim[1]
+
+        ymin = ylim[0]
+        ymax = ylim[1]
+
+        fig = plt.figure()
+
+        linestyle = 'solid'
+        color = 'b'
+
+        th1=0
+        th2=1
+
+        plt.plot(spline_path[0], spline_path[1], c='black', marker='o', linewidth=1, markersize=1, linestyle='-', alpha=1.0)
+
+        for rsList in trajTop:
+            for rs in rsList:
+                (X,Y)=VisualizeMarsRover.getPlotsLineFine(rs,th1,th2)
+                fgSafe=StarOp.checkIntersectionPoints(rs,obs)
+                if fgSafe==True:
+                    plt.plot(X,Y,'r.',alpha=0.05)
+                else:
+                    plt.plot(X,Y,'b.',alpha=0.05)
+
+        for rsList in trajBot:
+            for rs in rsList:
+                (X,Y)=VisualizeMarsRover.getPlotsLineFine(rs,th1,th2)
+                fgSafe=StarOp.checkIntersectionPoints(rs,obs)
+                if fgSafe==True:
+                    plt.plot(X,Y,'m.',alpha=0.1)
+                else:
+                    plt.plot(X,Y,'g.',alpha=0.1)
 
         # point cloud obstacle
         plt.scatter(obs[:,0], obs[:,1], c='red', s=2)

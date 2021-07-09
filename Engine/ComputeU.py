@@ -53,8 +53,8 @@ class CompU:
         for i in range(self.n):
             for j in range(self.n):
                 if (i,j) in self.Er:
-                    a=float(self.A[i][j]*self.Er[(i,j)][0])
-                    b=float(self.A[i][j]*self.Er[(i,j)][1])
+                    a=float(self.A[i][j]+self.Er[(i,j)][0])
+                    b=float(self.A[i][j]+self.Er[(i,j)][1])
                     c=(a+b)/2
                     Ac[i][j]=c
                 else:
@@ -552,8 +552,8 @@ class CompU:
             for j in range(self.n):
                 A_tilde[i][j]=self.A[i][j]
         for key in self.Er:
-            a=float(self.Er[key][0]*self.A[key[0]][key[1]])
-            b=float(self.Er[key][1]*self.A[key[0]][key[1]])
+            a=float(self.Er[key][0]+self.A[key[0]][key[1]])
+            b=float(self.Er[key][1]+self.A[key[0]][key[1]])
             #print(a,b)
             #print(mp.mpi(float(a),float(b)))
             #A_tilde[key[0]][key[1]]=mp.mpi(float(self.Er[key][0]*self.A[key[0]][key[1]]),float(self.Er[key][1]*self.A[key[0]][key[1]]))

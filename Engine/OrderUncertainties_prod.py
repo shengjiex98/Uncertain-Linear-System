@@ -144,14 +144,16 @@ class OrdUnc:
         dSig=[]
 
         max=-9999
+        prodQ=1
         for j in range(self.n):
             uj=uh[:,j]
             vj=v[j,:].reshape(self.n,1)
             q=np.matmul(np.matmul(uj,B),vj)
+            prodQ=prodQ*q
             if q.real[0]>max:
                 max=q.real[0]
 
-        return max
+        return prodQ
 
     def multSig(self,B):
 
@@ -198,11 +200,13 @@ class OrdUnc:
             uSigH=uSig.conjugate().transpose()
             vSigH=vSig.conjugate().transpose()
             Bh=B.conjugate().transpose()
+            prodQ=1
             if sig>0:
                 T=(np.matmul(np.matmul(vSigH,Bh),uSig))+(np.matmul(np.matmul(uSigH,B),vSig))
                 (eVals,w)=LA.eig(T)
                 for eig in eVals:
                     q=sig+((EPSILON*(eig))/2)+(EPSILON*EPSILON)
+                    prodQ=prodQ*q
                     #print("\tq: ",q)
                     if q>max:
                         max=q
@@ -212,11 +216,12 @@ class OrdUnc:
                 (eVals,w)=LA.eig(T)
                 for eig in eVals:
                     q=EPSILON*(math.sqrt(eig))+(EPSILON*EPSILON)
+                    prodQ=prodQ*q
                     #print("\tq: ",q)
                     if q>max:
                         max=q
 
-        return max
+        return prodQ
 
     def sortMat(A):
 

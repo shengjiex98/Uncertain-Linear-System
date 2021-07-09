@@ -131,9 +131,9 @@ class BicycleModel:
                 P[0]=(X[i],X[i]) # Update x
                 P[1]=(Y[i],Y[i]) # Update y
                 P[2]=(Vel[i],Vel[i]) # Update v
-                P[3]=(yawList[i],yawList[i]) # Update \phi
+                P[3]=(yawList[i],yawList[i]) # Update /phi
                 P[4]=(A[i],A[i]) # Update a
-                P[5]=(D[i],D[i]) # Update \delta
+                P[5]=(D[i],D[i]) # Update /delta
                 initialSet=(C,V,P)
                 reachSList=BicycleModel.getRSPoints(initialSet)
                 rsList.append(reachSList)
@@ -157,6 +157,56 @@ class BicycleModel:
             reachSList.append(reachS)
         return reachSList
 
+    def getReachSetsEr(X, Y, yawList, Vel, D, A, Er):
+        '''
+        Pickle a set of Robot-Cloud pair, given a initial set,
+        and U
+        '''
+        rcPair={}
+        rbt_all=[]
+        cld_all=[]
+        dim=7
+        C=[0]*dim
+        V=np.identity(dim)
+
+        rg=int(math.floor(len(D)/((len(D)*PER_COVERAGE)/100)))
+        listT=list(range(1,len(D),rg))
+        listT.append(len(D)-1)
+
+        rsList=[]
+        for i in range(len(D)):
+            if (i in listT):
+                print(i)
+                P=[(1,1)]*dim
+                P[0]=(X[i],X[i]) # Update x
+                P[1]=(Y[i],Y[i]) # Update y
+                P[2]=(Vel[i],Vel[i]) # Update v
+                P[3]=(yawList[i],yawList[i]) # Update /phi
+                P[4]=(A[i],A[i]) # Update a
+                P[5]=(D[i],D[i]) # Update /delta
+                initialSet=(C,V,P)
+                reachSList=BicycleModel.getRSPointsEr(initialSet,Er)
+                rsList.append(reachSList)
+
+        return rsList
+
+    def getRSPointsEr(initialSet,Er):
+        C=initialSet[0]
+        V=initialSet[1]
+        P=initialSet[2]
+        v=P[2][0]
+        phi=P[3][0]
+        delta=P[5][0]
+        (dynA,dynB,e)=BicycleModel.getDynamics(v,phi,delta)
+        A=BicycleModel.createMatrix(dynA,dynB,'+',1)
+        reachS=initialSet
+        reachSList=[initialSet]
+        for i in range(RS_STEPS+1):
+            rs=Split(A,Er,reachS,1)
+            reachS=rs.getReachableSet()
+            reachSList.append(reachS)
+        return reachSList
+
     def getCellOrderBasedError(v,phi,delta):
         '''
         Returns cell ordering for the bicycle model
@@ -164,12 +214,18 @@ class BicycleModel:
 
         (A,B,Er)=BicycleModel.getDynamics(v,phi,delta)
         A_club=BicycleModel.createMatrix(A,B,'+',1)
-        cellOrder=OrdUnc(A_club).getOrder()
+        projMat=np.zeros(A_club.shape)
+        projMat[1][1]=1
+        projMat[0][0]=1
+        A_club_proj=np.matmul(projMat,A_club)
+        cellOrder=OrdUnc(A_club_proj).getOrder()
 
         if True:
             np.set_printoptions(precision=3,suppress=True)
             print(cellOrder)
             print("\n\n")
             print(A_club)
+            print("\n")
+            print(A_club_proj)
 
         return cellOrder
