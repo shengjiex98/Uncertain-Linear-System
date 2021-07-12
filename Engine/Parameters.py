@@ -6,3 +6,5 @@ MARS_POINT_CLOUD=PROJECT_ROOT+'/mars_data/mars_point_cloud.npz'
 PER_COVERAGE=100
 ENV_ID=1
 RS_STEPS=1
+
+PKPD_RESULTS=PROJECT_ROOT+'/pkpd_results/'

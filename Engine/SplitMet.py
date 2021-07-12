@@ -658,6 +658,82 @@ class Split:
         #print("")
         return ORS
 
+    def getReachableSetAllList(self):
+        '''
+        Implements the main algorithm of splitting the effect of the constant and
+        the uncertain part
+        '''
+        #intervalPlot=math.ceil(self.T/7)
+        intervalPlot=INTERVAL
+        lPlots=[]
+        add_stars=0
+        prod_mat_stars=0
+        comp_U=0
+        start_time=time.time()
+        cu=CompU(self.A,self.Er)
+        sample=Sampling(self.A,self.Er)
+        ORS=self.Theta
+        ORS_old=self.Theta
+        RS=self.Theta
+        SRS=[self.Theta]
+        U=cu.computeUI_Interval(ORS)
+        t=1
+
+        ORS_List=[ORS]
+        RS_List=[RS]
+
+        '''(X,Y)=Visualization(s1,s2,SRS[0]).getPlotsLineFine()
+        (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+        (X2,Y2)=Visualization(s1,s2,ORS_old).getPlotsLineFine()
+        (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+        #lPlots.append((X1,Y1,X2,Y2,X3,Y3))
+        lPlots=[([(X,Y)],X1,Y1,X2,Y2,X3,Y3)]
+        lPlots3=(X2,Y2,X3,Y3)
+        #Visualization.displayPlot(s1,s2,lPlots,name+"_0")
+        #Visualization.displayPlotSingle(s1,s2,lPlots3,nameU+"U_0")'''
+
+        while (t<=self.T):
+            #sys.stdout.write('\r')
+            #sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            #sys.stdout.flush()
+            RS=CompU.prodMatStars(self.A,RS)
+            RS_List.append(RS)
+
+            SRS=sample.prodMatStars(SRS)
+            ORS_old=ORS
+            U_old=U
+
+            ORS=CompU.addStars(CompU.prodMatStars(self.Ac,ORS),U)
+            ORS_List.append(ORS)
+
+            '''if t%intervalPlot==0:
+                lst=Sampling.getPlotsLineFine(s1,s2,SRS)
+                (X1,Y1)=Visualization(s1,s2,RS).getPlotsLineFine()
+                (X2,Y2)=Visualization(s1,s2,ORS_old).getPlotsLineFine()
+                (X3,Y3)=Visualization(s1,s2,ORS).getPlotsLineFine()
+                lPlots=[(lst,X1,Y1,X2,Y2,X3,Y3)]
+                lPlots2=(X2,Y2,X3,Y3)
+                name=n+"_"+str(t)
+                nameU=n+"U_"+str(t)
+                Visualization.displayPlot(s1,s2,lPlots,name)
+                #Visualization.displayPlotSingle(s1,s2,lPlots2,nameU)'''
+
+
+            '''print("Center of ORS: ",ORS[0])
+            print("Vector of ORS: ")
+            print(ORS[1])
+            print("Predicate of ORS: ",ORS[2])
+            print("\n\n")'''
+
+
+            U=cu.computeUI_Interval(ORS)
+            t=t+1
+        #print("\n")
+        #time_taken=time.time()-start_time
+        #print("Time Taken: ",time_taken)
+        #print("")
+        return (ORS_List,RS_List)
+
     def printReachableSetCompactOld(self,s1,s2,n):
         '''
         Implements the main algorithm of splitting the effect of the constant and
