@@ -649,9 +649,6 @@ class VisualizeMarsRover:
                 else:
                     plt.plot(X,Y,'b.',alpha=0.05)
 
-        # point cloud obstacle
-        plt.scatter(obs[:,0], obs[:,1], c='red', s=2)
-
         for path_xy in mpc_path:
             path_x = path_xy[0]
             path_y = path_xy[1]
@@ -667,6 +664,9 @@ class VisualizeMarsRover:
         plt.plot(ref_path[0][0][0], ref_path[0][0][1], c='g', marker='o', markersize=7)
         # end
         plt.plot(ref_path[-1][-1][0], ref_path[-1][-1][1], c='y', marker='s', markersize=7)
+
+        # point cloud obstacle
+        plt.scatter(obs[:,0], obs[:,1], c='red', s=2)
 
         ax = fig.gca()
         ax.set_xticks(np.arange(xmin,xmax,50))

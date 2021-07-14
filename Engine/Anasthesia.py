@@ -111,8 +111,14 @@ class AnasthesiaPKPD:
         (dynA,dynB)=AnasthesiaPKPD.getDynamics()
         A=AnasthesiaPKPD.createMatrix(dynA,dynB,'.',0.01)
 
+        print(">> STATUS: Computing Reachable Sets . . .")
+        time_taken=time.time()
         rs=Split(A,Er,initialSet,T)
         (reachORS,reachRS)=rs.getReachableSetAllList()
+        time_taken=time.time()-time_taken
+        print("\tTime Taken: ",time_taken)
+        print(">> STATUS: Reachable Sets Computed!")
+        #exit(0)
 
         VisualizePKPD.vizC1C2(reachRS,reachORS)
 
@@ -177,7 +183,71 @@ class AnasthesiaPKPD:
 
         VisualizePKPD.vizCe(reachRS,reachORS)
 
+    def getCellOrder():
+        (A,B)=AnasthesiaPKPD.getDynamics()
+        A_club=AnasthesiaPKPD.createMatrix(A,B,'.',0.01)
+        print(">> STATUS: Applying Cell Ordering Algorithm . . .")
+        time_taken=time.time()
+        projMat=np.zeros(A_club.shape)
+        projMat[1][1]=1
+        projMat[0][0]=0
+        projMat[2][2]=0
+        A_club_proj=np.matmul(projMat,A_club)
+        cellOrder=OrdUnc(A_club_proj).getOrder()
+        time_taken=time.time()-time_taken
+        print("\tTime Taken: ",time_taken)
+        print(">> STATUS: Applying Cell Ordering Algorithm . . .")
+        print(cellOrder)
+
+    def getTopBotErrors():
+        '''
+        Based on the ouput we got from `self.getCellOrder()`,
+        some perturbation of the matrix were picked.
+        '''
+        p=2
+
+        Er_top={
+        (1,0): [1-(p/100),1+(p/100)],
+        (1,1): [1-(p/100),1+(p/100)]
+        }
+
+        Er_bot={
+        (2,0): [1-(p/100),1+(p/100)],
+        (2,2): [1-(p/100),1+(p/100)]
+        }
+
+        return Er_top,Er_bot
+
+    def getReachSetsTopBot():
+        '''
+        Based on Errors obtained from cell-ordering algorithm, we
+        compare the top and the bottom cells
+        '''
+        (Er_top,Er_bot)=AnasthesiaPKPD.getTopBotErrors()
+        C=[0,0,0,0,0]
+        V=np.array([
+        [1,0,0,0,0],
+        [0,1,0,0,0],
+        [0,0,1,0,0],
+        [0,0,0,1,0],
+        [0,0,0,0,1],
+        ])
+        P=[(2,4),(4,6),(4,6),(3,5),(0,10)]
+        initialSet=(C,V,P)
+        T=20
+
+        (dynA,dynB)=AnasthesiaPKPD.getDynamics()
+        A=AnasthesiaPKPD.createMatrix(dynA,dynB,'.',0.01)
+
+        rsTop=Split(A,Er_top,initialSet,T)
+        (reachORSTop,reachRSTop)=rsTop.getReachableSetAllList()
+
+        rsBot=Split(A,Er_bot,initialSet,T)
+        (reachORSBot,reachRSBot)=rsBot.getReachableSetAllList()
+
+        VisualizePKPD.vizComp(reachORSTop,reachORSBot)
 
 
-if True:
-    AnasthesiaPKPD.getReachSetC1C2()
+
+if False:
+    AnasthesiaPKPD.getCellOrder()

@@ -92,7 +92,7 @@ class BicycleModel:
         B[3, 2] = - DT * v * delta / (WB * math.cos(delta) ** 2) # For C[3]
         B[4, 2] = 1
 
-        p=20
+        p=10
         Er={
         #(0,0): [1-(p/100),1+(p/100)],
         (0,2): [1-(p/100),1+(p/100)],

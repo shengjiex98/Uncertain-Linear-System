@@ -449,3 +449,40 @@ class VisualizePKPD:
         #plt.legend()
         plt.savefig(PKPD_RESULTS+"/"+fname, dpi=100, bbox_inches='tight')
         plt.close()
+
+    def vizComp(RS_Top,RS_bot,fname="viz_compare"):
+        th1=1
+        th2=2
+
+        RS_XY_List=[]
+        ORS_XY_List=[]
+
+        plt.axes()
+        plt.autoscale(enable=True, axis='both', tight=False)
+        plt.xlabel("Time")
+        plt.ylabel("C1")
+        plt.xlim((-1,21))
+        plt.ylim((-2,12))
+
+        plt.plot([-4, 25], [0, 0], color='r', linestyle='--', linewidth=1)
+        plt.plot([-4, 25], [10, 10], color='r', linestyle='--', linewidth=1)
+        #plt.plot([-4, 12], [10, 10], color='r', linestyle='--', linewidth=1)
+        #plt.plot([0, 0], [-2, 12], color='r', linestyle='--', linewidth=1)
+        #plt.plot([10, 10], [-2, 12], color='r', linestyle='--', linewidth=1)
+
+        ct=0
+        for rs in RS_Top:
+            (X,Y)=VisualizePKPD.getPlotsLineFine(rs,th1,th2)
+            plt.plot([ct,ct],[min(X),max(X)],color='b', linestyle='-', linewidth=10)
+            ct=ct+1
+
+        ct=0
+        for rs in RS_bot:
+            (X,Y)=VisualizePKPD.getPlotsLineFine(rs,th1,th2)
+            plt.plot([ct,ct],[min(X),max(X)],color='cyan', linestyle='-', linewidth=4)
+            ct=ct+1
+
+
+        #plt.legend()
+        plt.savefig(PKPD_RESULTS+"/"+fname, dpi=100, bbox_inches='tight')
+        plt.close()

@@ -78,7 +78,13 @@ class Rover:
             path_mpc.append((x,y))
         VisualizeMarsRover.vizMarsTrajMPC(self.obs,self.image,path,spline_path,path_mpc)
 
+        print(">> STATUS: Computing Reachable Sets . . .")
+        time_taken=time.time()
         rsList=BicycleModel.getReachSets(X, Y, yawList, V, D, A)
+        time_taken=time.time()-time_taken
+        print("\tTime Taken: ",time_taken)
+        print(">> STATUS: Reachable Sets Computed!")
+        #exit(0)
         VisualizeMarsRover.vizMarsTrajRS(self.obs,self.image,spline_path,path_mpc,path,rsList)
 
     def getReachSetsTopBot(self):
@@ -144,7 +150,12 @@ class Rover:
         v=0.1
         phi=0.1
         delta=0.1
+        print(">> STATUS: Computing Cell Order . . .")
+        time_taken=time.time()
         cellOrder=BicycleModel.getCellOrderBasedError(v,phi,delta)
+        time_taken=time.time()-time_taken
+        print("\tTime Taken: ",time_taken)
+        print(">> STATUS: Cell Order Computed!")
         return cellOrder
 
     def getErrors(self):
@@ -152,7 +163,7 @@ class Rover:
         Based on the ouput we got from `self.getCellOrder()`,
         some perturbation of the matrix were picked.
         '''
-        p=20
+        p=10
         Er_top_0={
         (0,4): [1-(p/100),1+(p/100)],
         (0,5): [1-(p/100),1+(p/100)],
