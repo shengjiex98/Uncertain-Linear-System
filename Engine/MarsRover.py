@@ -4,7 +4,7 @@ APIs for Offloading with Mars Rover
 from VisualizeMars import *
 #from RobotCloudModel import *
 from PythonRobotics.PathTracking.model_predictive_speed_and_steer_control.model_predictive_speed_and_steer_control import *
-import sys,os
+import sys,os,copy
 import numpy as np
 import time
 from Parameters import *
@@ -194,8 +194,87 @@ class Rover:
 
         return Er_top,Er_bot
 
+    def getRobustnessMetric(self):
+        '''
+        Returns the Robustness Metric, amount of error
+        it can tolerate
+        '''
+        p=8
+        if self.env_id==2:
+            path=[
+            [(75,25),(52,70),(55,110),
+            (100,100),
+            (70,135),(80,190),(140,200),
+            (136,160),
+            (150,100),(100,50),(85,40)]
+            ]
+        elif self.env_id==0:
+            path=[
+            [(25,50),(85,70),(75,118),(100,142),(71,175),(15,167)]
+            ]
+        elif self.env_id==1:
+            case=5
+            if case==2:
+                path=[
+                [(20,115),(50,125),(100,129),(112,160),(165,170)]
+                ]
+            elif case==3:
+                path=[
+                [(20,115),(65,79),(100,85),(125,128),(165,170)]
+                ]
+            elif case==4:
+                path=[
+                [(20,115),(60,60),(128,76),(165,170)]
+                ]
+            elif case==5:
+                path=[
+                [(20,115),(60,80),(100,80),(120,110),(120,140),(40,115)]
+                ]
+        else:
+            print("Invalid Environment Chosen!")
+            exit(0)
+        #VisualizeMarsRover.vizMarsTraj(self.obs,self.image,path)
+        (T, X, Y, yawList, V, D, A, spline_path) = doMPC(path)
+
+        path_mpc=[]
+        for x,y in zip(X,Y):
+            path_mpc.append((x,y))
+
+        step=0.5
+        print(">> STATUS: Computing Robustness Metric . . .")
+        time_taken=time.time()
+        rsListOld=[]
+        while p<=15:
+            Er={
+            #(0,0): [1-(p/100),1+(p/100)],
+            (0,2): [1-(p/100),1+(p/100)],
+            (0,3): [1-(p/100),1+(p/100)],
+            (0,6): [1-(p/100),1+(p/100)],
+            #(1,1): [1-(p/100),1+(p/100)],
+            (1,2): [1-(p/100),1+(p/100)],
+            (1,3): [1-(p/100),1+(p/100)],
+            (1,6): [1-(p/100),1+(p/100)],
+            }
+            rsList=BicycleModel.getReachSetsEr(X, Y, yawList, V, D, A, Er)
+            safe=BicycleModel.isSafe(rsList,self.obs)
+            if safe==False:
+                p=p-step
+                break;
+            p=p+step
+            rsListOld=copy.copy(rsList)
+        time_taken=time.time()-time_taken
+        print("\tRobustness Metric: ",p)
+        print("\tTime Taken: ",time_taken)
+        print(">> STATUS: Robustness Metric Computed")
+        print(">> STATUS: Visualizing Safe Reachable Sets  . . .")
+        VisualizeMarsRover.vizMarsTrajRS(self.obs,self.image,spline_path,path_mpc,path,rsListOld,fname="RobMetTrajRS")
+        print(">> STATUS: Safe Reachable Sets Visualized!")
+
+
+
 if True:
     rov=Rover()
-    rov.getReachSetsTopBot()
+    #rov.getReachSetsTopBot()
     #rov.getReachSets()
     #rov.getCellOrder()
+    rov.getRobustnessMetric()

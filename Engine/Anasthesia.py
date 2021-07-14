@@ -9,6 +9,7 @@ from Parameters import *
 from SplitMet import *
 from OrderUncertainties import *
 from VisualizePKPD import *
+from StarOperations import *
 
 class AnasthesiaPKPD:
 
@@ -247,7 +248,74 @@ class AnasthesiaPKPD:
 
         VisualizePKPD.vizComp(reachORSTop,reachORSBot)
 
+    def getRobustnessMetric():
+        '''
+        Returns the Robustness Metric
+        '''
+        C=[0,0,0,0,0]
+        V=np.array([
+        [1,0,0,0,0],
+        [0,1,0,0,0],
+        [0,0,1,0,0],
+        [0,0,0,1,0],
+        [0,0,0,0,1],
+        ])
+        P=[(2,4),(3,6),(3,6),(2,4),(2,10)]
+        initialSet=(C,V,P)
+        C_u=[0,0,0,0,0]
+        V_u=np.array([
+        [1,0,0,0,0],
+        [0,1,0,0,0],
+        [0,0,1,0,0],
+        [0,0,0,1,0],
+        [0,0,0,0,1],
+        ])
+        P_u=[(6,60),(-30000000000000,60000000000000),(-30000000000000,60000000000000),(-30000000000000,60000000000000),(-30000000000000,60000000000000)]
+        unsafe1=(C_u,V_u,P_u)
+        P_u_2=[(-60,1.2),(-30000000000000,60000000000000),(-30000000000000,60000000000000),(-30000000000000,60000000000000),(-30000000000000,60000000000000)]
+        unsafe2=(C_u,V_u,P_u_2)
+
+        p=0.1
+        T=20
+
+        (dynA,dynB)=AnasthesiaPKPD.getDynamics()
+        A=AnasthesiaPKPD.createMatrix(dynA,dynB,'.',0.01)
+
+        step=0.1
+        rsListOld=[]
+        rsLisUnpOld=[]
+        time_taken=time.time()
+        while p<=0.8:
+            Er={
+            (0,0): [1-(p/2000),1+(p/2000)],
+            (0,4): [100/(100+p),100/(100-p)]
+            }
+            rs=Split(A,Er,initialSet,T)
+            (reachORS,reachRS)=rs.getReachableSetAllList()
+            safe=True
+            for rs in reachORS:
+                int1=StarOp.checkIntersection(rs,unsafe1)
+                int2=StarOp.checkIntersection(rs,unsafe2)
+                if int1==True or int2==True:
+                    safe=False
+                    p=p-step
+                    break;
+            if safe==False:
+                break
+            p=p+step
+            rsListOld=copy.copy(reachORS)
+            rsListUnpOld=copy.copy(reachRS)
+        time_taken=time.time()-time_taken
+        print("\tRobustness Metric: ",p)
+        print("\tTime Taken: ",time_taken)
+        print(">> STATUS: Robustness Metric Computed")
+        print(">> STATUS: Visualizing Safe Reachable Sets  . . .")
+        VisualizePKPD.vizCp(rsListUnpOld,rsListOld,fname="viz_Cp_robMet")
 
 
-if False:
-    AnasthesiaPKPD.getCellOrder()
+
+
+
+
+if True:
+    AnasthesiaPKPD.getRobustnessMetric()

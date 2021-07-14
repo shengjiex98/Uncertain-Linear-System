@@ -11,6 +11,7 @@ import math
 from Parameters import *
 from SplitMet import *
 from OrderUncertainties import *
+from StarOperations import *
 
 
 class BicycleModel:
@@ -92,7 +93,7 @@ class BicycleModel:
         B[3, 2] = - DT * v * delta / (WB * math.cos(delta) ** 2) # For C[3]
         B[4, 2] = 1
 
-        p=10
+        p=15
         Er={
         #(0,0): [1-(p/100),1+(p/100)],
         (0,2): [1-(p/100),1+(p/100)],
@@ -229,3 +230,15 @@ class BicycleModel:
             print(A_club_proj)
 
         return cellOrder
+
+    def isSafe(rsList,obs):
+        '''
+        Given a reachable set list and unsafe set, returns True iff Safe
+        '''
+        for rsSteps in rsList:
+            for rs in rsSteps:
+                #print(rs)
+                fgUnSafe=StarOp.checkIntersectionPoints(rs,obs)
+                if fgUnSafe==True:
+                    return False
+        return True
