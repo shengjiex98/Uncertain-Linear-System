@@ -199,7 +199,7 @@ class Rover:
         Returns the Robustness Metric, amount of error
         it can tolerate
         '''
-        p=8
+        p=9
         if self.env_id==2:
             path=[
             [(75,25),(52,70),(55,110),
@@ -244,7 +244,7 @@ class Rover:
         print(">> STATUS: Computing Robustness Metric . . .")
         time_taken=time.time()
         rsListOld=[]
-        while p<=15:
+        while p<=11:
             Er={
             #(0,0): [1-(p/100),1+(p/100)],
             (0,2): [1-(p/100),1+(p/100)],
