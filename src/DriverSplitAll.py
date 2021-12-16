@@ -589,7 +589,7 @@ class DriverCompU:
         ])
         P=[(0,35),(5,50),(0,35),(1,1)]
         rs=(C,V,P)
-        T=2050
+        T=30
         th1=1
         th2=2
         start=50
@@ -798,27 +798,8 @@ DriverCompU.motorTransmission1()
 DriverCompU.coOPVehiclesI()
 '''
 
-
-#Batch for Zono (Ac Basis)
-DriverCompU.stableSystem1()
-DriverCompU.stableSystem2()
-DriverCompU.stableSystem3()
-DriverCompU.stableSystem4()
-DriverCompU.dcConv()
-DriverCompU.giradI()
-DriverCompU.spaceCraftRndzvs()
-DriverCompU.giradII()
-DriverCompU.aircraftDynamics()
-DriverCompU.motorTransmission2()
 DriverCompU.acc()
-DriverCompU.flightEnvelope()
-DriverCompU.coOPVehiclesI()
-DriverCompU.laneChange()
-DriverCompU.fiveVehiclePlatton()
-DriverCompU.holesCXc()
-DriverCompU.pkpd2()
-DriverCompU.motorTransmission1()
-DriverCompU.laneChange()
+
 
 
 #DriverCompU.motorTransmission1()
