@@ -85,7 +85,7 @@ class Split:
         '''
         Computes the interval uncertain matrix
         '''
-        A_tilde=np.zeros((self.n,self.n),dtype=object)
+
         for i in range(self.n):
             for j in range(self.n):
                 A_tilde[i][j]=self.A[i][j]
@@ -98,7 +98,8 @@ class Split:
             #A_tilde[key[0]][key[1]]=mp.mpi(self.Er[key][0]*self.A[key[0]][key[1]],self.Er[key][1]*self.A[key[0]][key[1]])
             A_tilde[key[0]][key[1]]=mp.mpi(min(a,b),max(a,b))
 
-        #print(A_tilde)
+
+
         return A_tilde
 
     def computeU(self,rs):
@@ -500,7 +501,7 @@ class Split:
             for j in range(c):
                 G[i][j]=V[i][j]*P[j][1]
 
-        Z=zonotope(x,G)
+        Z=(x,G)
 
         return Z
 
@@ -689,9 +690,9 @@ class Split:
         #Visualization.displayPlotSingle(s1,s2,lPlots3,nameU+"U_0")'''
 
         while (t<=self.T):
-            #sys.stdout.write('\r')
-            #sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
-            #sys.stdout.flush()
+            sys.stdout.write('\r')
+            sys.stdout.write("Splitting Algorithm Progress (Optimization): "+str((t*100)/self.T)+"%")
+            sys.stdout.flush()
             RS=CompU.prodMatStars(self.A,RS)
             RS_List.append(RS)
 
@@ -1314,6 +1315,7 @@ class Split:
             t_reduction_interval=time.time()
             ORS_compact_interval=CompU.addStars(CompU.prodMatStars(self.Ac,ORS_compact_interval),U_compact_interval)
             if t%RED_INT_INTRVL==0:
+                #print("A")
                 ORS_compact_interval=Split.appxSB(ORS_compact_interval)
             U_compact_interval=cu.computeUI_Interval(ORS_compact_interval)
             time_taken_reduction_interval=time_taken_reduction_interval+(time.time()-t_reduction_interval)

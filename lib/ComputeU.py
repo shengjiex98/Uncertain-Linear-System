@@ -17,6 +17,7 @@ import mpmath as mp
 from gurobipy import *
 import sys
 import time
+import scipy.io as sio
 from operator import add
 
 from lib.PredicateGen import *
@@ -549,6 +550,9 @@ class CompU:
         Computes the interval uncertain matrix
         '''
         A_tilde=np.zeros((self.n,self.n),dtype=object)
+        A_tilde=np.zeros((self.n,self.n),dtype=object)
+        A_min=np.zeros((self.n,self.n))
+        A_max=np.zeros((self.n,self.n))
         for i in range(self.n):
             for j in range(self.n):
                 A_tilde[i][j]=self.A[i][j]
@@ -560,8 +564,16 @@ class CompU:
             #A_tilde[key[0]][key[1]]=mp.mpi(float(self.Er[key][0]*self.A[key[0]][key[1]]),float(self.Er[key][1]*self.A[key[0]][key[1]]))
             #A_tilde[key[0]][key[1]]=mp.mpi(self.Er[key][0]*self.A[key[0]][key[1]],self.Er[key][1]*self.A[key[0]][key[1]])
             A_tilde[key[0]][key[1]]=mp.mpi(min(a,b),max(a,b))
+            A_min[key[0]][key[1]]=min(a,b)
+            A_max[key[0]][key[1]]=max(a,b)
 
         #print(A_tilde)
+        if False:
+            name="cd"
+            print(self.Ac-A_min)
+            print(self.Ac+A_max)
+            sio.savemat(OUTPUT_PATH+"/"+name+".mat",{'A_min':self.Ac-A_min,'A_max':self.Ac+A_max})
+            exit(0)
         return A_tilde
 
     def computeUI_IntervalOld(self,rs):
