@@ -1,4 +1,4 @@
-# Computing Reachable Sets of Uncertain Linear System
+# `CRULS`: Computing Reachable Sets of Uncertain Linear System
 Given an uncertain linear system $x[t+1] = (A+ \Lambda) x[t]$, where $A \in \mathbb{R}^{n \times n}$ and $\Lambda \subset \mathbb{R}^{n \times n}$, this `Python` based prototype tool computes reachable sets of such system with various other functionalities.
 
 The basic idea is given in the following figure:
@@ -26,7 +26,7 @@ Please email [Bineet Ghosh](https://www.cs.unc.edu/~bineet/) at bineet@cs.unc.ed
   * Please obtain appropriate Gurobi License from [here](http://www.gurobi.com/downloads/licenses/license-center). Please note that if you are using Academic License, you **should be in your University network** (VPN should work fine too) while installing the license. Please refer to this [link](https://www.gurobi.com/documentation/8.1/quickstart_windows/academic_validation.html) for details. After the license is installed properly, Gurobi can be used from home network.
   * Install Gurobi. Please note that we will need Gurobi Python Interface. On-line documentation on installation can be found [here](http://www.gurobi.com/documentation/).
   * Gurobi Python Interface can also be installed through [Anaconda](https://www.anaconda.com/). Details on installing Gurobi Python Interface through `conda` can be found [here](https://www.gurobi.com/documentation/8.1/quickstart_mac/installing_the_anaconda_py.html#section:Anaconda).
-* [Optional: Only needed to run the Mars Rover case study] [Dependencies for `Python Robotics`](https://github.com/AtsushiSakai/PythonRobotics#requirements) need to be installed. Note that one doesn't need to downloaded the `Python Robotics` repository — that's provided native with our code. Just installing the dependencies for `Python Robotics` is required. If one does not wish to run the Mars Rover case study, they can ignore this step.
+* [Optional: Only needed to run the Mars Rover case study] [Dependencies for `Python Robotics`](https://github.com/AtsushiSakai/PythonRobotics#requirements) need to be installed. Note that one doesn't need to download the `Python Robotics` repository — that is provided native with our code. Just installing the dependencies for `Python Robotics` is required. If one does not wish to run the Mars Rover case study, they can ignore this step.
 
 ### Downloading the tool
 
