@@ -4,18 +4,10 @@ PROJECT_ROOT = os.environ['ULS_ROOT_DIR']
 sys.path.append(PROJECT_ROOT)
 
 import numpy as np
-import control
+import control as ctrl
 from sympy import symbols, Matrix
 from lib.OrderUncertainties import *
-from Benchmarks import sys_variables
-
-class Bench:
-    def __init__(self, A, B, C=None, D=None) -> None:
-        self.A = A
-        self.B = B
-        self.nx = A.shape[1]
-        self.nu = B.shape[1]
-        self.C = C if C else np.eye
+from Benchmarks import Bench, sys_variables
 
 def get_sensitivity(A, B):
     mat = OrdUnc(A)
@@ -25,11 +17,12 @@ def get_sensitivity(A, B):
         unc = mat.multSig(B)
     return unc
 
-def all_sensitivity(sys, K):
-    # A_bar_i = A + BKE_i where E_i = I(n) with 
-    for i in range(sys.nx):
-        E_i = Matrix(np.eye(sys.nx))
-        E_i[i, i] = symbols('l')
+def all_sensitivity(bench, K):
+    # A_bar_i = A + BKE_i where E_i = I(n) with the (i, i) entry swapped to lambda
+    for i in range(bench.nx):
+        E = Matrix(np.eye(bench.nx))
+        E[i, i] = symbols('l')
+        A = bench.A + bench.B * K * bench.E
 
 def find_AB(sys, x):
     nx = sys.A.shape[0]
@@ -39,6 +32,6 @@ def find_AB(sys, x):
     print(nx)
 
 def main():
-    find_AB("")
+    all_sensitivity(sys_variables['F1'], 1)
 
 main()
