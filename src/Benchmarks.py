@@ -2,15 +2,15 @@ import numpy as np
 import control as ctrl
 
 class Bench:
-    def __init__(self, A, B, C=None, D=None) -> None:
+    def __init__(self, A, B, C=None, D=None, Ts=0.02) -> None:
         self.A = A
         self.B = B
         self.nx = A.shape[1]
         self.nu = B.shape[1]
-        self.C = C if C else np.eye(1, self.nx)
-        self.D = D if D else 0
-        self.sysc = Bench(self.A, self.B, self.C, self.D)
-        self.sysd = ctrl.c2d(self.sysc)
+        self.C = C if C is not None else np.eye(1, self.nx)
+        self.D = D if D is not None else 0
+        self.sysc = ctrl.StateSpace(self.A, self.B, self.C, self.D)
+        self.sysd = ctrl.c2d(self.sysc, Ts) if Ts else None
 
 # Resistor-capacitor network
 r_1 = 100000
