@@ -3,7 +3,7 @@ Given an uncertain linear system $x[t+1] = (A+ \Lambda) x[t]$, where $A \in \mat
 
 The basic idea is given in the following figure:
 
-![method](method.png)
+![method](figures/method.png)
 
 Where:
 
@@ -79,7 +79,7 @@ Here, we illustrate the Anesthesia case study, as the other one can be run in si
 
 One should see the following plot in `/my/location/Uncertain-Linear-System/output/pkpd_results`:
 
-![viz_compare](viz_compare.png)
+![viz_compare](figures/viz_compare.png)
 
 The above plot shows the effect of perturbation in lower ranked cells (cyan), vs. higher ranked cells (high).
 
@@ -128,11 +128,11 @@ Singular Values:  [1.41421452e+00 1.31441296e+00 2.46736800e-04 0.00000000e+00]
 
 One should also see the following plot in `/my/location/Uncertain-Linear-System/output/BloatPlot/`
 
-![ACCBloat](ACCBloat.png)
+![ACCBloat](figures/ACCBloat.png)
 
 Along with the above plot, `/my/location/Uncertain-Linear-System/output/Plot/` should show:
 
-![ACC_30](ACC_30.png)
+![ACC_30](figures/ACC_30.png)
 
 ## Contact
 
