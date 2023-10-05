@@ -91,7 +91,7 @@ P = np.array([[0.6, -0.1, 0.1, 0.7, -0.2],
               [0.5, -0.7, 0.5, 0.6, 0.3],
               [0.8, 0.7, 0.6, -0.3, 0.2]])
 
-A_d5 = P * D * np.linalg.inv(P)
+A_d5 = P @ D @ np.linalg.inv(P)
 B_d5 = np.zeros((5, 1))
 C_d5 = np.eye(5)
 D_d5 = np.zeros((5, 1))
